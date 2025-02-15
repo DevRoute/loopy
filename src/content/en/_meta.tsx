@@ -11,25 +11,27 @@ export default {
       toc: false,
     },
   },
-  introduction: {
-    type: 'page',
-    title: 'This is Introduction',
-    theme: {
-      navbar: true,
-      toc: false,
-    },
-  },
-  examples: {
-    title: 'Examples',
+  javascript: {
+    title: 'Javascript',
     type: 'page',
   },
-  upgrade: {
+  performance: {
+    title: '前端性能优化',
+    type: 'page',
+  },
+  project: {
+    type: 'page',
     title: (
       <span className="flex items-center leading-[1]">
-        What's New
+        项目
         <TitleBadge />
       </span>
     ),
-    type: 'page',
+    theme: {
+      timestamp: false,
+      layout: 'full',
+      toc: false,
+    },
   },
+
 } satisfies MetaRecord
