@@ -11,25 +11,27 @@ export default {
       toc: false,
     },
   },
-  introduction: {
-    type: 'page',
-    title: '这是介绍',
-    theme: {
-      navbar: true,
-      toc: false,
-    },
-  },
-  examples: {
-    title: '示例',
+  javascript: {
+    title: 'Javascript',
     type: 'page',
   },
-  upgrade: {
+  performance: {
+    title: '前端性能优化',
+    type: 'page',
+  },
+  project: {
+    type: 'page',
     title: (
       <span className="flex items-center leading-[1]">
-        新变化
+        项目
         <TitleBadge />
       </span>
     ),
-    type: 'page',
+    theme: {
+      timestamp: false,
+      layout: 'full',
+      toc: false,
+    },
   },
+
 } satisfies MetaRecord

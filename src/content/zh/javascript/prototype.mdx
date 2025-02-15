@@ -1,0 +1,578 @@
+# 原型链
+ECMAScript 中的对象是由一组键值对组成的数据结构。每个键（也叫属性名）都是一个字符串，值可以是任意类型的数据（如原始值、函数、甚至是其他对象）。对象是 ECMAScript 中用于存储和组织数据的核心结构之一。
+
+## 创建对象的方法
+
+在 JavaScript 中，可以通过两种常见的方式来创建对象：
+
+1. 字面量语法。
+
+```js
+const person = {
+  running() {
+    console.log('你会我也会啊')
+  },
+  name: 'moment',
+  age: 7,
+  dance() {
+    console.log('我还会跳舞呢')
+  },
+}
+```
+
+2. 构造函数语法
+
+```js
+// 创建一个Object的新实例,然后在实例上面添加属性和方法
+const person = new Object()
+
+person.name = 'moment'
+person.age = 18
+
+person.running = function () {
+  console.log('我会游泳哦,你会吗')
+}
+```
+
+在上面的两个实例中，每创建一个对象，都要为其创建一个 name，age 的属性以及 running 的方法，那么有没有什么方法可以让我们可以减少一些重复的代码呢，答案是有的。我们可以把方法抽取出来定义成一个函数，再给对象赋值。
+
+```js
+const running = (info) => {
+  console.log(info)
+}
+
+const person = new Object()
+
+person.name = 'moment'
+person.age = 18
+
+person.running = running
+
+const object = {
+  running,
+  name: 'moment',
+  age: 7,
+  dance() {
+    console.log('我还会跳舞呢')
+  },
+}
+
+// ,似乎只能封装公共的方法,属性无法动态传值,只能是固定的一个值
+
+person.running('我们大家都会游泳哦') // 我们大家都会游泳哦
+object.running('我们大家都会游泳哦') // 我们大家都会游泳哦
+```
+
+## 工厂函数
+
+工厂函数（Factory Function）是指一个普通的函数，它返回一个新的对象实例，并且该对象具有某些属性和方法。工厂函数通常用于创建多个相似的对象，而不需要使用类（class）和 new 关键字。它是 JavaScript 中实现对象创建和封装的一种常见模式。
+
+```js
+function createObject(name, age, info) {
+  const obj = new Object()
+  obj.name = name
+  obj.age = age
+
+  obj.running = function () {
+    console.log(info)
+  }
+
+  return obj
+}
+
+const person = createObject('moment', 18, '我会跑步')
+const student = createObject('supper', 16, '我会跑步,我比你还年轻呢')
+
+person.running() // 我会跑步
+student.running() // 我会跑步,我比你还年轻呢
+```
+
+通过工厂模式，我们可以快速创建大量相似对象，没有重复代码。迎面走来走来的又是一个新问题,工厂模式创建的对象属于 Object，无法区分对象类型，这也是工厂模式没有广泛使用的原因。
+
+## 构造函数
+
+构造函数模式是一种常见的创建对象的方式，它通过一个函数来定义对象的模板。使用构造函数创建的对象实例可以继承构造函数中的属性和方法。构造函数通常与 new 关键字一起使用，用于创建对象实例。
+
+### 构造函数模式的基本形式
+
+构造函数是一个普通的函数，通常首字母大写（以示区分），并且通过 new 关键字来创建对象实例。构造函数的作用是为每个实例化的对象设置属性和方法。
+
+```js
+function Person(name, age, info) {
+  this.name = name
+  this.age = age
+
+  this.running = function () {
+    console.log(info)
+  }
+}
+
+const person = new Person('moment', 18, '我会跑步')
+const student = new Person('supper', 16, '我会跑步,我比你还年轻呢')
+
+person.running() // 我会跑步
+student.running() // 我会跑步,我比你还年轻呢
+```
+
+要创建 Person 实例，应使用 new 操作符。在使用 new 关键字时，构造函数会执行以下步骤：
+
+1. 在内存创建一个新对象 `{}`。
+
+2. 这个新对象内部的 `[[Prototype]](proto)` 特性被赋值为构造函数的 prototype 属性,
+   即 `person.__proto__ = Person.prototype`。
+
+3. 构造函数内部的 this 被赋值为这个新对象（即 this 指向新对象 `this = person`）。
+
+4. 执行构造函数内部的代码. 如 `person.proto.name='moment'`。
+
+5. 如果构造函数返回非空对象，则返回该对象。否则，返回刚创建的新对象。
+
+new 的执行过程可以参考以下代码：
+
+```js
+function myNew(func, ...args) {
+  // 判断方法体
+  if (typeof func !== 'function') {
+    throw '第一个参数必须是方法体'
+  }
+  // 创建新对象
+  // 这个对象的[[prototype]](隐式原型 __proto__)指向 func 这个类的原型对象 prototype
+  // 即实例可以访问构造函数原型 obj.constructor === Person
+  const object = Object.create(func.prototype)
+
+  // 构造函数内部的this被赋值为这个新对象
+  const result = func.apply(object, args)
+
+  // 如果构造函数返回的结果是引用数据类型，则返回运行后的结果
+  // 否则返回新创建的 obj
+  const isObject = typeof result === 'object' && result !== null
+  const isFunction = typeof result === 'function'
+
+  return isObject || isFunction ? result : object
+}
+```
+
+通过控制台打印不难发现，前面两个对象都是 Object 的实例，同时也是 Person 的实例：
+
+```js
+// instanceof 运算符用来检测 constructor.prototype 是否存在于参数 object 的原型链上
+// person和student的隐式原型都指向Person的显式原型;
+console.log(person.__proto__ === student.__proto__) // true
+console.log(person instanceof Object) // true
+console.log(person instanceof Person) // true
+console.log(student instanceof Object) // true
+console.log(student instanceof Person) // true
+
+// 以上代码的代码实际上执行的该例子
+console.log(
+  student.__proto__.__proto__.constructor.prototype === Object.prototype
+) // true
+
+console.log(student.__proto__.constructor.prototype === Person.prototype) // true
+```
+
+构造方法虽然有用,但是也存在问题,虽然 person 和 student 都有一个方法 running,但这两个方法不是同一个 Function 的实例,指向的内存也各自不同。
+
+```js
+console.log(student.running === person.running) // false
+```
+
+都是做着同样的事情，但是每个实例都创建出一个方法，这就造成了没必要的内存损耗，那么有没有什么办法可以很好的解决这个问题呢，这时候，原型模式就出现了。
+
+## 原型模式
+
+原型模式（Prototype Pattern）是一种创建对象的模式，它允许我们通过克隆现有对象来创建新对象，而不是直接实例化一个新对象。JavaScript 的 原型继承（Prototype Inheritance） 就是基于原型模式实现的。
+
+在 JavaScript 中，每个函数（包括构造函数）都有一个 prototype 属性，它指向一个对象，而这个对象包含所有实例共享的属性和方法。所有由该构造函数创建的实例都会继承这个 prototype 对象上的属性和方法。使用原型模式可以避免在构造函数中创建相同的方法，从而节省内存。
+
+```js
+function Person(name, age) {
+  this.name = name
+  this.age = age
+}
+
+// 在这里,把方法running定义在了Person的prototype属性上
+// person和student共享同一个原型方法running,指向的是同一快内存空间
+Person.prototype.running = function (info) {
+  console.log(info)
+}
+
+const person = new Person('moment', 18)
+const student = new Person('supper', 16)
+
+// 在构造函数中这里输出的是false
+console.log(person.running === student.running) // true
+
+person.running('我会跑步') // 我会跑步
+student.running('我会跑步,我比你还年轻呢') // 我会跑步,我比你还年轻呢
+```
+
+在前面的 new 操作符可以知道，person 和 student 的隐式原型等于 Person 的显式原型：
+
+1. 首先 person 和 student 现在自己身上查找有没有 running 方法，没有找到。
+
+2. 去原型里查找，也就是通过 `person.__proto__` 或者 `student.__proto__`，该方法，由于 `person.__proto__ = Person.prototype`，所以调用 person.running() 实际上调用的是 Person.prototype.running()方法
+
+```js
+console.log(person.__proto__ === Person.prototype) // true
+console.log(student.__proto__ === Person.prototype) // true
+console.log(Person.prototype.constructor === Person) // true
+```
+
+![20250210152511](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250210152511.png)
+
+具体的内存图如下图所示：
+
+![20250210155102](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250210155102.png)
+
+通过上图，以下代码的输出结果就能理解了：
+
+```js
+console.log(Person.prototype.constructor === Person) // true
+console.log(student.__proto__.constructor === Person) // true
+```
+
+### 原型层级
+
+在开始之前先来祭出两张神图：
+
+![20250210160003](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250210160003.png)
+
+![20250210160017](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250210160017.png)
+
+在讲原型之前，我们先来认识一下 Function 和 Object 的关系。
+
+在 JavaScript 中，每个 JavaScript 函数 实际上都是一个 Function 对象。这意味着函数本身是一个对象，具有像对象一样的属性和方法。
+
+几乎所有的对象都是 Object 类型的实例，并且它们都会从 Object.prototype 继承属性和方法。Object.prototype 提供了基本的对象功能，如 toString()、hasOwnProperty() 等。
+
+从原型链的角度来看，Function 继承了 Object，也就是说 Function.prototype 继承自 Object.prototype。这使得函数不仅有其自身的方法和属性，还可以访问 Object.prototype 中的方法和属性。
+
+从构造器的角度来看，Function 也是一个构造函数，它用来创建新的函数实例，且 Function 本身是由 Object 构造的。这意味着 Function 本身是 Object 的一个实例。
+
+接下来通过代码的展示，应该能更清楚的说明了上面两张图中的所讲的意思了。
+
+```js
+function Person(name, age) {
+  this.name = name
+  this.age = age
+}
+// 在这里,把方法running定义在了Person的prototype属性上了
+Person.prototype.running = function (info) {
+  console.log(info)
+}
+
+const obj = {}
+
+const person = new Person('moment', 18)
+const student = new Person('supper', 16)
+
+console.log(obj.__proto__ === Object.prototype) // true
+console.log(Object.constructor === Function) // true
+console.log(Function.prototype.__proto__ === Object.prototype) // true
+console.log(Function.constructor === Function) // true
+console.log(Person.__proto__.constructor.__proto__ === Function.prototype) // true
+console.log(
+  student.__proto__.__proto__.constructor.__proto__ === Function.prototype
+) // true
+console.log(Function.constructor.__proto__ === Function.prototype) // true
+console.log(Object.constructor === Function.constructor) // true
+console.log(Object instanceof Function) // true
+console.log(Function instanceof Object) // true
+console.log(Function.prototype.__proto__ === Object.prototype) // true
+```
+
+在上面的代码中，所有的对象和函数都是由 `Function` 构造的，这意味着它们都继承自 `Function.prototype`，而 `Function.prototype` 本身又继承自 `Object.prototype`。
+
+通过一系列的原型链检查，代码验证了这些继承关系。例如，`Object.constructor` 和 `Function.constructor` 都指向 `Function`，反映了 `Object` 是通过 `Function` 构造出来的。同时，函数本身作为对象，也有自己的原型链，这使得它既具备 `Function` 的特性，也继承了 `Object` 的方法。
+
+在这段代码中，我们通过查看 `__proto__` 和 `constructor` 属性，进一步理解了函数与对象如何通过原型链相互关联。例如，`Function.prototype.__proto__` 指向 `Object.prototype`，而 `Object` 和 `Function` 之间不仅通过构造器连接，还通过原型链形成了继承关系。通过这些检查，代码揭示了 `Function` 是所有构造函数和对象的“祖先”，并且它自己也是 `Object` 的实例。
+
+### 原型查找机制
+
+原型查找机制，首先，JavaScript 会在实例对象本身查找所需的属性或方法。如果在实例对象中找到了，就返回该属性或方法。如果没有找到，则继续查找该对象的原型（`proto`）。如果原型中存在该属性或方法，返回它。如果在原型中仍然没有找到，继续沿着原型链查找，直到查找到 Object.prototype。如果在 Object.prototype 上找到了该属性或方法，则返回它。如果在整个原型链上都没有找到该属性或方法，最终返回 undefined。
+
+> 需要注意的是，只有在尝试调用一个不存在的函数时，才会抛出 TypeError 错误；否则，查找结束时通常返回 undefined。
+
+```js
+function Person(name, age) {
+  this.name = name
+  this.age = age
+  this.sayName = function () {
+    console.log('我是在实例身上的')
+  }
+  this.memory = '我是属于实例的'
+}
+
+// 在这里,把方法running定义在了Person的prototype属性上了
+Person.prototype.running = function () {
+  console.log('我是原型上的方法')
+}
+
+Object.prototype.牛逼 = '这是真的'
+
+Person.prototype.memory = '我是属于原型的'
+
+const person = new Person('moment', 18)
+
+console.log(person.name) // 来自实例
+console.log(person.memory) // 来自实例
+person.sayName() // 来自实例
+person.running() // 来自原型
+console.log(person.牛逼) // 这是真的
+console.log(person.六六六) // undefined
+```
+
+整个查找流程如下所示：
+
+```text
+person -> Person.prototype -> Object.prototype -> null
+```
+
+### 原型模式的弊端
+
+原型模式的优势在于节省了创建新对象时的开销，但在实际应用中也存在一些弊端。
+
+#### 共享引用类型的数据
+
+当使用原型模式时，如果你在原型对象（例如 `Person.prototype`）上定义了引用类型（如数组、对象等），所有实例将共享这部分数据。这可能导致数据污染或意外的副作用。
+
+```js
+function Person(name) {
+  this.name = name
+}
+
+Person.prototype.hobbies = ['reading', 'traveling'] // 引用类型数据
+
+const person1 = new Person('Alice')
+const person2 = new Person('Bob')
+
+person1.hobbies.push('swimming')
+
+console.log(person1.hobbies) // ["reading", "traveling", "swimming"]
+console.log(person2.hobbies) // ["reading", "traveling", "swimming"]  // 影响了 person2 的数据
+```
+
+在这个例子中，hobbies 是定义在 Person.prototype 上的一个数组，它会被所有实例共享。如果你修改了 person1.hobbies，那么 person2.hobbies 也会被改变。这种共享引用类型数据的行为可能会导致不可预测的副作用。
+
+如果你想要避免引用类型数据被共享，可以在构造函数中初始化引用类型数据，或者在原型上使用闭包来创建私有数据。
+
+```js
+function Person(name) {
+  this.name = name
+  this.hobbies = [] // 在构造函数内初始化
+}
+```
+
+#### 原型链查找性能问题
+
+原型链查找在 JavaScript 中是实现对象继承的核心机制，但在某些情况下可能会导致性能问题。每当访问对象的属性时，JavaScript 会沿着原型链逐级查找，直到找到属性或到达原型链的终点 `Object.prototype`。
+
+如果继承链过深，每次查找都会增加查找的时间，导致性能下降。为避免性能问题，应该尽量简化继承层次，避免过多的嵌套继承。使用 Object.create() 可以显式地指定原型，从而减少查找的层次。缓存经常访问的属性或方法也可以有效提升性能，减少重复的原型链查找。
+
+## 原型链继承
+
+原型链继承是 JavaScript 中实现继承的主要方式，它利用了 JavaScript 中的原型链机制。每个 JavaScript 对象都有一个原型对象（`__proto__`），通过这个原型对象，子对象可以访问到父对象的方法和属性。原型链继承的核心思想是让子类通过原型链访问父类的属性和方法。
+
+它的构造原理就是每个函数对象都有一个 prototype 属性，指向包含实例共享属性和方法的对象。每个实例对象有一个隐式的 `__proto__` 属性，指向其构造函数的 prototype，通过原型链，实例可以访问到构造函数原型中的属性和方法。通过这种机制，子类实例可以继承父类原型中的属性和方法，从而实现继承。
+
+```js
+function Student() {}
+function Teacher() {}
+
+Teacher.prototype.running = function () {
+  console.log('老师')
+}
+
+Teacher.prototype.teach = function () {
+  console.log('教')
+}
+
+const teach = new Teacher()
+Student.prototype = teach
+
+const student = new Student()
+
+student.running = function () {
+  console.log('我被修改了')
+}
+
+const smallStudent = new Student()
+smallStudent.running() // 老师 继承于Teacher原型
+student.running() // 我被修改了  来自于实例本身
+```
+
+通过一张图来展示子类的两个实例和两个构造函数及其对应的原型之间的关系:
+
+![20250210170945](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250210170945.png)
+
+在使用原型链实现继承时，子类的原型实际上变成了父类的一个实例，这导致父类的实例属性和方法变成了原型属性和方法。这样，子类的实例会共享父类原型上的属性和方法，可能引发共享数据的问题。另一个问题是，子类在实例化时无法直接给父类的构造函数传递参数，这会影响父类构造函数的初始化。
+
+```js
+function Animal(name) {
+  this.name = name // 父类实例属性
+}
+
+Animal.prototype.sayHello = function () {
+  console.log(`${this.name} says hello!`) // 父类方法
+}
+
+function Dog(name, breed) {
+  Animal.call(this, name) // 无法将 breed 传递给 Animal 的构造函数
+  this.breed = breed // 子类独有属性
+}
+
+// 使用原型链继承
+Dog.prototype = Object.create(Animal.prototype)
+Dog.prototype.constructor = Dog
+
+const dog1 = new Dog('Buddy', 'Golden Retriever')
+dog1.sayHello() // "Buddy says hello!" (继承了 Animal 的方法)
+
+const dog2 = new Dog('Max', 'Bulldog')
+console.log(dog1.name) // "Buddy"
+console.log(dog2.name) // "Max"
+
+// 问题 1: 原型链共享属性
+dog1.name = 'Rocky' // 修改 dog1 的 name
+console.log(dog1.name) // "Rocky"
+console.log(dog2.name) // "Max" (dog2 也受影响，修改了原型上的属性)
+
+// 问题 2: 无法给父类传递 breed 参数
+const dog3 = new Dog('Rex') // 只传递了 name
+console.log(dog3.breed) // undefined (没有传递 breed)
+```
+
+## 盗用构造函数
+
+盗用构造函数是 JavaScript 中一种继承方法，它通过在子类构造函数内部调用父类构造函数（使用 call() 或 apply()）来实现继承。它的基本思想是让子类的实例能够继承父类的实例属性。盗用构造函数并不会改变原型链，它只是通过调用父类构造函数，确保子类实例具有父类的属性。
+
+它的工作原理如下：
+
+1. 子类构造函数：在子类的构造函数中，使用 call() 或 apply() 来调用父类的构造函数，并将 this 指向当前的子类实例。
+
+2. 父类构造函数：父类构造函数用于设置实例属性（而非方法），call() 或 apply() 允许子类获取父类的实例属性。
+
+```js
+function Teacher(nickname, age, height) {
+  this.nickname = nickname
+  this.age = age
+  this.height = height
+}
+
+function Student(nickname, age, height) {
+  Teacher.call(this, nickname, age, height)
+  this.hobby = ['唱', '跳', 'rap']
+}
+
+Teacher.prototype.running = function () {
+  console.log('老师')
+}
+
+Teacher.prototype.teach = function () {
+  console.log('教')
+}
+
+const student = new Student('moment', '18', '1米59')
+
+console.log(student.height) // 1米59
+console.log(student.hobby) //  ["唱", "跳", "rap"]
+```
+
+盗用构造函数他会存在一些问题：
+
+1. 无法继承父类的原型方法：盗用构造函数只会继承父类构造函数中定义的实例属性，而不会继承父类的原型方法（例如 running）。
+
+2. 无法共享父类原型上的方法：每次调用子类的构造函数时，都会创建父类构造函数中定义的实例属性，无法共享父类原型上的方法，可能导致内存浪费。
+
+盗用构造函数是一个简单的继承方式，通过调用父类构造函数，子类实例可以获得父类的实例属性，但它无法继承父类的原型方法。为了更好地继承父类的所有属性和方法，通常需要结合使用原型链继承。
+
+## 组合继承
+
+组合继承 是 JavaScript 中常见的一种继承模式，它结合了 原型链继承 和 盗用构造函数 继承的优点，并有效避免了它们的缺点。组合继承既能继承父类的实例属性，又能继承父类原型上的方法。
+
+组合继承的实现步骤如下所示：
+
+1. 调用父类构造函数：在子类构造函数中调用父类构造函数 (call())，继承父类的实例属性。
+
+2. 设置子类原型对象：通过 Object.create() 创建一个新的对象作为子类的原型对象，并让它指向父类的原型，继承父类的原型方法。
+
+3. 修复构造函数：由于 Object.create() 会改变 constructor 的指向，所以需要手动修复 constructor 属性，使其指向子类构造函数。
+
+```js
+function Teacher(nickname, age, height) {
+  this.nickname = nickname
+  this.age = age
+  this.height = height
+}
+
+Teacher.prototype.running = function () {
+  console.log('老师')
+}
+
+Teacher.prototype.teach = function () {
+  console.log('教')
+}
+
+function Student(nickname, age, height) {
+  Teacher.call(this, nickname, age, height) // 继承 Teacher 的实例属性
+  this.hobby = ['唱', '跳', 'rap'] // 学生特有的属性
+}
+
+// 使用原型链继承 Teacher 的方法
+Student.prototype = Object.create(Teacher.prototype)
+Student.prototype.constructor = Student // 修复构造函数指向
+
+// 创建 Student 实例
+const student = new Student('moment', '18', '1米59')
+
+console.log(student.height) // 1米59
+console.log(student.hobby) // ["唱", "跳", "rap"]
+student.running() // 老师
+student.teach() // 教
+```
+
+组合继承的缺点就是父类构造函数会被执行两次，子类实例化时，父类构造函数被执行两次：第一次是在 call() 中执行的，用于继承实例属性；第二次是在 Object.create() 中执行的，用于继承原型方法。这可能导致父类构造函数不必要的重复执行。
+
+## 寄生组合继承
+
+为了解决性能问题，可以使用 寄生组合继承（Parasitic Combination Inheritance），它是对组合继承的优化，通过避免父类构造函数执行两次来提高效率。
+
+```js
+function inheritPrototype(superType, children) {
+  const prototype = new Object(superType.prototype) // 创建对象
+  prototype.constructor = children // 增强对象
+  children.prototype = prototype // 赋值对象
+}
+
+function Teacher(nickname, age, height) {
+  this.nickname = nickname
+}
+
+function Student(nickname) {
+  Teacher.call(this, nickname)
+  this.hobby = ['唱', '跳', 'rap']
+}
+
+inheritPrototype(Student, Teacher)
+
+Teacher.prototype.running = function () {
+  console.log('老师会跑步')
+}
+
+Student.prototype.running = function () {
+  console.log('学生也会跑步')
+}
+
+const student = new Student('moment')
+
+student.running() // 学生也会跑步
+console.log(student.hobby) // ['唱', '跳', 'rap']
+console.log(student.nickname) // comment
+```
+
+通过 寄生组合继承 可以解决组合继承的性能问题，避免父类构造函数执行两次。
+
+## 总结
+
+原型链继承是 JavaScript 中实现对象继承的核心机制，通过原型链，子类可以继承父类实例的属性和原型上的方法。通过构造函数和原型链结合的 组合继承，子类不仅继承了父类的实例属性，还能够共享父类原型上的方法，从而避免了内存浪费。然而，组合继承存在父类构造函数被执行两次的问题，导致性能下降。为了解决这个问题，寄生组合继承优化了性能，通过减少不必要的父类构造函数执行，达到了更高效的继承方式。

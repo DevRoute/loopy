@@ -1,0 +1,729 @@
+---
+title: "类型转换"
+---
+
+# 类型转换
+类型转换通常发生在静态类型语言的编译阶段，而在动态类型语言中，强制类型转换则发生在运行时。这也是为什么在日常开发和面试中，类型转换无处不在，我们时常需要手动进行强制转换或依赖语言的隐式转换机制。
+
+在 JavaScript 中，通常将类型转换统称为强制类型转换。可以进一步区分为隐式强制类型转换和显式强制类型转换，二者的区别十分明显。显式强制类型转换通常是开发者明确调用的转换函数，而隐式强制类型转换则不那么显眼，通常是某些操作自动引发的副作用。
+
+如下代码所示：
+
+```js
+var a = 77;
+var b = a + ""; // 隐式强制类型转换
+var c = String(a); // 显示类型转换
+```
+
+## toString
+
+`toString()` 是 JavaScript 中每个对象都有的一个方法，用于将对象转换成字符串。不同类型的数据调用 `toString()` 会返回不同的结果。
+
+#### 基本用法
+
+普通对象：默认返回 `"[object Object]"`。
+
+```javascript
+const obj = {};
+console.log(obj.toString()); // "[object Object]"
+```
+
+数字：返回数字的字符串形式。
+
+```javascript
+const num = 123;
+console.log(num.toString()); // "123"
+```
+
+布尔值：返回 "true" 或 "false"。
+
+```javascript
+const bool = true;
+console.log(bool.toString()); // "true"
+```
+
+数组：将数组元素转为以逗号分隔的字符串。
+
+```javascript
+const arr = [1, 2, 3];
+console.log(arr.toString()); // "1,2,3"
+```
+
+函数：返回函数的源代码字符串。
+
+```javascript
+const func = () => "hello";
+
+console.log(func.toString()); // () => "hello"
+```
+
+你可以重写对象的 `toString()` 方法，来定义自己的字符串表现形式：
+
+```javascript
+const person = {
+  name: "Moment",
+  toString: function () {
+    return this.name;
+  },
+};
+
+console.log(person.toString()); // "Moment"
+```
+
+当进行字符串拼接时，JavaScript 会自动调用 `toString()`：
+
+```javascript
+const obj = { name: "Moment" };
+
+console.log("Hello, " + obj); // "Hello, [object Object]"
+```
+
+`toString()` 方法帮助将对象转换为字符串。不同类型的数据和对象会有不同的转换方式，且你可以通过重写 `toString()` 来定制对象的字符串表示。
+
+## valueOf()
+
+`valueOf()` 方法用于将对象转换为原始值，通常在进行数值运算时优先调用。而 `toString()` 方法则用于将对象转换为字符串，通常在进行字符串操作时优先调用。如果 `toString()` 返回的是字符串类型，`valueOf()` 通常不会被调用，因为字符串转换已经通过 `toString()` 完成。
+
+如下代码所示：
+
+```js
+const obj = {
+  valueOf: () => 42,
+  toString: () => "Hello",
+};
+
+// 数值运算时，优先调用 valueOf()
+console.log(10 + obj); // 输出：52，因为调用了 obj.valueOf()，返回 42
+
+// 字符串操作时，valueOf() 被优先调用，然后将其转换为字符串
+console.log("Message: " + obj); // 输出：Message: 42，因为调用了 obj.valueOf()，返回 42
+
+// 显式转换为字符串时，toString() 会被调用
+console.log(String(obj)); // 输出：Hello，调用了 obj.toString()
+```
+
+通过这个例子，我们可以看到在不同类型转换时，`valueOf()` 和 `toString()` 的调用优先顺序。
+
+## Symbol.toPrimitive
+
+Symbol.toPrimitive 是 JavaScript 中的一个内置 Symbol 属性，它定义了对象如何转换为原始值。当对象需要进行强类型转换时，该属性指定的方法会优先被调用。
+
+这个方法接收一个 hint 参数，表示预期转换的原始值类型。hint 的取值可以是：
+
+1. `number`：转换为数值类型。
+
+2. `string`：转换为字符串类型。
+
+3. `default`：默认类型，通常由 JavaScript 自动决定。
+
+该方法用于支持所有强类型转换算法（如数值运算、字符串拼接等），在这些场景中，JavaScript 会优先调用 Symbol.toPrimitive 来确保对象能够正确转换为期望的原始值。
+
+以下示例描述了 `Symbol.toPrimitive` 属性如何修改从对象转换的原始值:
+
+```js
+const object = {
+  [Symbol.toPrimitive](type) {
+    if (type === "number") return 77;
+    if (type === "string") return "string优先调用这里";
+    // 处理 default 类型时直接返回想要的值
+    if (type === "default") return "default";
+  },
+  valueOf() {
+    return 22;
+  },
+  toString() {
+    return 33;
+  },
+};
+
+console.log(String(object)); // string优先调用这里，type 参数值是 "string"
+console.log(Number(object)); // 77，type 参数值是 "number"
+console.log(object + ""); // default，type 参数值是 "default"
+```
+
+## JSON 字符串化
+
+工具函数 JSON.stringify(...) 在将 JSON 对象序列化为字符串时，也会调用 toString() 方法。JSON.stringify 和 toString() 的效果基本相同，只不过 JSON.stringify 的序列化结果总是一个字符串，且它会将对象转换成符合 JSON 格式的字符串，而 toString() 返回的是对象的字符串表示，通常是一个简洁的描述。
+
+```js
+console.log(JSON.stringify(77)); // '77'
+console.log(JSON.stringify("77")); // '77'
+console.log(JSON.stringify(null)); // 'null'
+console.log(JSON.stringify(undefined)); // undefined
+```
+
+`JSON.stringify(...)` 在对象中遇到 undefined、`function()` 和 symbol 时会自动将其忽略,在数组中则会返回 null，例如:
+
+```js
+console.log(JSON.stringify(undefined)); // undefined
+console.log(JSON.stringify(function () {})); // undefined
+console.log(JSON.stringify(class C {})); // undefined
+console.log(JSON.stringify([1, undefined, function () {}, 4])); // [1,null,null,4]
+console.log(JSON.stringify({ a: 2, b() {} })); // "{"a":2}"
+console.log(JSON.stringify({ x: undefined, y: Object, z: Symbol("") })); // '{}'
+```
+
+当对象包含循环引用时，执行 JSON.stringify(...) 会抛出错误。循环引用指的是对象的某个属性直接或间接地引用了对象自身。此外，JSON.stringify() 还可能在以下情况下报错：
+
+1. 包含无法序列化的值：当对象的属性值为 `undefined`、`function`、`Symbol` 类型时，`JSON.stringify()` 会忽略它们；而如果对象包含 `BigInt` 类型的值，`JSON.stringify()` 会抛出 `TypeError` 错误，因为 `BigInt` 无法被序列化为 JSON。
+
+2. 包含不可枚举的属性：`JSON.stringify()` 只会序列化对象中的可枚举属性，忽略不可枚举的属性。
+
+3. toJSON() 返回无法序列化的值：如果对象的 toJSON() 方法返回一个包含无法序列化的值（如 undefined 或 BigInt），也会导致序列化失败。
+
+如下代码所示：
+
+```js
+const obj1 = {
+  name: "John",
+  func: function () {
+    return "Hello";
+  }, // 函数不能被序列化（会被忽略）
+};
+
+const obj2 = {
+  name: "Jane",
+  value: Symbol("unique"), // Symbol 不能被序列化（会被忽略）
+};
+
+const obj3 = {
+  name: "Alice",
+  bigIntValue: BigInt(123), // BigInt 类型不能被序列化（会抛出错误）
+};
+
+// 这里不会报错，只是忽略 func
+console.log(JSON.stringify(obj1)); // 输出: {"name":"John"}
+
+// 这里不会报错，只是忽略 Symbol
+console.log(JSON.stringify(obj2)); // 输出: {"name":"Jane"}
+
+try {
+  console.log(JSON.stringify(obj3)); // 这里会抛出 TypeError
+} catch (error) {
+  console.error("Error: BigInt 不能被 JSON.stringify() 处理", error);
+}
+```
+
+如果对象中定义了 `toJSON()` 方法，`JSON.stringify()` 在进行字符串化时会优先调用该方法，并使用其返回值进行序列化。如果对象包含非法的 JSON 值，或者某些值无法被正确序列化，您可以通过定义 `toJSON()` 方法来确保返回一个安全且可序列化的 JSON 值。这样可以控制对象序列化的过程，避免不符合 JSON 格式的值导致错误。
+
+如下代码所示：
+
+```js
+const obj = {
+  name: "John",
+  age: 30,
+  birthdate: new Date(), // 这会导致错误，因为 Date 对象不能直接序列化
+  toJSON: function () {
+    // 返回一个自定义的可序列化对象
+    return {
+      name: this.name,
+      age: this.age,
+      birthdate: this.birthdate.toISOString(), // 将 Date 转换为 ISO 字符串
+    };
+  },
+};
+
+const jsonString = JSON.stringify(obj);
+console.log(jsonString);
+```
+
+最终输出结果如下图所示：
+
+![20250212151520](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250212151520.png)
+
+### replacer
+
+在 `JSON.stringify()` 中，第二个参数 replacer 用于 控制对象的哪些属性应该被序列化。它可以是 `数组` 或 `函数`，分别起到不同的作用。
+
+#### replacer 作为数组
+
+如果 replacer 是一个 字符串数组，那么只有 数组中列出的属性 会被包含在 JSON 结果中，其他属性会被忽略
+
+如下代码所示：
+
+```js
+var a = {
+  foo: 77,
+  bar: "moment",
+  baz: [1, 2, 3],
+};
+
+console.log(JSON.stringify(a, ["bar", "baz"]));
+
+// 输出: '{"bar":"moment","baz":[1,2,3]}'
+// 只有 "bar" 和 "baz" 被包含，"foo" 被忽略
+```
+
+它的作用是通过数组指定要序列化的属性，忽略未列出的属性。
+
+#### replacer 作为函数
+
+如果 replacer 是一个 函数，那么它会 对每个属性 都调用一次，并决定该属性是否要被序列化。
+该函数接收 两个参数：
+
+1. key：当前正在处理的属性名
+
+2. value：当前属性的值
+
+如果 replacer 返回 undefined，该属性会被忽略；否则返回的值会用于序列化。
+
+```js
+var a = {
+  foo: 77,
+  bar: "moment",
+  baz: [1, 2, 3],
+};
+
+console.log(
+  JSON.stringify(a, function (key, value) {
+    if (key === "foo") return undefined; // 忽略 "foo"
+    return value; // 其他属性正常序列化
+  })
+);
+
+// 输出: '{"bar":"moment","baz":[1,2,3]}'
+// "foo" 被忽略，"bar" 和 "baz" 被正常序列化
+```
+
+上面的代码它的作用是通过自定义逻辑，动态决定哪些属性应该被序列化。
+
+## ToNUmber
+
+有时我们需要将非数字值当做数组来使用，比如数字运算。为此 [es5 规范](https://tc39.es/ecma262/multipage/abstract-operations.html#sec-tonumber) 给我们定义了抽象操作 `ToNumber`，其基本语法为 `ToNUmber(argument)`，它在调用时执行以下步骤:
+
+1. 如果 `argument` 是数字类型，直接返回 `argument`;
+
+2. 如果 `argument` 时 `Symbol`和 `Bigint`，则抛出一个 `TypeError(类型错误)` 错误;
+
+3. 如果 `argument` 是 `undefined`，返回 `NAN`;
+
+4. 如果 `argument` 是 `null`和`false`，则返回 `+0`;
+
+5. 如果 `argument` 是 `true`，则返回 `1`;
+
+6. 如果 `argument` 是一个 `string` 类型，则返回一个 `StringToNumber(argument)` 方法，如果 `argument` 不是只包含数字的字符串，例如 `"1,2"`，那么 `Number` 函数会将其转为 `NAN`;
+
+如果传入的是对象（包括数组），它会首先被转换为对应的基本类型。如果转换后的值不是数字类型，则会按照 **规则 6** 进一步强制转换为数字。
+
+为了将对象转换为相应的基本类型，抽象操作 [`ToPrimitive`](https://tc39.es/ecma262/multipage/abstract-operations.html#sec-toprimitive) 会首先调用内部方法 `[[DefaultValue]](hint)`：
+
+- 如果 `hint` 参数为 `"number"`，则会检查该对象是否具有 `valueOf()` 方法。
+
+  - 如果存在 `valueOf()`，则调用该方法，并返回其结果。
+
+  - 如果返回的是基本类型值，则直接用于强制类型转换。
+
+  - 如果 `valueOf()` 不存在或未返回基本类型值，则改为调用 `toString()` 方法。
+
+- `toString()` 方法的调用规则与 `valueOf()` 相同，如果返回的是基本类型值，则进行类型转换。
+
+如果 `valueOf()` 和 `toString()` **都没有返回基本类型值**，则会抛出 `TypeError` 错误。
+
+从 **ES5** 开始，使用 `Object.create(null)` 创建的对象，其 `[[Prototype]]` 属性为 `null`，因此没有 `valueOf()` 和 `toString()` 方法，导致无法进行强制类型转换。
+
+```js
+var a = {
+  valueOf: function () {
+    return "66";
+  },
+  toString() {
+    return "77";
+  },
+};
+
+var b = {
+  toString() {
+    return "77";
+  },
+};
+
+var c = [2, 3];
+c.toString = function () {
+  return this.join("");
+};
+
+console.log(Number(a)); // 66
+console.log(Number(b)); // 77
+console.log(Number(c)); // 23
+console.log(Number("")); // 0
+console.log(Number([])); // 0
+console.log(Number([1, 2])); // NAN
+console.log(Number(["a"])); // NAN
+console.log(Number("12ab")); // NAN
+```
+
+在上面的例子中，数字的强制类型转换会优先调用 `valueOf()` 方法，随后是 `toString()` 方法。
+
+在 `c` 变量中修改了数组的原型方法 `toString()`，使其返回一个字符串 `"23"`，然后对其强制类型转换。
+
+对数组进行强制类型转换，会先调用数组的 `toString()`方法，`[]` 会变成 `""`，`[2,3]` 会变成 `"2,3"`，所以遵循规则，空字符串会返回 `0`，而如果不是纯数字的字符串会返回 `NAN`。
+
+## ToBoolean
+
+`JavaScript` 中有两个关键词 `true` 和 `false`，分别代表布尔类型中的真和假。在 `ES规范` 中定义了抽象操作 `ToBOlean`，该抽象操作接收一个参数 `argument`，并且遵循以下规则:
+
+1. 如果 `argument`是一个 `Completion Record` 类型，并且是一个 `abrupt completion`，直接返回 `argument`，否则返回 `ToBolean(argument.[[value]])`;
+
+2. 如果 `argument`是一个 `undefined` 类型，返回 `false`;
+
+3. 如果 `argument`是一个 `Null` 类型，返回 `false`;
+
+4. 如果 `argument`是一个 `Boolean` 类型，直接返回 `argument`;
+
+5. 如果 `argument`是一个 `Number` 类型，并且是 `+0`，`-0`或者`NAN`，返回 `false`，否则返回`true`;
+
+6. 如果 `argument`是一个 `String` 类型，并且是一个空字符串(字符串长度为`0`)，返回`false`，否则返回`true`;
+
+7. 如果 `argument`是一个 `Symbol` 类型，返回 `true`;
+
+8. 如果 `argument`是一个 `Object` 类型，包括 `[]`、`{}`、`function(){}`，都返回 `true`(注意，这里还有一个意外，请看规则 9);
+
+9. 如果 `argument`是一个 `Object` 类型，并且 `argument` 拥有 `[[IsHTMLDDA]]`内部插槽，返回 `false`，例如 `document.all`;
+
+```js
+console.log(Boolean(undefined)); // false
+console.log(Boolean(null)); // false
+console.log(Boolean(true)); // true
+console.log(Boolean(+0)); // false
+console.log(Boolean(-0)); // false
+console.log(Boolean(NaN)); // false
+console.log(Boolean(777));
+console.log(Boolean("")); // false
+console.log(Boolean("1")); // true
+console.log(Boolean('""')); // true  长度不为0
+console.log(Boolean(Symbol())); // // true
+console.log(Boolean(function () {})); // // true
+console.log(Boolean({})); // true
+console.log(Boolean([])); // true
+console.log(Boolean(document.all)); // false
+```
+
+### Completion Record
+
+`Completion Record（完成记录）` 是一种特殊的 `Record` 类型，用于表示流程执行某个特定步骤后的结果。例如，当我们在控制台输入 `var a = 2;` 时，虽然执行成功，但返回的结果是 `undefined`。普通语句执行后会产生一个 `[[type]]` 为 `normal` 的 `Completion Record`，这意味着执行完成后会继续执行下一条语句。而表示式语句则会返回一个带有 `[[value]]` 字段的 `Completion Record`，这个字段表示语句的计算结果。对于 `var` 声明语句，执行时会生成一个 `[[value]]` 为**空**的 `Completion Record`。
+
+在 `ES5` 规范中，所有步骤或语句的执行都会显式或隐式地返回一个 `Completion Record`，它包含三个特定字段。
+
+![20250212161216](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250212161216.png)
+
+1. `[[type]]` 字段表示当前 `Completion Record` 的类型。它的值可以是 `normal`、`return`、`throw`、`break` 或 `continue`，表示该记录是由哪种语句或步骤生成的。
+
+2. 如果 `[[type]]` 是 `normal`、`return` 或 `throw` 中的一个，则 `[[value]]` 会记录生成的正常值或抛出的异常值；否则，`[[value]]` 的值为 `empty`。
+
+3. 如果 `[[type]]` 是 `break` 或 `continue`，则 `[[target]]` 会包含目标 `label`，指示控制流应该跳转到哪个位置，类似于 `goto` 语句。
+
+`Completion Record` 的 `[[type]]` 为 `normal` 时，称为 **normal completion（正常完成）**；如果是其他类型，则称为 **abrupt completion（中断式完成）**。
+
+## 显示强制类型转换
+
+显示强制类型转换是那些显而易见的类型转换，很多类型转换都属于此类。
+
+### 字符串和数字之间的显式转换
+
+字符串和数字之间的转换是通过 `String(...)` 和 `Number(...)` 这两个内建函数来实现的，但是它们前面没有 `new` 关键字，并不创建封装对象。例如:
+
+```js
+var a = 77;
+console.log(String(a)); // "77"
+
+var b = "3.14";
+console.log(Number(b)); // 3，14
+```
+
+除了 `String(...)` 和 `Number(...)` 意外，还有其他方法可以实现字符串和数字之间的显式转换:
+
+```js
+var a = 77;
+console.log(a.toString()); // "77"
+
+var b = "3.14";
+console.log(+b); // 3，14
+```
+
+`a.toString()` 是显式的，不过其中设计隐式转换。因为 `77` 根本没有 `toString()` 的方法或者说 `toString()` 对这些基本类型不适用，所以`JavaScript` 引擎会自动为 `77` 创建一个封装对象，然后对该对象调用 `toString()`。这里显示转换中含有隐式转换， `a.toString()` 实际上是执行的以下代码:
+
+```js
+var a = 77;
+var aa = new String(a);
+console.log(aa.toString()); // "77"
+```
+
+在上例中 `+b` 是 `+` 运算符的**一元**形式(即只有一个操作数)。 `+` 运算符显示地将 `b` 转换为数字，而非数字加法运算，也不是字符串拼接。
+
+一元操作符的其他操作，例如:
+
+```js
+var a = "3.14";
+var b = 3.14 + +a;
+console.log(b); // 6.28
+```
+
+```js
+console.log(1 + -+(+(+-+1))); // 2
+```
+
+那么我们继续看看下面你的例子:
+
+```js
+console.log(+[]); // 0
+console.log(+["1"]); // 1
+console.log(+["1"， "2"， "3"]); // NaN
+console.log(+{}); // NaN
+```
+
+上面的例子中 `+[]`，首先调用 `valueOf()` 方法，但是 `valueOf()` 不存在，调用 `toString()` 方法，返回 `""`，得到结果，然后对其调用 `ToNumber()` 方法，`""` 对应的返回值是 `0`，所以返回 `0`，下面两个同样的道理。而 `{}` 调用 `toString()` 方法返回的是 `[object Object]`，对其调用 `ToNumber()` 方法，返回的结果是 `NaN`。
+
+### 显式解析数字字符串
+
+解析字符串中的数字和将字符串强制类型转换为数字返回的结果都是数字。但是解析和转换两者之间还是有明显的差别的。例如:
+
+```js
+var a = "77";
+var b = "77px";
+
+console.log(Number(a)); // 7
+console.log(parseInt(a)); // 7
+
+console.log(Number(b)); // Nan
+console.log(parseInt(b)); // 7
+```
+
+解析运行字符串中含有非数字字符，解析从左侧到右的顺序，如果遇到非数字字符就停止。而转换不允许出现非数字字符，否则会失败并返回 `NaN`。
+
+再看一个例子:
+
+```js
+console.log(parseInt(1 / 0， 19)); // 18
+```
+
+咦，这怎么输出的 18，难道不是 `NaN`吗，这一定有问题，不行，我要重启电脑看看，再次打开电脑，发现依然是 `18`，在开机的过程中我已经想到了答案了，且听我一一道来:`parseInt(1/0， 19)` 实际上是 `parseInt("Infinity"， 19)`。第一个字符是 `"I"`，以 19 为基数时值为 18。第二个字符 `"n"`不是一个有效的数字字符，解析到此为止，所以输出的是 `15`。
+
+现在一些看起来奇奇怪怪的但实际上解释的通的例子:
+
+```js
+console.log(parseInt(0.000008)); // 0 (0 来自于"0.000008")
+console.log(parseInt(0.0000008)); // 0 (0 来自于"8e-7")
+console.log(parseInt(false， 16)); // 250 ("fa" 来自于 "false")
+console.log(parseInt(parseInt， 16)); // 15 ("f" 来自于 "function")
+
+console.log(parseInt("0x10")); // 16
+console.log(parseInt("103"， 2)); // 2 (3无效)
+```
+
+`parseInt()` 如果传入一个对象，如果该对象含有 `toString()` 方法，则直接隐式调用用该方法，和前面说到的一样，把该方法返回值作为 `parseInt()` 的参数传递:
+
+```js
+var obj = {
+  a: 1，
+  toString() {
+    return this.a;
+  }，
+  valueOf() {
+    return 2;
+  }，
+  toJSON() {
+    return 3;
+  }，
+};
+
+console.log(parseInt(obj)); //  1
+```
+
+### 显示转换为布尔值
+
+与前面的 `String(...)` 和 `Number(...)`一样，`Boolean(...)` 是显示的 `ToBoolean` 强制类型转换，虽然 `Boolean(...)` 是显示的，但并不常用。
+
+一元运算符 `!` 显式地将值强制类型转换为布尔值。但是它同时还将真值反转为假值(或者将假值反转为真值)。所以显式强制类型转换为布尔值最常用的方法是 `!!`，因为第二个 `!` 会将结果反转回原值:
+
+```js
+var a = "0";
+var b = [];
+var c = {};
+
+var d = "";
+var e = 0;
+var f = null;
+
+var g;
+
+console.log(!!a); // true
+console.log(!!b); // true
+console.log(!!c); // true
+console.log(!!d); // false
+console.log(!!e); // false
+console.log(!!f); // false
+console.log(!!g); // false
+```
+
+## 隐式强制类型转换
+
+隐式强制类型转换指的是那些隐藏的强制类型转换，副作用也不是很明显。换句话说，你自己不觉得不够明显的强制类型转换都可以算作隐式强制类型转换。
+
+显示强制类型转换旨在让代码更加清晰易读，而隐式强制类型转换看起来就像是它的对立面，会让代码变得更晦涩。
+
+### 字符串和数字之间的隐式强制类型转换
+
+通过重载， `+` 运算符既能用于数字加法，也能用于字符串拼接。`JavaScript` 怎样来判断我们要执行的是哪个操作?例如:
+
+```js
+var a = "77";
+var b = "0";
+
+var c = 77;
+var d = 0;
+
+console.log(a + b); // 770
+console.log(c + d); // 77
+```
+
+这里为什么会得到 `"770"` 和 `77` 两个不同的结果呢?通常的理解是，因为某一个或者两个操作数都是字符串，所以 `+` 执行的是字符串拼接操作。这样解释只对了一般，实际情况要复杂的多，例如:
+
+```js
+var a = [1， 2];
+var b = [3， 4];
+
+console.log(a + b); // "1，23，4"
+```
+
+`a` 和 `b` 都不是字符串，但是它们都被强制转换为字符串然后进行拼接，原因是什么呢?
+
+![20250212161756](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250212161756.png)
+
+根据上图 `ES5规范` ，我们来个简单的总结，主要有以下规则:
+
+1. 把第一个表达式 `AdditiveExpression` 的值赋值给左引用 `lref`;
+
+2. 使用 `GetValue(lref)` 方法获取左引用 `lref` 的计算结果，并赋值给左值 `lval`。
+
+3. 使用 `ReturnIfAbrupt(lval)` 返回运算结，如果 `lval` 是 `abrupt completion`，则直接返回，如果是一个 `Completion Record`，那么则通过该记录的内部 `[[value]]` 获取生成的是正常值还是抛出的异常值，否则就是`empty`，`empty` 一般都为 `undefined`;
+
+4. 右边的也是相同的步骤;
+
+5. 使用 `ToPrimitive(lval)`获取左值 `lval` 的原始类型，并将其赋值给左原生值 `lprim`;
+
+6. 使用 `ToPrimitive(lval)`获取左值 `rval` 的原始类型，并将其赋值给右原生值 `rprim`;
+
+7. 如果操作符左边或者操作符右边其中一个是 `String` 类型，则把另外一个非 `String` 类型转换为 `String` 类型，再进行字符串拼接。如果另外一个也是 `String` 类型，则直接进行字符串拼接；
+
+8. 把 `ToNumber(lprim)` 的结果赋值给左数字 `lnum`;
+
+9. 把 `ToNumber(rprim)` 的结果赋值给左数字 `rnum`;
+
+10. 返回左数字 `lnum` 和 右数字 `rnum` 相加的数值;
+
+然鹅，加法操作还有以下规范:
+
+1. 如果其中一个操作数是 `NaN`，则返回结果便是 `NaN`;
+
+2. 两个 `Infinity` 相加还是 `Infinity`;
+
+3. 两个符号相反的 `Infinity` 相加是 `NaN`;
+
+4. `Infinity` 和一个有限值相加还是 `Infinity`;
+
+5. 两个 `-0` 的和是 `-0`，两个 `+0` 或两个符号相反的 `0` 的和为 `+0`。
+
+6. 零和非零有限值之和等于非零操作数。
+
+```js
+console.log(null + 1); // 1 Number(null) === 0
+console.log(undefined + 1); // NaN  Number(undefined)=== NaN
+console.log(NaN + 1); // NaN
+console.log(-Infinity + Infinity); // NaN
+console.log(Infinity + Infinity); // Infinity
+console.log(9999999 + Infinity); // Infinity
+console.log(-0 + 0); // 0
+console.log(-0 + -0); // -0
+```
+
+在上面的数组相加的例子中，因为数组并没有 `valueOf()` 方法，于是转而调用 `toString()`。因此上例中的两个数组变成了 `"1，2"` 和 `"3，4"`。`+` 操作符将它们进行了拼接，所以便返回了 `"1，23，4"`。
+
+我们再来看看下面的例子:
+
+```js
+var obj = {
+  valueOf() {
+    return 7;
+  }，
+  toString() {
+    return "7";
+  }，
+};
+
+var foo = {
+  valueOf() {
+    return 7;
+  }，
+  toString() {
+    return "7";
+  }，
+};
+
+var bar = {
+  toString() {
+    return "7";
+  }，
+};
+
+console.log(foo + obj); // 14
+console.log([1] + foo); // "17"
+console.log(foo + bar); // 77
+```
+
+通过代码输出可以得出结论，两个对象相加，如果对象内部有 `valueOf()` 方法，会优先调用该方法，否则调用 `toString()` 方法。剩下的继续遵循上面讲解的规则。
+
+我们再看看下面的那几对奇葩:
+
+```js
+console.log([] + {}); // [object Object]
+console.log({} + []); // [object Object]
+```
+
+通过查看输出，两者的结果一致，按照规范，它们是这样执行的:`[]` 调用 `toString()` 方法，返回 `""`，而 `{}` 调用 `toString()` 方法，返回的是 `[object Object]`，两者进行字符串拼接，于是有 `[object Object]` 这样的输出。
+
+但是这两个卧龙凤雏在浏览器上输出便产生了不同的结果，具体看下图:
+
+![20250212161937](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250212161937.png)
+
+这是因为 `{}` 被当成了一个独立的代码快运行了，所以 `{} + []` 变成了 `+[]`，所以结果就变成了 `0`。但是，对其加上一个括号，它又变回原样了。
+
+![20250212161949](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250212161949.png)
+
+我们再最后一个例子:
+
+```js
+console.log(new Date(2022， 11， 20) + 777); // Tue Dec 20 2022 00:00:00 GMT+0800 (中国标准时间)777
+```
+
+在这里 `Date` 是一个特例，如果其中一个操作数是对象，则对象则会遵循对象到原始值的转换规则，也就是首先调用 `valueOf()`，日期对象直接调用 `toString` 方法转成字符串，其它对象先调用 `valueOf()` 方法，所以该结果进行的是字符串拼接。
+
+`+` 操作符讲完了，接下来就看看 `-` 操作符，但是这个没 `+` 操作符那么复杂，这个很简单，继续看规范。
+
+![20250212162029](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250212162029.png)
+
+和 `+` 操作符不同的是， `-` 操作符默认都是把左右值优先转成 `number` 类型的，具体解释请看下面的代码:
+
+```js
+console.log([1， 3] - 2); // Nan   Number([1， 3]) - 2
+console.log(null - 1); // -1   Number(null) - 1
+console.log(undefined - 1); // NaN    Number(undefined) - 1
+console.log(77 - "7"); // 70  77 - Number("7")
+console.log([3] - [1]); // 2  Number([3]) - Number([1])
+console.log(new Date() - 1); // 1668914470081   new Date().valueOf() - 1
+```
+
+`+` 操作符在进行字符串拼接时会优先转换对象为字符串，而 `-` 操作符则会将左右操作数强制转换为数字进行运算，无法转换的值会返回 `NaN`。
+
+## 参考文献
+
+- [ES5 规范](http://es5.github.io/#x8.12.8)
+
+- [ECMA 标准](https://262.ecma-international.org/6.0/#sec-scope)
+
+- [ECMA 标准](https://tc39.es/ecma262/#sec-intro)
+
+- [MDN](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/valueOf)
+
+## 总结
+
+JavaScript 的类型转换分为隐式和显式转换。隐式转换由 JavaScript 自动执行，常见于运算符操作中，如 `+` 运算符会根据操作数类型选择进行字符串拼接或数值运算。显式转换则是开发者通过内建函数如 `String()`, `Number()` 等手动进行的转换。`toString()` 和 `valueOf()` 方法常用于对象的类型转换，`Symbol.toPrimitive` 允许自定义类型转换规则。总的来说，JavaScript 的类型转换机制既灵活又复杂，影响了代码的执行和结果。
