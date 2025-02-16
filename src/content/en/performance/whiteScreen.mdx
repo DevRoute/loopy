@@ -1,191 +1,191 @@
 ---
-title: "白屏检测"
+title: "White Screen Detection"
 ---
 
-# 白屏检测
+# White Screen Detection
 
-前端白屏是指用户打开网页时，页面未能正常加载或渲染，导致浏览器显示一片空白。这通常是由于 JavaScript 错误、资源加载失败、网络问题或渲染逻辑错误引起的。尤其在单页面应用（SPA）中，前端白屏问题变得更加复杂，可能导致用户无法看到任何有效内容。解决白屏问题需要快速定位并修复错误，确保资源正确加载和渲染。
+Frontend white screen refers to when users open a webpage and the page fails to load or render properly, resulting in a blank display in the browser. This is usually caused by JavaScript errors, resource loading failures, network issues, or rendering logic errors. Particularly in Single Page Applications (SPAs), frontend white screen issues become more complex and may prevent users from seeing any valid content. Resolving white screen issues requires quickly locating and fixing errors to ensure proper resource loading and rendering.
 
-## 白屏的表现和原因
+## White Screen Manifestations and Causes
 
-白屏的表现通常表现为以下几种情况：
+White screens typically manifest in the following ways:
 
-1. 页面空白：用户打开页面时，只能看到一个空白的浏览器窗口，没有任何内容显示。页面完全没有渲染，背景通常是白色的。
+1. Blank Page: When users open the page, they only see a blank browser window with no content displayed. The page hasn't rendered at all, and the background is usually white.
 
-2. 加载中状态无变化：页面在加载过程中，可能显示一个加载动画或进度条，但这个动画或进度条会停滞不前，长时间没有进展，最终变成空白。
+2. Loading State Stuck: During page loading, there might be a loading animation or progress bar, but it remains stagnant with no progress for an extended period, eventually becoming blank.
 
-3. 部分元素未显示：有时页面的某些内容未能渲染出来，可能只有一部分元素（如背景或某些框架）显示，其他部分完全消失，形成一个不完整的页面。
+3. Partial Elements Missing: Sometimes certain page content fails to render, with only some elements (like backgrounds or certain frameworks) showing while other parts completely disappear, resulting in an incomplete page.
 
-4. 浏览器错误提示：在开发环境下，开发者可能看到浏览器的控制台报错信息（如 JavaScript 错误、资源加载失败等），但用户端则仅显示空白页面。
+4. Browser Error Messages: In development environments, developers might see browser console error messages (like JavaScript errors or resource loading failures), while users only see a blank page.
 
-5. 不响应交互操作：页面空白且无法进行任何交互。用户尝试点击或滚动页面，但页面没有任何反应。
+5. No Response to Interactions: The page is blank and unresponsive to any interaction. Users' attempts to click or scroll the page yield no response.
 
-6. 无状态或黑屏：不是完全的白色屏幕，而是页面没有任何内容，背景可能变为黑色或灰色，但这通常表示页面渲染异常。
+6. Completely Empty or Black Screen: Instead of a completely white screen, the page has no content, and the background might turn black or gray, usually indicating abnormal page rendering.
 
-导致白屏的原因分为两种：资源加载错误、代码执行错误。
+White screens are caused by two types of issues: resource loading errors and code execution errors.
 
-### 资源加载错误
+### Resource Loading Errors
 
-资源加载错误通常指页面依赖的静态文件或网络请求未能成功加载，导致页面无法显示内容。常见的资源加载错误有：
+Resource loading errors typically refer to when static files or network requests that the page depends on fail to load successfully, preventing the page from displaying content. Common resource loading errors include:
 
-1. JavaScript 文件加载失败：如果必需的 JavaScript 文件未能加载（可能是文件路径错误、网络问题、服务器故障等），页面中的动态功能无法执行，导致空白。
+1. JavaScript File Loading Failure: If essential JavaScript files fail to load (possibly due to incorrect file paths, network issues, server failures, etc.), dynamic functionality on the page cannot execute, leading to blank screens.
 
-2. CSS 文件加载失败：如果页面样式表加载失败，页面元素的布局和样式无法应用，可能导致页面看起来是空白的。
+2. CSS File Loading Failure: If page stylesheets fail to load, page element layout and styles cannot be applied, potentially causing the page to appear blank.
 
-3. 图片、字体等静态资源加载失败：如果页面依赖的图片、字体等静态资源加载失败，可能导致页面内容不完整，甚至出现空白。
+3. Static Resource Loading Failure: If static resources like images and fonts that the page depends on fail to load, it may result in incomplete page content or even blank screens.
 
-4. API 请求失败：如果页面需要通过 API 获取数据，而 API 请求失败或返回错误（如 404 或 500 错误），可能导致页面的动态内容无法渲染。
+4. API Request Failure: If the page needs to fetch data through APIs and the API requests fail or return errors (like 404 or 500 errors), dynamic content on the page may fail to render.
 
-### 代码执行错误
+### Code Execution Errors
 
-代码执行错误是指 JavaScript 脚本在浏览器中运行时出现问题，导致页面的渲染过程被中断。常见的代码执行错误有：
+Code execution errors refer to issues that occur when JavaScript scripts run in the browser, interrupting the page rendering process. Common code execution errors include:
 
-1. JavaScript 运行时错误：在页面的脚本执行过程中，可能会出现未捕获的异常（例如访问未定义的变量、调用不存在的函数等），这些错误会阻止后续代码的执行，导致页面无法渲染。
+1. JavaScript Runtime Errors: During script execution on the page, uncaught exceptions might occur (such as accessing undefined variables or calling non-existent functions), which prevent subsequent code execution and prevent page rendering.
 
-2. 框架渲染错误：在使用像 React、Vue 或 Angular 等前端框架时，如果框架的组件渲染出现错误（如组件数据异常、状态管理错误等），也可能导致页面白屏。
+2. Framework Rendering Errors: When using frontend frameworks like React, Vue, or Angular, if framework component rendering encounters errors (such as component data anomalies or state management errors), it may result in blank screens.
 
-3. 异步代码问题：前端代码中大量依赖异步操作（例如使用 fetch 或 axios 发起 API 请求），如果这些异步操作失败（如网络问题、服务器返回错误等），也可能导致页面渲染失败。
+3. Asynchronous Code Issues: Frontend code heavily relies on asynchronous operations (like using fetch or axios for API requests). If these asynchronous operations fail (due to network issues, server errors, etc.), page rendering may fail.
 
-4. 无限循环或死锁：前端代码中的逻辑错误（如无限递归、死循环等）会使 JavaScript 引擎崩溃或挂起，导致页面无法渲染。
+4. Infinite Loops or Deadlocks: Logic errors in frontend code (like infinite recursion or endless loops) can cause the JavaScript engine to crash or hang, preventing page rendering.
 
-## 检测方案对比
+## Detection Method Comparison
 
-| 方法                 | 原理                                                                                             | 优点                 | 缺点                                                                                  |
-| -------------------- | ------------------------------------------------------------------------------------------------ | -------------------- | ------------------------------------------------------------------------------------- |
-| 检测某节点是否挂载   | SPA 框架渲染的 DOM 一般挂载在一个根节点下，监听 `onload`, `onerror` 事件，检测根节点是否挂载 DOM | 开发成本低           | 通用性差，只兼容主流 SPA 框架                                                         |
-| 监听 DOM 变化        | 利用 Mutation Observer API 监听 DOM 变化                                                         | 开发成本较低         | 准确度低，无法检测未渲染。结束渲染后可能丢失状态，如果用户长时间未操作 DOM 可能会失效 |
-| 页面截图对比         | 对页面截图，将页面与先前的截图进行对比                                                           | 技术难度无，适用性好 | 准确度低，无法检测到背景图、引导屏幕的背景                                            |
-| 前端错误内存溢出监测 | 利用 ErrorBoundary 组件捕获 JS 异常并检测页面异常                                                | 开发成本较低         | 无法检测页面异常屏幕，只能检测框架程度                                                |
-| 页面元素键值对比     | 在页面中查看交互/交叉验证各种样式，使用 `elementsFromPoint` API 获取元素下的信息                 | 准确性高，技术难度低 | 开发成本较高                                                                          |
+| Method | Principle | Advantages | Disadvantages |
+| -------- | -------- | -------- | -------- |
+| Root Node Mount Detection | Monitors whether DOM is mounted under a root node in SPA frameworks by listening to `onload` and `onerror` events | Low development cost | Poor compatibility, only works with mainstream SPA frameworks |
+| DOM Change Monitoring | Uses Mutation Observer API to monitor DOM changes | Relatively low development cost | Low accuracy, cannot detect unrendered content. May lose state after rendering completes, may fail if user doesn't interact with DOM for long periods |
+| Page Screenshot Comparison | Takes screenshots and compares them with previous versions | Technically simple, good applicability | Low accuracy, cannot detect background images and loading page backgrounds |
+| Frontend Error & Memory Overflow Detection | Uses ErrorBoundary component to catch JS exceptions and detect page anomalies | Relatively low development cost | Cannot detect abnormal screens, only framework-level issues |
+| Page Element Key-Value Comparison | Examines interactions/cross-validates styles using `elementsFromPoint` API to get element information | High accuracy, low technical difficulty | Higher development cost |
 
-> elementsFromPoint 是一个 JavaScript 的 API，用于获取指定屏幕坐标位置上所有的 DOM 元素。通过这个方法，你可以获得给定坐标处所有的元素，按层叠顺序（从上到下）。
+> elementsFromPoint is a JavaScript API that gets all DOM elements at specified screen coordinates. Through this method, you can obtain all elements at given coordinates in stacking order (top to bottom).
 
-如下代码使用示例：
+Example usage:
 
 ```JS
 document.elementsFromPoint(x, y);
 ```
 
-这几种前端白屏检测方案的主要区别在于检测原理和适用场景：
+The main differences between these frontend white screen detection methods lie in their detection principles and applicable scenarios:
 
-1. 检测节点是否挂载 主要通过监听页面根节点的事件来判断页面是否加载成功，适用于简单的 SPA 框架，但通用性差。
+1. Root Node Mount Detection mainly determines if page loading is successful by monitoring root node events. Suitable for simple SPA frameworks but has poor compatibility.
 
-2. 监听 DOM 变化 利用 `MutationObserver` API 动态监控 DOM 变化，适用于动态渲染，但准确度较低，无法检测未渲染的内容。
+2. DOM Change Monitoring uses the `MutationObserver` API to dynamically monitor DOM changes. Suitable for dynamic rendering but has low accuracy and cannot detect unrendered content.
 
-3. 页面截图对比 通过对比当前页面截图与预期截图来判断页面是否正确渲染，适用于检测页面的完整性，但无法处理动态内容。
+3. Page Screenshot Comparison determines if the page is rendered correctly by comparing current screenshots with expected ones. Suitable for checking page completeness but cannot handle dynamic content.
 
-4. 前端错误监测 通过捕获 JavaScript 错误来检测页面崩溃，适用于框架中的错误检测，但无法捕获页面显示异常。
+4. Frontend Error Detection detects page crashes by capturing JavaScript errors. Suitable for framework error detection but cannot capture display anomalies.
 
-5. 页面元素对比 利用 `elementsFromPoint` API 获取页面元素信息，检查页面显示，精确度高，但开发成本较高，适合复杂页面。
+5. Page Element Comparison uses the `elementsFromPoint` API to get page element information and check display status. High accuracy but higher development cost, suitable for complex pages.
 
-每种方法在精确度、开发难度和适用范围上有所不同。
+Each method differs in accuracy, development difficulty, and applicable scope.
 
-通过以上对比发现，采用 `页面关键点采样对比` 的实现方案较好。
+Based on the above comparison, using 'Page Key Point Sampling Comparison' proves to be a better implementation approach.
 
-需要注意的是，对于主应用内嵌入的 iframe 的场景，因为每次采样取到的都是整个 iframe 元素，所以无法在主应用侧判断 iframe 是否白屏，需要在 iframe 应用内接入白屏检测 SDK。
+Note that for scenarios with iframes embedded in the main application, since each sampling only captures the entire iframe element, it's impossible to determine if the iframe is showing a white screen from the main application. The white screen detection SDK needs to be integrated within the iframe application itself.
 
-## 数据采集
+## Data Collection
 
 ![20250208142506](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250208142506.png)
 
-这个流程图详细描述了前端白屏检测的步骤，尤其考虑到骨架屏应用的特殊情况。首先，系统会判断页面是否是骨架屏应用。这是因为骨架屏是一种页面加载过程中的占位符，通常会显示一个简单的框架或动画，以给用户提示页面正在加载。骨架屏本身可能会展示一个白屏状态，因此需要额外判断，确保不是因为骨架屏造成的误判。
+This flowchart details the steps of frontend white screen detection, particularly considering the special case of skeleton screen applications. First, the system determines if the page is a skeleton screen application. This is because skeleton screens are placeholders during page loading, typically showing a simple framework or animation to indicate that the page is loading. The skeleton screen itself might display a white screen state, so additional judgment is needed to ensure false positives are avoided.
 
-如果页面是骨架屏应用，接着会检查页面是否加载完成或出现加载错误。如果页面加载完成且没有错误，系统会在浏览器空闲时进行屏幕采样，判断当前页面是否满足白屏标准。如果符合标准，表示页面可能处于白屏状态，系统进一步判断是否开启了轮询检测。如果未开启，系统将启动轮询检测；如果已经开启，系统会比较初次采样结果与后续结果是否一致，确保页面没有发生变化。如果结果不一致，说明页面可能出现了白屏，系统将上报错误。
+If the page is a skeleton screen application, the system then checks if the page has finished loading or if there are loading errors. If the page loads successfully without errors, the system performs screen sampling during browser idle time to determine if the current page meets white screen criteria. If the criteria are met, indicating a possible white screen state, the system further checks if polling detection is enabled. If not enabled, the system will start polling detection; if already enabled, the system compares initial sampling results with subsequent results to ensure the page hasn't changed. If the results differ, indicating a possible white screen, the system will report the error.
 
-整个流程通过这些判断步骤，确保能够正确识别和上报白屏问题，尤其是在骨架屏这种特殊情况下，避免误判。
+The entire process ensures accurate identification and reporting of white screen issues through these judgment steps, particularly in special cases like skeleton screens, avoiding false positives.
 
-### 屏幕采样点选取
+### Screen Sampling Point Selection
 
-采样点的选取有三种方式：垂直采样、交叉采样、垂直交叉采样。
+There are three methods for selecting sampling points: vertical sampling, cross sampling, and vertical cross sampling.
 
-#### 垂直采样
+#### Vertical Sampling
 
-垂直采样是指从页面的顶部到底部沿垂直方向进行采样，逐行或以一定间隔采样页面的内容。这种方法可以简单而有效地检测页面的渲染情况，特别适用于页面内容有明显的垂直布局（如文章、博客等）。
+Vertical sampling refers to sampling page content from top to bottom along the vertical direction, either line by line or at certain intervals. This method can effectively detect page rendering, particularly suitable for pages with obvious vertical layouts (such as articles, blogs, etc.).
 
-但是如果页面的内容横向布局或者大量动态加载的部分，垂直采样可能无法完全覆盖页面的渲染状态。
+However, if the page has horizontal layouts or large amounts of dynamically loaded content, vertical sampling might not fully cover the page's rendering state.
 
 ![20250208143501](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250208143501.png)
 
-#### 交叉采样
+#### Cross Sampling
 
-交叉采样是指从页面的多个位置同时进行采样，既涵盖垂直方向，也涉及水平方向的多个位置。通常，它通过交替选择页面不同区域的采样点来进行检测。交叉采样能够捕捉更多页面细节，特别适用于多列布局或复杂页面结构（如新闻网站、电子商务平台等），可以更全面地反映页面的渲染情况。与垂直采样相比，交叉采样需要更多的计算资源，采样点较多，因此在实现上更复杂，可能会带来额外的性能开销。
+Cross sampling involves sampling from multiple locations on the page simultaneously, covering both vertical and horizontal directions. Typically, it detects by alternately selecting sampling points from different page areas. Cross sampling can capture more page details, particularly suitable for multi-column layouts or complex page structures (such as news websites, e-commerce platforms, etc.), providing a more comprehensive view of page rendering. Compared to vertical sampling, cross sampling requires more computational resources and has more sampling points, making implementation more complex and potentially causing additional performance overhead.
 
 ![20250208143642](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250208143642.png)
 
-#### 垂直交叉采样
+#### Vertical Cross Sampling
 
-垂直交叉采样结合了垂直采样和交叉采样的特点，既沿页面的垂直方向从顶部到底部进行采样，又在不同的垂直线间交替进行水平采样。这样可以覆盖页面更广泛的区域，既能检查整体布局，又能捕捉细节，适用于复杂的页面结构。由于采样点增多，计算量较大，可能对性能造成一定压力，因此在实际应用中需要平衡检测精度与性能开销。
+Vertical cross sampling combines features of both vertical and cross sampling, sampling both vertically from top to bottom and alternating horizontal sampling between different vertical lines. This covers a broader page area, checking both overall layout and details, suitable for complex page structures. Due to increased sampling points, the computational load is higher, potentially impacting performance, so practical applications need to balance detection accuracy with performance overhead.
 
-为了克服垂直交叉采样带来的性能问题，我们可以利用 requestIdleCallback 在浏览器空闲时执行计算。由于 requestIdleCallback 只在空闲时段运行，它不会阻塞页面渲染或影响用户操作的响应速度，从而有效减轻了计算负担。
+To overcome the performance issues of vertical cross sampling, we can use requestIdleCallback to perform calculations during browser idle time. Since requestIdleCallback only runs during idle periods, it won't block page rendering or affect user operation response time, effectively reducing computational burden.
 
 ![20250208144920](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250208144920.png)
 
-### 白屏的判断标准和检测时机
+### White Screen Detection Criteria and Timing
 
-有骨架屏和无骨架屏应用的检测方式不一样，检测时机也有细微差别。
+Detection methods and timing differ slightly between applications with and without skeleton screens.
 
-#### 无骨架屏场景
+#### Scenarios Without Skeleton Screens
 
-确定可见元素的检测时机是一个关键挑战，时机把握不当容易导致误判。如果检测过早，可能会将页面加载过程中的短暂空白误认为是白屏，从而无法准确反映页面最终的渲染状态；而如果检测过晚，当用户因长时间等待而关闭页面时，白屏情况就会错过，导致漏测。因此，合理选择检测时机至关重要，既要避免过早判断，也要防止延迟导致漏报。
+Determining the timing for detecting visible elements is a key challenge - improper timing can lead to misjudgments. If detection occurs too early, temporary blanks during page loading might be mistaken for white screens, failing to accurately reflect the page's final rendering state. If detection occurs too late, white screen incidents might be missed when users close pages due to long wait times. Therefore, choosing appropriate detection timing is crucial to avoid both premature judgment and delayed reporting.
 
-##### 检测时机
+##### Detection Timing
 
-检测的时机主要分为以下几个方面：
+Detection timing consists of several aspects:
 
-1. 页面加载完成后：在页面加载完成并没有出现任何加载错误时，监控会开始进行初始的采样。startMonitoring 方法作为监控的入口，会在方法中调用 requestIdleCallback 来进行浏览器空闲时的采样。
+1. After Page Load: When the page has loaded completely without any loading errors, monitoring begins initial sampling. The startMonitoring method, serving as the monitoring entry point, calls requestIdleCallback to perform sampling during browser idle time.
 
-2. 浏览器空闲时采样：通过使用 requestIdleCallback 来执行采样任务，确保采样操作不会阻塞页面渲染和用户交互。requestIdleCallback 确保在浏览器空闲时执行，从而提升性能并减少对用户体验的影响。
+2. Browser Idle Time Sampling: Using requestIdleCallback to execute sampling tasks ensures sampling operations don't block page rendering and user interaction. requestIdleCallback ensures execution during browser idle time, improving performance and reducing impact on user experience.
 
-3. 页面内容变化检测：在每次采样时，系统会将当前的采样数据与初始采样数据进行对比，检查页面是否发生变化。如果页面发生了变化，系统会进行异常上报（reportAnomaly 方法），并启动重试机制（retrySampling 方法）。
+3. Page Content Change Detection: During each sampling, the system compares current sampling data with initial sampling data to check for page changes. If changes occur, the system reports anomalies (reportAnomaly method) and initiates retry mechanisms (retrySampling method).
 
-4. 白屏检测：系统每次采样时都会判断页面中是否有空白区域。若空白区域超过设定的阈值（threshold），则认为页面为白屏并触发上报。白屏检测基于页面元素的有无和可视状态进行判定，通过大量的采样点来增强准确性。
+4. White Screen Detection: The system checks for blank areas during each sampling. If blank areas exceed the set threshold, the page is considered white screen and triggers reporting. White screen detection is based on the presence and visibility of page elements, using multiple sampling points to enhance accuracy.
 
-5. 重试机制：在页面发生变化或者检测到白屏的情况下，系统会启动重试机制。通过 retrySampling 方法，系统会根据设定的最大重试次数和重试间隔进行多次采样，直到检测到页面发生变化或达到最大重试次数。
+5. Retry Mechanism: When page changes or white screens are detected, the system initiates a retry mechanism. Through the retrySampling method, the system performs multiple samplings based on maximum retry counts and intervals until detecting page changes or reaching maximum retries.
 
-6. 停止监控：在监控过程中，如果页面发生特殊情况（例如，页面请求被取消，或者页面被强制停止），可以调用 stopMonitoring 方法来停止监控。调用时，requestIdleCallback 会停止采样，监控任务也会被清除，避免不必要的资源消耗。
+6. Stop Monitoring: During monitoring, if special circumstances occur (e.g., page request cancellation or forced page stop), the stopMonitoring method can be called to stop monitoring. When called, requestIdleCallback stops sampling and monitoring tasks are cleared to avoid unnecessary resource consumption.
 
-##### 检测方式
+##### Detection Methods
 
-无骨架屏的检测方式主要有以下几个方面：
+Detection methods for applications without skeleton screens include several aspects:
 
-1. 初始化和配置根容器：在初始化 SDK 时，我们需要根据页面的结构配置根容器。如果根容器为空（即页面中没有有效的容器元素），则认为页面发生了白屏。在代码中，根容器元素的判断通过 isContainer 方法实现。该方法通过判断元素的 tagName 是否为常见容器元素（如 DIV, SECTION, MAIN, HEADER, FOOTER）来确定是否是有效的根容器。
+1. Root Container Initialization and Configuration: When initializing the SDK, we need to configure root containers based on page structure. If the root container is empty (no valid container elements in the page), it's considered a white screen. In the code, root container element determination is implemented through the isContainer method, which determines valid root containers by checking if element tagNames are common container elements (like DIV, SECTION, MAIN, HEADER, FOOTER).
 
-2. 采样点的计算和检测：通过获取页面的宽度 (window.innerWidth) 和高度 (window.innerHeight)，代码计算了多个采样点的坐标，涵盖了页面的各个方向（包括 X 轴、Y 轴、上升对角线和下降对角线）。使用 document.elementsFromPoint 方法获取每个坐标的 DOM 元素，并判断这些元素是否为有效的根容器元素。若某些采样点没有有效的容器元素，便增加空点计数。
+2. Sampling Point Calculation and Detection: By obtaining page width (window.innerWidth) and height (window.innerHeight), the code calculates multiple sampling point coordinates covering various directions (including X-axis, Y-axis, ascending diagonal, and descending diagonal). Using document.elementsFromPoint method to get DOM elements at each coordinate and determining if these elements are valid root container elements. Empty point count increases when sampling points lack valid container elements.
 
-3. 白屏检测：每次采样后，系统会检查页面中是否有空白区域。空白区域超过设定的阈值（threshold）时，认为页面发生了白屏并进行上报。为了避免遗漏微前端或 iframe 场景的子应用，代码选定页面的 右下方 作为内容区，通过检查该区域内的采样点来判断是否满足白屏条件。这样可以确保即使主应用中没有白屏，子应用的白屏问题也能够被检测到。
+3. White Screen Detection: After each sampling, the system checks for blank areas on the page. When blank areas exceed the set threshold, the page is considered white screen and reported. To avoid missing micro-frontend or iframe scenario sub-applications, the code designates the lower right area as the content area, checking sampling points in this area to determine white screen conditions. This ensures white screen issues in sub-applications can be detected even if the main application shows no white screen.
 
-4. 重试机制：在检测到页面内容发生变化或白屏时，系统会启动重试机制。通过 retrySampling 方法，系统会在设定的最大重试次数和重试间隔内进行多次采样，直到页面状态发生变化或达到最大重试次数。此机制确保了即使在页面动态变化时，监控也能够及时捕捉到状态变化。
+4. Retry Mechanism: When detecting page content changes or white screens, the system initiates a retry mechanism. Through the retrySampling method, the system performs multiple samplings within set maximum retry counts and intervals until page state changes or maximum retries are reached. This mechanism ensures monitoring can capture state changes even during dynamic page changes.
 
-5. 停止监控：当页面发生特殊情况（如请求被取消或页面被强制停止）时，监控会被停止。通过 stopMonitoring 方法，requestIdleCallback 会停止采样任务，清除定时器，避免不必要的资源消耗。
+5. Stop Monitoring: When special circumstances occur (like request cancellation or forced page stop), monitoring stops. Through the stopMonitoring method, requestIdleCallback stops sampling tasks and clears timers to avoid unnecessary resource consumption.
 
 ![20250208164239](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250208164239.png)
 
-如上图所示，整个屏幕共 33 个采样点，其中内容区有 28 个。简单起见，检测白屏时，我们判断空白的采样点是否大于等于 28 个。采样点坐标的获取如下：
+As shown above, the entire screen has 33 sampling points, with 28 in the content area. For simplicity, when detecting white screens, we determine if blank sampling points are greater than or equal to 28. Sampling point coordinates are obtained as follows:
 
 ```ts
 for (let i = 1; i <= 9; i++) {
-  // x轴采样点
+  // x-axis sampling points
   const xElements = document?.elementsFromPoint(
     (window.innerWidth * i) / 10,
     window.innerHeight / 2
   )
-  // y轴采样点
+  // y-axis sampling points 
   const yElements = document?.elementsFromPoint(
     window.innerWidth / 2,
     (window.innerHeight * i) / 10
   )
-  // 上升的对角线采样点
+  // ascending diagonal sampling points
   const upDiagonalElements = document?.elementsFromPoint(
     (window.innerWidth * i) / 10,
     (window.innerHeight * i) / 10
   )
-  // 下降的对角线采样点
+  // descending diagonal sampling points
   const downDiagonalElements = document?.elementsFromPoint(
     (window.innerWidth * i) / 10,
     window.innerHeight - (window.innerHeight * i) / 10
   )
 
-  // 针对每个方向的采样进行数据获取
+  // Get sample data for each direction
   sampleData[`xElement_${i}`] = this.getElementSample(xElements[0])
   sampleData[`yElement_${i}`] = this.getElementSample(yElements[0])
   sampleData[`upDiagonalElement_${i}`] = this.getElementSample(
@@ -195,7 +195,7 @@ for (let i = 1; i <= 9; i++) {
     downDiagonalElements[0]
   )
 
-  // 判断是否为空点（无有效内容或不可见）并同时检查是否是容器
+  // Check if it's an empty point (no valid content or invisible) and check if it's a container
   if (
     !this.isElementVisible(xElements[0])
     || !this.isContainer(xElements[0] as HTMLElement)
@@ -204,7 +204,7 @@ for (let i = 1; i <= 9; i++) {
   }
 
   if (i !== 5) {
-    // 避免中心点重复计算
+    // Avoid duplicate calculation of center point
     if (
       !this.isElementVisible(yElements[0])
       || !this.isContainer(yElements[0] as HTMLElement)
@@ -227,19 +227,20 @@ for (let i = 1; i <= 9; i++) {
 }
 ```
 
-#### 骨架屏场景
+#### Skeleton Screen Scenarios
 
-检测的时机主要分为以下几个方面：
+Detection timing consists of several aspects:
 
-1. 监听骨架屏消失：使用 MutationObserver 监听 DOM 变化，当骨架屏从页面中移除时，触发白屏检测。
+1. Monitor Skeleton Screen Disappearance: Use MutationObserver to monitor DOM changes, triggering white screen detection when skeleton screen is removed from the page.
 
-2. 超时机制：如果骨架屏在 skeletonMaxWaitTime 内没有消失，强制触发白屏检测，防止页面无限等待。
+2. Timeout Mechanism: If skeleton screen doesn't disappear within skeletonMaxWaitTime, force white screen detection to prevent infinite page waiting.
 
-3. 骨架屏消失后检测白屏：当骨架屏移除后，立即检查页面是否有有效内容，确保页面正确渲染。
+3. White Screen Detection After Skeleton Screen Disappearance: Once skeleton screen is removed, immediately check if page has valid content to ensure proper rendering.
 
-##### 检测方式
 
-如果应用内有骨架屏，继续用无骨架屏应用的白屏检测方式已经无法判断白屏，因为骨架屏也是有效的 dom 元素。
+##### Detection Methods
+
+If an application has a skeleton screen, continuing to use non-skeleton screen application's white screen detection methods becomes ineffective because skeleton screens are valid DOM elements.
 
 ```ts
 import { Logger } from './Logger'
@@ -248,11 +249,11 @@ import { SDKConfig } from './types'
 export class SkeletonScreenMonitor {
   private config: SDKConfig
   private onSkeletonDisappear: () => void
-  private onWhiteScreenDetected: () => void // 新增：白屏回调
+  private onWhiteScreenDetected: () => void // Added: white screen callback
   private logger: Logger
-  private isSkeletonScreenGone: boolean = false // 确保回调只执行一次
-  private observer: MutationObserver | null = null // 保存 MutationObserver 实例
-  private timeoutId: number | null = null // 保存定时器 ID
+  private isSkeletonScreenGone: boolean = false // Ensure callback is executed only once
+  private observer: MutationObserver | null = null // Store MutationObserver instance
+  private timeoutId: number | null = null // Store timer ID
 
   constructor(
     config: SDKConfig,
@@ -262,17 +263,17 @@ export class SkeletonScreenMonitor {
   ) {
     this.config = config
     this.onSkeletonDisappear = onSkeletonDisappear
-    this.onWhiteScreenDetected = onWhiteScreenDetected // 初始化白屏回调
+    this.onWhiteScreenDetected = onWhiteScreenDetected // Initialize white screen callback
     this.logger = logger
   }
 
-  // 监听骨架屏的消失并开始白屏检测
+  // Monitor skeleton screen disappearance and start white screen detection
   waitForSkeletonToDisappear(): void {
     const skeleton = document.querySelector(this.config.skeletonSelector)
 
     if (!skeleton) {
       this.logger.info('No skeleton screen detected')
-      this.triggerSkeletonDisappear() // 没有检测到骨架屏时，直接调用回调
+      this.triggerSkeletonDisappear() // If no skeleton screen detected, directly call callback
 
       return
     }
@@ -285,9 +286,9 @@ export class SkeletonScreenMonitor {
             && removedNode.matches(this.config.skeletonSelector)
           ) {
             this.logger.info('Skeleton screen disappeared')
-            this.disconnectObserver() // 骨架屏消失时断开 observer
-            this.triggerSkeletonDisappear() // 骨架屏消失时调用回调
-            this.checkForWhiteScreen() // 骨架屏消失后，检查白屏
+            this.disconnectObserver() // Disconnect observer when skeleton screen disappears
+            this.triggerSkeletonDisappear() // Call callback when skeleton screen disappears
+            this.checkForWhiteScreen() // Check for white screen after skeleton screen disappears
           }
         })
       })
@@ -295,7 +296,7 @@ export class SkeletonScreenMonitor {
 
     this.observer.observe(document.body, { childList: true, subtree: true })
 
-    // 设置超时机制，如果骨架屏在最大等待时间内未消失，强制触发回调
+    // Set timeout mechanism, if skeleton screen doesn't disappear within maximum wait time, force trigger callback
     this.timeoutId = window.setTimeout(() => {
       this.disconnectObserver()
 
@@ -304,45 +305,45 @@ export class SkeletonScreenMonitor {
         this.triggerSkeletonDisappear()
       }
 
-      this.checkForWhiteScreen() // 超时后检查白屏
+      this.checkForWhiteScreen() // Check for white screen after timeout
     }, this.config.skeletonMaxWaitTime)
   }
 
-  // 用于触发骨架屏消失的回调，并确保只触发一次
+  // Trigger callback for skeleton screen disappearance and ensure it's triggered only once
   private triggerSkeletonDisappear(): void {
     if (!this.isSkeletonScreenGone) {
       this.isSkeletonScreenGone = true
-      this.onSkeletonDisappear() // 确保回调只执行一次
+      this.onSkeletonDisappear() // Ensure callback is executed only once
     }
   }
 
-  // 检查页面是否有有效的内容，判断是否为白屏
+  // Check if the page has valid content and determine if it's a white screen
   private checkForWhiteScreen(): void {
     const visibleContent = this.getVisibleContent()
 
     if (visibleContent === 0) {
       this.logger.error('White screen detected')
-      this.onWhiteScreenDetected() // 白屏检测回调
+      this.onWhiteScreenDetected() // Call white screen callback
     }
     else {
       this.logger.info(`Visible content detected: ${visibleContent} elements`)
     }
   }
 
-  // 获取页面中可见的元素数目
+  // Get the number of visible elements on the page
   private getVisibleContent(): number {
     const visibleElements = document.querySelectorAll(
       this.config.contentSelector
-    ) // 获取父容器的内容
+    ) // Get content of parent container
     let visibleCount = 0
 
-    // 遍历父容器下的所有子元素，检查它们的显示状态
+    // Iterate through all child elements under the parent container and check their display status
     visibleElements.forEach((element) => {
-      // 检查该元素是否可见
+      // Check if the element is visible
       const rect = element.getBoundingClientRect()
       const computedStyle = window.getComputedStyle(element)
 
-      // 只有当元素有尺寸且不是被隐藏时，才算作可见
+      // Only count as visible when element has dimensions and is not hidden
       if (
         rect.width > 0
         && rect.height > 0
@@ -356,7 +357,7 @@ export class SkeletonScreenMonitor {
     return visibleCount
   }
 
-  // 断开 observer 并清除定时器
+  // Disconnect observer and clear timer
   disconnectObserver(): void {
     if (this.observer) {
       this.observer.disconnect()
@@ -373,20 +374,20 @@ export class SkeletonScreenMonitor {
 }
 ```
 
-在 SkeletonScreenMonitor 类中，白屏检测的核心在于监听骨架屏的消失，并在合适的时机判断页面是否渲染出有效内容。骨架屏作为页面加载过程中的占位符，当它被移除时，就意味着页面的真实内容应该已经加载完成，因此白屏检测会在这个时机进行。检测方法 checkForWhiteScreen 会在骨架屏消失后被调用，检查页面中是否存在可见的内容。如果没有可见内容，则会触发 onWhiteScreenDetected 回调，认为页面出现白屏。
+In the SkeletonScreenMonitor class, white screen detection primarily involves monitoring skeleton screen disappearance and determining appropriate timing to check if the page renders valid content. The skeleton screen serves as a placeholder during page loading, and when removed, it indicates that real page content should have loaded, triggering white screen detection at this time. The checkForWhiteScreen method is called after skeleton screen disappearance to check for visible content on the page. If no visible content exists, the onWhiteScreenDetected callback triggers, indicating a white screen.
 
-具体的检测方式是 getVisibleContent 方法，它通过遍历页面中的元素，检查它们是否具有非零尺寸，并且 visibility 不是 hidden，display 不是 none，从而判断页面是否真正渲染了内容。如果页面中没有符合这些条件的可见元素，就认为是白屏，并触发相应的回调。
+The specific detection method is the getVisibleContent method, which iterates through page elements, checking if they have non-zero dimensions and if visibility isn't hidden and display isn't none, thus determining if the page has truly rendered content. If no visible elements meet these conditions, it's considered a white screen and triggers corresponding callbacks.
 
-此外，为了防止某些情况下骨架屏长时间未消失，代码还设置了超时机制。如果骨架屏在设定的最大等待时间内没有移除，则强制触发 onWhiteScreenDetected，确保白屏检测不会因为骨架屏未消失而被跳过。为了准确捕捉骨架屏的消失，MutationObserver 监听 document.body 的变化，一旦骨架屏被移除，就立即执行白屏检测，确保页面已经正常渲染。即使骨架屏移除后，仍然需要确认页面的主要内容是否真正加载，防止误判。
+Additionally, to prevent cases where skeleton screens don't disappear for extended periods, the code includes a timeout mechanism. If the skeleton screen hasn't been removed within the maximum wait time, onWhiteScreenDetected is forcibly triggered, ensuring white screen detection isn't skipped due to skeleton screen persistence. To accurately capture skeleton screen disappearance, MutationObserver monitors document.body changes, executing white screen detection immediately upon skeleton screen removal to ensure normal page rendering. Even after skeleton screen removal, confirmation of main content loading is still necessary to prevent false judgments.
 
-## 参考资料
+## References
 
-- [前端白屏检测：SDK 的设计与实现](https://juejin.cn/post/7310112724945272832)
+- [Frontend White Screen Detection: SDK Design and Implementation](https://juejin.cn/post/7310112724945272832)
 
-## 总结
+## Summary
 
-前端白屏是指用户访问网页时，页面未能正常加载或渲染，导致浏览器显示空白。这通常由资源加载失败、代码执行错误或网络问题引起。白屏问题在单页面应用（SPA）中尤为复杂，可能导致用户无法看到任何有效内容。
+Front-end white screen refers to a scenario where users encounter a blank browser display when accessing a web page due to failed loading or rendering, typically caused by resource loading failures, code execution errors, or network issues. This problem is particularly complex in Single Page Applications (SPAs), potentially leaving users unable to view any meaningful content.  
 
-白屏检测可以通过多种方案实现。常见的方法包括监听根节点的事件、使用 MutationObserver 监听 DOM 变化、页面截图对比、前端错误监测以及页面元素对比。每种方案在准确性、开发难度和适用范围上有所不同。基于采样点的检测方案，通过选取页面上的多个采样点，检查是否有有效内容来判断页面是否为白屏。检测时需要平衡性能开销和检测精度，常见的采样方式有垂直采样、交叉采样和垂直交叉采样。
+White screen detection can be implemented through various approaches. Common methods include monitoring root node events, using MutationObserver to track DOM changes, screenshot comparison, front-end error monitoring, and page element analysis. Each method varies in accuracy, development complexity, and applicability. Sampling point-based detection, for example, evaluates whether a page is blank by checking multiple sampling points for valid content, requiring a balance between performance overhead and detection precision. Typical sampling strategies include vertical sampling, cross sampling, and vertical-cross hybrid sampling.  
 
-为了确保检测结果的准确性，白屏检测工具通常会结合页面加载状态、骨架屏的消失时机以及页面内容的渲染状态来判断是否为白屏。在微前端和 iframe 场景中，需要特别注意子应用的白屏检测。通过完善白屏检测，能够在早期发现问题，减少重大故障发生的几率，提升用户体验。
+To ensure detection accuracy, white screen detection tools typically combine page loading status, the timing of skeleton screen disappearance, and content rendering state to determine if a white screen occurs. Special attention is needed for sub-application detection in micro-frontend and iframe scenarios. By refining white screen detection, issues can be identified early, reducing the likelihood of critical failures and improving user experience.

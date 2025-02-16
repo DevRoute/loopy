@@ -1,10 +1,10 @@
 import type { MetaRecord } from 'nextra'
 
 export default {
-  whiteScreen: '白屏检测',
+  whiteScreen: 'White Screen Detection',
 
-  FCP: '前端性能指标--FCP',
-  FMP: '前端性能指标--FMP',
+  FCP: 'Frontend Performance Metrics--FCP',
+  FMP: 'Frontend Performance Metrics--FMP',
 
 
 } satisfies MetaRecord

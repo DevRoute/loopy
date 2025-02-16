@@ -1,37 +1,37 @@
 ---
-title: "类型判断"
+title: "Type Judgment"
 ---
-# 类型判断
-在 JavaScript 中，有 7 种内置类型，分别是：
+# Type Judgment
+In JavaScript, there are 7 built-in types, which are:
 
-- 空值 (`null`)
-- 未定义 (`undefined`)
-- 布尔值 (`boolean`)
-- 数字 (`number`)
-- 字符串 (`string`)
-- 对象 (`object`)
-- 符号 (`symbol`)
+- Null (`null`)
+- Undefined (`undefined`)
+- Boolean (`boolean`)
+- Number (`number`)
+- String (`string`)
+- Object (`object`)
+- Symbol (`symbol`)
 
-严格来说，JavaScript 有 6 种原始类型（值类型）：
+Strictly speaking, JavaScript has 6 primitive types (value types):
 
-- 空值 (`null`)
-- 未定义 (`undefined`)
-- 布尔值 (`boolean`)
-- 数字 (`number`)
-- 字符串 (`string`)
-- 符号 (`symbol`)
+- Null (`null`)
+- Undefined (`undefined`)
+- Boolean (`boolean`)
+- Number (`number`)
+- String (`string`)
+- Symbol (`symbol`)
 
-此外，还有一个特殊的原始类型：
+In addition, there is a special primitive type:
 
-- 任意精度整数 (`BigInt`)，用于表示大于 `Number` 范围的整数。
+- BigInt, used to represent integers larger than the range of `Number`.
 
-这些原始类型是不可变的，而 `Object` 类型是复杂类型，可以包含多个值。
+These primitive types are immutable, while the `Object` type is a complex type that can contain multiple values.
 
-## 什么是 typeof
+## What is typeof
 
-typeof 是 JavaScript 中的一个运算符，用来检查一个变量的类型。它会返回一个字符串，表示给定值的类型。
+`typeof` is an operator in JavaScript used to check the type of a variable. It returns a string that indicates the type of the given value.
 
-接下来我们使用 `typeof` 运算符来查看值的类型，它返回的是类型的字符串值。有意思的是，这七种类型和它们的字符串值并不一一对应:
+Next, we will use the `typeof` operator to see the type of values; it returns the string value of the type. Interestingly, these seven types and their string values do not correspond one-to-one:
 
 ```js
 console.log(typeof 777); // number
@@ -43,13 +43,13 @@ console.log(typeof Number("moment")); // number
 console.log(typeof 77n); // bigint
 
 console.log(typeof "1"); // string
-console.log(typeof typeof 1); // string typeof 返回一个字符串
+console.log(typeof typeof 1); // string typeof returns a string
 console.log(typeof String(777)); // string
 
 console.log(typeof true); // boolean
 console.log(typeof false); // boolean
-console.log(typeof Boolean(5)); // boolean  // Boolean() 会基于参数是真值还是虚值进行转换
-typeof !!1 === "boolean"; // 两次调用 !（逻辑非）运算符相当于 Boolean()
+console.log(typeof Boolean(5)); // boolean  // Boolean() converts based on whether the argument is truthy or falsy
+typeof !!1 === "boolean"; // Calling ! (logical NOT) twice is equivalent to Boolean()
 
 console.log(typeof Symbol()); // symbol
 console.log(typeof Symbol("foo")); // symbol
@@ -65,29 +65,29 @@ console.log(typeof function () {}); // function
 console.log(typeof class T {}); // function
 ```
 
-你可能注意到 `null` 类型比较特殊,`typeof null==='object'`,正确的返回应该是`'null'`,但是这个 bug 由来已久,在`JavaScript`中已经存在了将近二十年,也许永远不会修复。
+You may have noticed that the `null` type is quite special, `typeof null === 'object'`, the correct return should be `'null'`, but this bug has existed for nearly twenty years in JavaScript and may never be fixed.
 
-在 JavaScript 最初的实现中，JavaScript 中的值是由一个表示类型的标签和实际数据值表示的。对象的类型标签是 0。由于  `null`  代表的是空指针（大多数平台下值为 0x00），因此，null 的类型标签是 0，`typeof null`  也因此返回  `"object"`。
+In the original implementation of JavaScript, values in JavaScript were represented by a type label and the actual data value. The type label for objects is 0. Since `null` represents a null pointer (most platforms have a value of 0x00), the type label for `null` is also 0, which is why `typeof null` returns `"object"`.
 
 ```js
 console.log(typeof function () {}); // function
 ```
 
-在上面的代码中,输出结果为 `'function'`,说明 `function` 也是`JavaScript` 的一个内置类型。然而规范里，它实际上是 `object` 的一个 `子类型`。具体来说，函数是 `可调用对象`，它有一个内部属性 `[[call]]` ,该属性使其可以被调用。
+In the code above, the output is `'function'`, indicating that `function` is also a built-in type in JavaScript. However, in the specification, it is actually a subtype of `object`. Specifically, functions are `callable objects`, which have an internal property `[[call]]` that allows them to be called.
 
 ```js
 function f() {}
 console.log(f.__proto__.constructor === Function); // true
 console.log(f.__proto__.__proto__.constructor === Object); // true
 
-// 函数不仅是对象,还可以拥有属性
+// Functions are not only objects but can also have properties
 console.log(f.name); // f
-console.log(f.arguments); // 因为没有传参数,所以是一个 null
+console.log(f.arguments); // null because no parameters were passed
 ```
 
-通过原型的方法去判别,函数确实是 Object 的子类。
+By using the prototype method to determine, functions are indeed subclasses of Object.
 
-再来看看数组，`JavaScript`支持数组，数组也是对象，确切涞水，它也是 `object` 的一个 `子类型`，数组的元素按数字顺序来进行索引，其 `length` 属性是元素的个数。
+Now let's look at arrays. JavaScript supports arrays, and arrays are also objects. More precisely, they are also a subtype of `object`, and the elements of an array are indexed in numerical order, with its `length` property being the number of elements.
 
 ```js
 const foo = [];
@@ -95,9 +95,9 @@ console.log(foo.__proto__.constructor === Array); // true
 console.log(foo.__proto__.__proto__.constructor === Object); // true
 ```
 
-## new 操作符
+## The new Operator
 
-- 所有使用  `new`  调用的构造函数都将返回非基本类型,返回的不是`object` 类型,就是  `function`。大多数返回对象，但值得注意的例外是  Function，它返回一个函数。
+- All constructor functions called with `new` will return non-primitive types; the return is either `object` type or `function`. Most return objects, but a notable exception is `Function`, which returns a function.
 
 ```js
 const str = new String("777");
@@ -110,20 +110,20 @@ console.log(typeof num); // object
 console.log(typeof func); // function
 ```
 
-## undefined 和 undeclared
+## Undefined and Undeclared
 
-- 变量在未持有值的时候为 `undefined`。此时 `typeof` 返回 `undefined`:
+- A variable is `undefined` when it does not hold a value. At this point, `typeof` returns `undefined`:
 
 ```js
 var a;
 console.log(tyoeof a); // undefined
 ```
 
-大多数的开发者倾向于将 `undefined` 等同于 `undeclared(未声明)`，但在 `JavaScript`中它们完全是两回事。在作用域中声明但是还没有赋值的变量,是 `undefined`。相反，还没有在作用域中声明过的变量，是`undeclared` 的。
+Most developers tend to equate `undefined` with `undeclared`, but in JavaScript, they are completely different. A variable declared in the scope but not yet assigned a value is `undefined`. In contrast, a variable that has not been declared in the scope is `undeclared`.
 
 ![20250212165935](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250212165935.png)
 
-在上列中, `bar is not defined`容易让人误以为是 `bar is undefined`。但是 `undefined` 和 `is undefined` 是两码事，但是 `typeof` 处理 `undeclared` 返回的结果竟然是 `undefined`，例如:
+In the example above, `bar is not defined` can easily be mistaken for `bar is undefined`. However, `undefined` and `is undefined` are two different things, but `typeof` handles `undeclared` and returns `undefined`, for example:
 
 ```js
 var foo;
@@ -132,13 +132,13 @@ console.log(typeof foo); // undefined
 console.log(typeof bar); // undefined
 ```
 
-它们两个原样返回 `"undefined"`，并且 `typeof bar` 并没有报错，这是因为 `typeof` 有一个特殊的安全防范机制。
+Both return `"undefined"` as is, and `typeof bar` does not throw an error because `typeof` has a special safety mechanism.
 
-## 内部属性 `[[class]]`
+## Internal Property `[[class]]`
 
-在前面的例子中，使用 `typeof` 进行判断，无论是 `null`、`Object`、`Array`等类型，都返回的是 `"object"`，那么是否有一种机制可以判断它具体为什么类型的值呢?答案是有的。
+In the previous examples, using `typeof` for judgment, whether it is `null`, `Object`, `Array`, etc., all return `"object"`. So is there a mechanism to determine what specific type of value it is? The answer is yes.
 
-所有 `typeof` 返回值为 `object` 的对象（如数组）都包含一个内部属性 `[[class]]`，我们可以把它看作一个内部的分类，而非传统的面向对象意义上的类。这个属性无法直接访问，一般通过 `Object.prototype.toString(...)` 来查看。例如:
+All objects for which `typeof` returns `object` (such as arrays) contain an internal property `[[class]]`, which we can think of as an internal classification, rather than a class in the traditional object-oriented sense. This property cannot be accessed directly and is generally viewed through `Object.prototype.toString(...)`. For example:
 
 ```js
 console.log(Object.prototype.toString.call([1, 2, 3])); // [object Array]
@@ -155,9 +155,9 @@ console.log(Object.prototype.toString.call(new Boolean(1))); // [object Boolean]
 console.log(Object.prototype.toString.call(new RegExp())); // [object RegExp]
 ```
 
-上例中，数组内部[[class]]属性值是 `Array`，正则表达式的值是 `RegExp`。多数情况下，对象的内部 `[[class]]` 属性和创建该对象的内建原生构造函数相对应，但并不是所有的情况都是这样，例如一些基本类型，例如 `null` 和 `undefined`，虽然 `Null()` 和 `undefined()` 这样的原生构造函数并不存在，但是内部 `[[class]]` 属性值仍然是 `Null` 和 `Undefined`。
+In the example above, the internal `[[class]]` property value of an array is `Array`, and the value of a regular expression is `RegExp`. In most cases, the internal `[[class]]` property of an object corresponds to the built-in native constructor that created the object, but this is not always the case. For example, some primitive types, such as `null` and `undefined`, do not have native constructors like `Null()` and `undefined()`, but their internal `[[class]]` property values are still `Null` and `Undefined`.
 
-其他基本类型，例如 字符串、数值和布尔值 的情况有所不同，由于基本类型值没有 `.length` 和 `.toString()` 这样的属性和方法，需要通过封装对象才能访问,此时 `JavaScript` 会自动为基本类型封装为一个对象，例如 `var foo = 'moment';`，实际上进行的是 `var foo =new String('moment'); `，使其变成一个对象，让其拥有自己的属性和方法，如果想要得到封装对象中的基本类型值，可以使用 `valueOf() `函数，例如:
+Other primitive types, such as strings, numbers, and booleans, behave differently. Since primitive type values do not have properties and methods like `.length` and `.toString()`, they need to be wrapped in objects to access them. At this point, JavaScript automatically wraps primitive types into an object. For example, `var foo = 'moment';` actually performs `var foo = new String('moment');`, turning it into an object that has its own properties and methods. If you want to get the primitive type value from the wrapped object, you can use the `valueOf()` function, for example:
 
 ```js
 var foo = new String("moment");
@@ -167,32 +167,32 @@ console.log(foo.valueOf()); // moment
 console.log(typeof foo.valueOf()); // string
 ```
 
-## 手写 typeof
+## Custom typeof
 
-`typeof`  是非常有用的，但它不像需要的那样万能。例如，`typeof []`  是  `"object"`，以及  `typeof new Date()`、`typeof /abc/`  等。
+`typeof` is very useful, but it is not as universal as needed. For example, `typeof []` is `"object"`, as well as `typeof new Date()` and `typeof /abc/`, etc.
 
-为了明确地检查类型, `mdn` 上提供了一个自定义的 `type(value)` 函数,它主要模仿  `typeof`  的行为，但对于非基本类型（即对象和函数），它在可能的情况下返回更详细的类型名。
+To explicitly check the type, MDN provides a custom `type(value)` function that mainly mimics the behavior of `typeof`, but for non-primitive types (i.e., objects and functions), it returns more detailed type names whenever possible.
 
 ```js
 function type(value) {
-  // 如果传入的值是 null ,则返回 null
+  // If the passed value is null, return null
   if (value === null) {
     return "null";
   }
 
   const baseType = typeof value;
-  // 如果是基本类型
+  // If it is a primitive type
   if (!["object", "function"].includes(baseType)) {
     return baseType;
   }
 
-  // Symbol.toStringTag 通常指定对象类的“display name”
+  // Symbol.toStringTag usually specifies the "display name" of the object's class
   const tag = value[Symbol.toStringTag];
   if (typeof tag === "string") {
     return tag;
   }
 
-  // 如果他是一个函数,其源代码以 class 关键字开头的
+  // If it is a function, and its source code starts with the class keyword
   if (
     baseType === "function" &&
     Function.prototype.toString.call(value).startsWith("class")
@@ -200,23 +200,23 @@ function type(value) {
     return "class";
   }
 
-  // 构造函数的名称；例如 `Array`、`GeneratorFunction`、`Number`、`String`、`Boolean` 或 `MyCustomClass`
+  // The name of the constructor; for example, `Array`, `GeneratorFunction`, `Number`, `String`, `Boolean`, or `MyCustomClass`
   const className = value.constructor.name;
   if (typeof className === "string" && className !== "") {
     return className;
   }
 
-  // 没有合适的方法来获取值的类型,直接返回
+  // If there is no suitable method to get the type of the value, return directly
   return baseType;
 }
 ```
 
-## 参考文献
+## References
 
-- 书籍 `你不知道的JavaScript`
+- Book: "You Don't Know JS"
 
-- [mdn 文档](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/typeof)
+- [MDN Documentation](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/typeof)
 
-## 总结
+## Summary
 
-`typeof` 运算符用于检查变量的类型，返回一个表示数据类型的字符串。对于基本类型（如 `number`、`string` 等），返回值明确，但对于对象类型（如 `null`、数组、正则表达式等），`typeof` 都返回 `"object"`，这导致一些特殊情况。为了解决这种模糊判断问题，可以通过 `Object.prototype.toString.call()` 来精确判断对象的实际类型。此外，`typeof` 无法判断数组、`null` 和类等，需要额外的处理。
+The `typeof` operator is used to check the type of a variable, returning a string that represents the data type. For primitive types (such as `number`, `string`, etc.), the return value is clear, but for object types (such as `null`, arrays, regular expressions, etc.), `typeof` returns `"object"`, leading to some special cases. To solve this ambiguity, you can use `Object.prototype.toString.call()` to accurately determine the actual type of an object. In addition, `typeof` cannot determine arrays, `null`, and classes, requiring additional handling.

@@ -1,48 +1,48 @@
 ---
-title: "前端性能指标--FCP"
+title: "Frontend Performance Metrics--FCP"
 ---
-# 前端性能指标-FCP
-FCP（First Contentful Paint，首次内容绘制）是网页性能指标之一，用来衡量页面的加载性能。它表示浏览器开始绘制页面上第一个有意义的内容（即文本、图像、SVG 等）的时刻，通常是在用户开始看到可视内容时的第一个视觉反馈。与 FMP（First Meaningful Paint）不同，FCP 更注重页面上第一个有内容的呈现，而不关注其对用户的意义。
+# Frontend Performance Metrics-FCP
+FCP (First Contentful Paint) is one of the web performance metrics used to measure page loading performance. It represents the moment when the browser begins to render the first meaningful content on the page (i.e., text, images, SVG, etc.), typically providing the first visual feedback when users start seeing visible content. Unlike FMP (First Meaningful Paint), FCP focuses on the first rendering of content on the page, regardless of its significance to users.
 
-## FCP 的定义
+## Definition of FCP
 
-FCP 是指从用户开始请求页面（即导航开始）到页面上第一个内容元素（例如文本、图像或 SVG 元素）被绘制到屏幕上所需的时间。它衡量的是页面响应速度，尤其是在用户等待页面呈现时，浏览器为其展示第一部分内容的时间。
+FCP measures the time from when a user initiates a page request (i.e., navigation starts) until the first content element (such as text, images, or SVG elements) is painted on the screen. It measures page response speed, particularly the time it takes for the browser to display the first piece of content while users wait for the page to render.
 
-有意义的内容包括：
+Meaningful content includes:
 
-- 页面中的文本
+- Text on the page
 
-- 图片
+- Images
 
-- SVG 元素
+- SVG elements
 
-- Canvas 内容等
+- Canvas content, etc.
 
 ![20250207160550](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250207160550.png)
 
-在上图中所示的加载时间轴中，FCP 发生在第二帧，因为这是第一个文本和图片元素渲染到屏幕上的时间。
+In the loading timeline shown above, FCP occurs in the second frame, as this is when the first text and image elements are rendered to the screen.
 
-您会发现，虽然部分内容已呈现，但并非所有内容都已呈现。这是一个重要的区别，需要在 First Contentful Paint 和 Largest Contentful Paint (LCP) 之间加以区分，后者旨在衡量网页的主要内容何时加载完毕。
+You'll notice that while some content has been rendered, not all content is present. This is an important distinction to make between First Contentful Paint and Largest Contentful Paint (LCP), which aims to measure when the main content of a webpage has finished loading.
 
-为了提供良好的用户体验，网站应尽量将首次有意义的绘制时间控制在 1.8 秒或更短的时间。为确保大多数用户都能达到此目标值，一个合适的衡量阈值是网页加载时间的第 75 个百分位数，并按移动设备和桌面设备进行细分。
+To provide a good user experience, sites should strive to have a First Contentful Paint time of 1.8 seconds or less. To ensure you're reaching this target for most of your users, a good threshold to measure is the 75th percentile of page loads, segmented across mobile and desktop devices.
 
 ![20250207160755](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250207160755.png)
 
-## 衡量 FCP 的方案
+## Methods to Measure FCP
 
-衡量 FCP 的方案有多种不同的方式，接下来我们将一一介绍。
+There are several different ways to measure FCP, which we'll discuss below.
 
 ### PageSpeed Insights
 
-[PageSpeed Insights](https://pagespeed.web.dev/?hl=zh-cn)（简称 PSI）是由 Google 提供的一个免费的在线工具，用于分析网页的加载性能并提供优化建议。它主要通过评估页面的加载速度和响应能力，帮助开发者和站点所有者提升网页的用户体验。PageSpeed Insights 通过多项性能指标和数据，帮助用户理解页面的加载过程，并提供改进建议以优化网页的性能。
+[PageSpeed Insights](https://pagespeed.web.dev/) (PSI) is a free online tool provided by Google that analyzes webpage loading performance and provides optimization suggestions. It primarily helps developers and site owners improve web page user experience by evaluating page load speed and responsiveness. PageSpeed Insights uses multiple performance metrics and data to help users understand page loading processes and provides recommendations for improving web page performance.
 
 ![20250207161123](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250207161123.png)
 
-打开该工具的网站，输入我们要检测的网站即可。
+Simply open the tool's website and enter the website you want to analyze.
 
-### 在 JavaScript 中衡量 FCP
+### Measuring FCP in JavaScript
 
-如需在 JavaScript 中衡量 FCP，您可以使用 Paint Timing API。以下示例展示了如何创建一个 PerformanceObserver，用于监听名称为 first-contentful-paint 的 paint 条目并将其记录到控制台。
+To measure FCP in JavaScript, you can use the Paint Timing API. The following example shows how to create a PerformanceObserver that listens for paint entries named first-contentful-paint and logs them to the console.
 
 ```js
 new PerformanceObserver((entryList) => {
@@ -52,23 +52,23 @@ new PerformanceObserver((entryList) => {
 }).observe({ type: "paint", buffered: true });
 ```
 
-> **警告**：此代码展示了如何将 `first-contentful-paint` 条目记录到控制台，但在 JavaScript 中衡量 FCP 要复杂得多。请继续阅读以了解详情。
+> **Warning**: This code shows how to log first-contentful-paint entries to the console, but measuring FCP in JavaScript is more complex. Continue reading to learn more.
 
-在前面的代码段中，记录的 first-contentful-paint 条目会告知您绘制出第一个有内容的元素的时间。不过，在某些情况下，此条目不适用于衡量 FCP。
+In the code snippet above, the logged first-contentful-paint entry will tell you when the first contentful element was painted. However, in some cases, this entry isn't suitable for measuring FCP.
 
-以下部分列出了 API 报告的内容与指标计算方式之间的差异。
+The following sections list the differences between what the API reports and how the metric is calculated.
 
-指标与 API 之间的差异
+Differences between the metric and API:
 
-1. API 会为在后台标签页中加载的网页分派 first-contentful-paint 条目，但在计算 FCP 时应忽略这些网页（仅当网页在整个时间都处于前台时，才应考虑首次绘制时间）。
+1. The API will dispatch first-contentful-paint entries for pages loaded in background tabs, but these pages should be ignored when calculating FCP (First Paint times should only be considered if the page was in the foreground the entire time).
 
-2. 当网页从返回/前进缓存恢复时，API 不会报告 first-contentful-paint 条目，但在这些情况下，应衡量 FCP，因为用户会将其视为不同的网页访问。
+2. The API does not report first-contentful-paint entries when pages are restored from the back/forward cache, but FCP should be measured in these cases since users experience them as distinct page visits.
 
-3. 该 API 可能不会报告来自跨源 iframe 的绘制时间，但为了正确衡量 FCP，您应考虑所有帧。子帧可以使用此 API 向父帧报告其绘制时间以进行汇总。
+3. The API may not report paint times from cross-origin iframes, but to properly measure FCP you should consider all frames. Subframes can use the API to report their paint times to the parent frame for aggregation.
 
-4. 该 API 会从导航开始时刻测量 FCP，但对于预渲染网页，应从 activationStart 开始测量 FCP，因为这与用户体验到的 FCP 时间相对应。
+4. The API measures FCP from the navigation start time, but for prerendered pages, FCP should be measured from activationStart since this corresponds to when the user actually experiences FCP.
 
-开发者无需记住所有这些细微差异，只需使用 web-vitals JavaScript 库来衡量 FCP，该库会为您处理这些差异（在可能的情况下，请注意不涵盖 iframe 问题）：
+Developers don't need to remember all these nuances. Instead, they can use the web-vitals JavaScript library to measure FCP, which handles these differences for you (where possible; note that the iframe issue is not covered):
 
 ```js
 import { onFCP } from "web-vitals";
@@ -77,46 +77,46 @@ import { onFCP } from "web-vitals";
 onFCP(console.log);
 ```
 
-你可以参阅 [onFCP()](https://github.com/GoogleChrome/web-vitals/blob/main/src/onFCP.ts) 的源代码，查看有关如何在 JavaScript 中衡量 FCP 的完整示例。
+You can refer to the source code for [onFCP()](https://github.com/GoogleChrome/web-vitals/blob/main/src/onFCP.ts) for a complete example of how to measure FCP in JavaScript.
 
-## 如何提高 FCP
+## How to Improve FCP
 
-如需了解如何提高特定网站的 FCP，您可以运行 Lighthouse 性能审核，并留意审核中建议的任何具体优化建议或诊断结果。
+To learn how to improve FCP for a specific site, you can run a Lighthouse performance audit and pay attention to any specific optimization opportunities or diagnostics it suggests.
 
-如需了解如何普遍提高 FCP（适用于任何网站），请参阅以下效果指南：
+To learn how to improve FCP in general (for any site), refer to the following performance guides:
 
-- [移除阻塞渲染的资源](https://developer.chrome.com/docs/lighthouse/performance/render-blocking-resources?hl=zh-cn)
+- [Eliminate render-blocking resources](https://developer.chrome.com/docs/lighthouse/performance/render-blocking-resources)
 
-- [缩减 CSS 大小](https://developer.chrome.com/docs/lighthouse/performance/unminified-css?hl=zh-cn)
+- [Minify CSS](https://developer.chrome.com/docs/lighthouse/performance/unminified-css)
 
-- [移除未使用的 CSS](https://developer.chrome.com/docs/lighthouse/performance/unused-css-rules?hl=zh-cn)
+- [Remove unused CSS](https://developer.chrome.com/docs/lighthouse/performance/unused-css-rules)
 
-- [移除未使用的 JavaScript](https://developer.chrome.com/docs/lighthouse/performance/unused-javascript?hl=zh-cn)
+- [Remove unused JavaScript](https://developer.chrome.com/docs/lighthouse/performance/unused-javascript)
 
-- [预先连接到必需的资源](https://developer.chrome.com/docs/lighthouse/performance/uses-rel-preconnect?hl=zh-cn)
+- [Preconnect to required origins](https://developer.chrome.com/docs/lighthouse/performance/uses-rel-preconnect)
 
-- [缩短服务器响应时间（TTFB）](https://developer.chrome.com/docs/lighthouse/performance/server-response-time?hl=zh-cn)
+- [Reduce server response times (TTFB)](https://developer.chrome.com/docs/lighthouse/performance/server-response-time)
 
-- [避免多次网页重定向](https://developer.chrome.com/docs/lighthouse/performance/redirects?hl=zh-cn)
+- [Avoid multiple page redirects](https://developer.chrome.com/docs/lighthouse/performance/redirects)
 
-- [预加载关键请求](https://developer.chrome.com/docs/lighthouse/performance/uses-rel-preload?hl=zh-cn)
+- [Preload key requests](https://developer.chrome.com/docs/lighthouse/performance/uses-rel-preload)
 
-- [避免网络加载过大](https://developer.chrome.com/docs/lighthouse/performance/total-byte-weight?hl=zh-cn)
+- [Avoid enormous network payloads](https://developer.chrome.com/docs/lighthouse/performance/total-byte-weight)
 
-- [使用高效的缓存策略提供静态资源](https://developer.chrome.com/docs/lighthouse/performance/uses-long-cache-ttl?hl=zh-cn)
+- [Serve static assets with an efficient cache policy](https://developer.chrome.com/docs/lighthouse/performance/uses-long-cache-ttl)
 
-- [避免 DOM 构建过大](https://developer.chrome.com/docs/lighthouse/performance/dom-size?hl=zh-cn)
+- [Avoid an excessive DOM size](https://developer.chrome.com/docs/lighthouse/performance/dom-size)
 
-- [最大限度地缩短关键请求深度](https://developer.chrome.com/docs/lighthouse/performance/critical-request-chains?hl=zh-cn)
+- [Minimize critical request depth](https://developer.chrome.com/docs/lighthouse/performance/critical-request-chains)
 
-- [确保文本在页面字体加载时保持可见状态](https://developer.chrome.com/docs/lighthouse/performance/font-display?hl=zh-cn)
+- [Ensure text remains visible during webfont load](https://developer.chrome.com/docs/lighthouse/performance/font-display)
 
-- [请将较低的请求数量和较小的输入大小](https://developer.chrome.com/docs/lighthouse/performance/resource-summary?hl=zh-cn)
+- [Keep request counts low and transfer sizes small](https://developer.chrome.com/docs/lighthouse/performance/resource-summary)
 
-## 参考资料
+## References
 
-- [First Contentful Paint (FCP)](https://web.dev/articles/fcp?hl=zh-cn)
+- [First Contentful Paint (FCP)](https://web.dev/articles/fcp)
 
-## 总结
+## Summary
 
-FCP 主要衡量用户在加载页面时，能看到第一个可见内容的时间。它与页面的加载性能密切相关，优化 FCP 可以显著改善用户的初始体验。通过减少阻塞渲染、优化字体和图片加载等手段，可以提升 FCP 指标，从而加快页面的响应速度。
+FCP primarily measures the time it takes for users to see the first visible content when loading a page. It is closely related to page loading performance, and optimizing FCP can significantly improve the initial user experience. By reducing render-blocking resources, optimizing font and image loading, and other techniques, you can improve the FCP metric and thus speed up page response times.

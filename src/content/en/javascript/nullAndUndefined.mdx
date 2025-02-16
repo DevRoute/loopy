@@ -1,29 +1,29 @@
 ---
-title: "null和undefined"
+title: "null and undefined"
 ---
 
-# null和undefined
-通过当前文章所在专栏的上一篇的文章学习我们可以知道 `undefined == null` 进行相等比较返回的结果是 true，但是具体是怎么样的，ES5 规范好像并没有明确的说明，这便引起了我的极度好奇，那么通过这篇这篇文章我们将揭开这个神秘的面纱。
+# null and undefined
+From the previous article in this series, we learned that `undefined == null` returns true when performing an equality comparison. However, the ES5 specification doesn't seem to clearly explain why this happens, which aroused my intense curiosity. Through this article, we will unveil this mystery.
 
-## 什么是 undefined
+## What is undefined
 
-undefined 是 JavaScript 的一个原始数据类型，表示“未定义”的状态。它作为全局属性存在，用于表示一个变量尚未被赋值或一个函数没有返回值。
+undefined is a primitive data type in JavaScript that represents an "undefined" state. It exists as a global property and is used to indicate that a variable hasn't been assigned a value or a function hasn't returned a value.
 
-如果一个变量声明时没有被赋予初始值，它的默认值就是 undefined。
+When a variable is declared without being initialized, its default value is undefined.
 
 ```js
 let x;
-console.log(x); // 输出: undefined
+console.log(x); // Output: undefined
 ```
 
-如果一个函数没有 return 语句，或者 return 语句没有返回任何值，那么该函数的返回值是 undefined。
+If a function has no return statement, or the return statement doesn't return any value, then the function's return value is undefined.
 
 ```js
 function foo() {}
-console.log(foo()); // 输出: undefined
+console.log(foo()); // Output: undefined
 ```
 
-如果调用一个函数时没有传入它定义的参数，那么这些参数的值也是 undefined。
+If a function is called without passing the defined parameters, those parameters will have the value undefined.
 
 ```js
 function bar(a, b) {
@@ -34,85 +34,79 @@ function bar(a, b) {
 bar(10);
 ```
 
-总结来说，undefined 用于表示“尚未定义”的状态，通常出现在变量声明时、函数没有返回值时或参数未传递时。
+In summary, undefined is used to represent a "not yet defined" state, typically occurring when variables are declared, functions don't return values, or parameters aren't passed.
 
-## 什么是 null
+## What is null
 
-null 值 特指一个对象的值未设置，它是 JavaScript 中的基本数据类型之一。在布尔运算中，null 被认为是 falsy，即在布尔上下文中它会被转换为 false。
-
-```js
-console.log(Boolean(null)); // 输出: false
-```
-
-null 是字面量，不同于 undefined，它不是全局对象的属性。null 表示变量未指向任何对象，通常可以理解为“尚未创建的对象”。从逻辑上讲，null 代表一个空的对象指针，这也解释了为什么 typeof null 会返回 "object"。这种历史遗留问题源于早期 JavaScript 的设计，null 在内存中被当作一个指向空对象的指针，因此返回 "object"。
+null specifically indicates that an object's value hasn't been set, and it's one of JavaScript's primitive data types. In boolean operations, null is considered falsy, meaning it will be converted to false in a boolean context.
 
 ```js
-console.log(typeof null); // 输出: "object"
+console.log(Boolean(null)); // Output: false
 ```
 
-获取 DOM 元素时，如果没有找到对应的元素，返回的就是 null。这表示没有匹配的元素可供操作。
+null is a literal, unlike undefined, it's not a property of the global object. null indicates that a variable isn't pointing to any object, and can be understood as an "object not yet created". Logically, null represents an empty object pointer, which explains why typeof null returns "object". This historical artifact stems from early JavaScript design, where null was treated in memory as a pointer to an empty object.
+
+```js
+console.log(typeof null); // Output: "object"
+```
+
+When getting DOM elements, if no matching element is found, null is returned. This indicates there's no matching element to operate on.
 
 ```js
 const element = document.getElementById("nonexistent");
-console.log(element); // 输出: null
+console.log(element); // Output: null
 ```
 
-原型链的最顶端 是 null。这意味着 JavaScript 对象的原型链最终会指向 null，表示原型链的终结。
+The top of the prototype chain is null. This means that JavaScript objects' prototype chain ultimately points to null, indicating the end of the prototype chain.
 
 ```js
 const obj = {};
-console.log(Object.getPrototypeOf(obj)); // 输出: null
+console.log(Object.getPrototypeOf(obj)); // Output: null
 ```
 
-总结来说，null 用来表示对象的值未设置，表示空对象指针。它是一个常见的 JavaScript 原始数据类型，常用于表示“无”或“空”的状态。
+In summary, null is used to represent an unset object value, indicating an empty object pointer. It's a common JavaScript primitive data type, frequently used to represent "none" or "empty" states.
 
-## 为什么使用 typeof 对 null 进行类型检查会返回 object
+## Why typeof null Returns "object"
 
-- 在 `typeof` 中分别对 `undefined`和`null`进行类型检查，请看以下代码:
+- When using `typeof` to check the types of `undefined` and `null`, see the following code:
 
 ```js
 console.log(typeof undefined); // undefined
 console.log(typeof null); // object
 ```
 
-`typeof undefined` 输出 `"undefined"`估计已经家喻户晓了吧，但是为什么 `typeof null` 输出的 `"object"`，通过查阅资料得知，这是一个历史遗留问题，曾经有有一个 `ECMAScript` 的修复提案，但被拒绝了，这个似乎无法修复，因为它会破坏现有代码(此项目依靠该 bug 运行...)。
+The output of `typeof undefined` as `"undefined"` is probably well-known, but why does `typeof null` output `"object"`? Through research, this is known to be a historical bug. There was once an ECMAScript proposal to fix this, but it was rejected as it would break existing code (projects that rely on this bug...).
 
-在 `JavaScript` 的第一个版本中，值存储在 32 位的单元中（相当于一条机器码）它由一个小型类型标记（1-3 位）和值的实际数据组成。类型标记存储在单元的低位，其中:
+In JavaScript's first version, values were stored in 32-bit units (equivalent to a machine code) consisting of a small type tag (1-3 bits) and the actual data of the value. The type tag was stored in the lower bits, where:
 
-1. 000: `对象`，数据是对象的引用;
+1. 000: `object`, data is a reference to an object
+2. 1: `integer`, data is a 31-bit signed integer
+3. 010: `double`, data is a reference to a double-precision float
+4. 100: string, data is a string
+5. 110: boolean, data is a boolean value
 
-2. 1: `整型`，数据是 31 位带符号的整数;
+> In the V8 engine, JavaScript hot code is compiled into machine code, which is directly read and executed by the computer's CPU. It runs fastest but is very obscure and difficult to write; machine code is code that computers can directly execute and runs at the highest speed.
 
-3. 010: `双精度`，数据是双精度浮点数的引用;
+undefined and null are special:
 
-4. 100:字符串，数据是字符串;
+1. undefined: is the integer `(-2)^30` (a number beyond the integer range)
+2. null: is the machine code `NULL` pointer, or an object type tag plus a reference of 0
 
-5. 110: 布尔值，数据是布尔值;
+Now, back to our question of why `typeof null` returns `"object"`. It should be easier to understand now.
 
-   > 在 V8 引擎中，会把 JavaScript 热点代码编译成机器码，它是电脑 CPU 直接读取运行的机器码，运行速度最快，但是非常晦涩难懂，同时也比较难编写；机器码就是计算机可以直接执行，并且执行速度最快的代码；
+Because the object type tag is `0`, and since `null` represents an `empty pointer` (JavaScript has no concept of pointers), null is represented by all 32 bits being `0`. Therefore, `typeof null` returns `"object"`.
 
-而 `undefined` 和 `null` 是特殊的:
-
-1. undefined:是整数 `(-2)^30`(超出整数的范围的数字);
-
-2. null: 是机器代码 `NULL` 指针，或者说是一个对象类型标记加上一个为 `0` 的引用;
-
-好了，绕了这么远，该回来了，还是这个问题，为什么 `typeof null` 返回的是 `"object"`，这下子应该就很好理解了吧。
-
-因为对象的类型标签是 `0`，由于 `null` 代表的是 `空指针`，在 `JavaScript` 中没有指针的概念，所以 `null` 32 位全为 `0` 来表示。因此，`typeof null` 返回的是 `"object"`。
-
-所以通过上面的总结， `null` 本质上是 `0`，请看以下代码示例:
+So from the above summary, `null` is essentially `0`, as shown in the following example:
 
 ```js
 console.log(undefined + 1); // NaN
 console.log(null + 1); // 1
 ```
 
-`null` 转化为 `number` 类型时，会转换为 `0`。
+When `null` is converted to a `number` type, it becomes `0`.
+When `undefined` is converted to a `number` type, it becomes `NaN`.
 
-`undefined` 转换为 `number` 类型时，会转换为 `NaN`。
-
-那么使用上还有什么样的区别呢？继续上代码:
+So what other differences are there in usage? Let's continue with code:
 
 ```js
 function foo(x = 77, y = "moment") {
@@ -123,32 +117,29 @@ function foo(x = 77, y = "moment") {
 foo(undefined, null);
 ```
 
-在调用 foo(undefined, null) 时：
+When calling foo(undefined, null):
 
-1. x 的值是 undefined，因此默认值 77 会被赋给 x。
+1. x's value is undefined, so the default value 77 is assigned to x.
+2. y's value is null, so y is set to null instead of the default value "moment".
 
-2. y 的值是 null，因此 y 会被设置为 null，而不是默认值 "moment"。
-
-接下来是解构赋值的例子：
+Here's an example of destructuring assignment:
 
 ```js
 const [x = 1, y = 2] = [undefined, null];
-console.log(x); // 输出: 1
-console.log(y); // 输出: null
+console.log(x); // Output: 1
+console.log(y); // Output: null
 ```
 
-在这个例子中：
+In this example:
 
-1. x 的值是 undefined，因此它会采用默认值 1。
+1. x's value is undefined, so it takes the default value 1.
+2. y's value is null, so it's directly assigned null instead of taking the default value 2.
 
-2. y 的值是 null，因此它会被直接赋值为 null，而不是采用默认值 2。
+## References
 
-## 参考文章
+- [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/typeof)
+- [MDN Recommended Article](https://2ality.com/2013/10/typeof-null.html)
 
-- [MDN](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/typeof)
+## Conclusion
 
-- [MDN 推荐文章](https://2ality.com/2013/10/typeof-null.html)
-
-## 结尾
-
-`null` 和 `undefined` 在 JavaScript 中有不同的含义和用途，`null` 表示空对象指针，而 `undefined` 表示未定义的状态。`typeof null` 返回 `"object"` 是历史遗留问题，源自早期 JavaScript 的内存管理机制。`null` 转换为数字时为 `0`，而 `undefined` 转换为数字时为 `NaN`。在函数参数中，`undefined` 会触发默认值，而 `null` 则直接赋给参数，不触发默认值。
+`null` and `undefined` have different meanings and uses in JavaScript. `null` represents an empty object pointer, while `undefined` represents an undefined state. `typeof null` returning `"object"` is a historical artifact from JavaScript's early memory management mechanism. `null` converts to `0` when converted to a number, while `undefined` converts to `NaN`. In function parameters, `undefined` triggers default values, while `null` is directly assigned to parameters without triggering default values.
