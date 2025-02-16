@@ -76,5 +76,35 @@ export default {
       answer: 'If you encounter any issues while using the template, please contact us via GitHub @pdsuwwz.',
     },
   ],
+projectList: [
+    {
+      name: 'online-edit-web', // Project Name
+      github: 'https://github.com/xun082/online-edit-web',
+      link: 'https://online-edit-web.vercel.app/',
+      image: 'https://online-edit-web.vercel.app/images/home.png',
+      status: "Completed",
+      description: 'An Online IDE integrated with AI capabilities, providing a ready-to-use development environment to simplify the development process and improve efficiency.',
+      tags: ['react', 'next', 'Tailwindcss', 'TypeScript', 'shadcn', 'zustand', 'swr'],
+    },
+    {
+      name: 'create-neat', // Project Name
+      github: 'https://github.com/xun082/create-neat',
+      link: '',
+      image: '',
+      status: "Completed",
+      description: 'Create-Neat is a lightweight scaffolding tool designed to provide a ready-to-use and zero-configuration experience, aimed at helping users quickly and easily build projects while supporting a variety of technology stack choices.',
+      tags: ['webpack', 'vite', 'eslint', 'react', 'vue', 'prettier']
+    },
+    {
+      name: 'create-neat2', // Project Name
+      github: 'https://github.com/xun082/create-neat',
+      link: '',
+      image: '',
+      status: "Completed",
+      description: 'Create-Neat is a lightweight scaffolding tool designed to provide a ready-to-use and zero-configuration experience, aimed at helping users quickly and easily build projects while supporting a variety of technology stack choices.',
+      tags: ['webpack', 'vite', 'eslint', 'react', 'vue', 'prettier']
+    }
+  ],
+
 
 }

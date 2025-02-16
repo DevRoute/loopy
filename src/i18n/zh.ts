@@ -76,5 +76,33 @@ export default {
       answer: '如果在使用过程中遇到问题，请通过 GitHub @pdsuwwz 与我们联系。',
     },
   ],
-
+  projectList: [
+    {
+      name: 'online-edit-web', // 项目名称
+      github: 'https://github.com/xun082/online-edit-web',
+      link: 'https://online-edit-web.vercel.app/',
+      image:'https://online-edit-web.vercel.app/images/home.png',
+      status: "已完成",
+      description: '一款集成AI能力的Online IDE，提供开箱即用的开发环境，简化开发过程，提高效率',
+      tags: ['react', 'next', 'Tailwindcss', 'TypeScript', 'shadcn', 'zustand', 'swr'],
+    },
+    {
+      name:'create-neat',//项目名称
+      github:'https://github.com/xun082/create-neat',
+      link:'',
+      image:'',
+      status: "已完成",
+      description:'Create-Neat 是一款轻量级脚手架工具，专为提供 开箱即用和 零配置体验而设计，旨在帮助用户快速且轻松地构建项目，同时支持多样的技术栈选择。',
+      tags:['webpack','vite','eslint','react','vue','prettier']
+    },
+    {
+      name:'create-neat2',//项目名称
+      github:'https://github.com/xun082/create-neat',
+      link:'',
+      image:'',
+      status: "已完成",
+      description:'Create-Neat 是一款轻量级脚手架工具，专为提供 开箱即用和 零配置体验而设计',
+      tags:['webpack','vite','eslint','react','vue','prettier']
+    }
+  ],
 }
