@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils'
 import { useTheme } from 'nextra-theme-docs'
 import { useMemo } from 'react'
 import Marquee from 'react-fast-marquee'
+import { ProjectCard } from './ProjectCard'
 import { Section } from './Section'
 import { SetupHero } from './Setup'
 
@@ -33,6 +34,7 @@ export default function HomepageHero() {
 
   const featureList = t('featureList')
   const faqs = t('faqs')
+  const projectList = t('projectList')
 
   const { resolvedTheme } = useTheme()
 
@@ -105,11 +107,12 @@ export default function HomepageHero() {
           </div>
         </Section>
         <Section
-          title="Features"
+          title="Project"
           description={t('featuresDesc')}
         >
           <div className="flex justify-center w-full max-w-7xl">
-            <HoverEffect items={processedFeatureList} />
+            {/* <HoverEffect items={processedFeatureList} /> */}
+            <ProjectCard items={projectList} />
           </div>
         </Section>
         <Section

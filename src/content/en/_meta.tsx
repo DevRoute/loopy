@@ -19,19 +19,4 @@ export default {
     title: '前端性能优化',
     type: 'page',
   },
-  project: {
-    type: 'page',
-    title: (
-      <span className="flex items-center leading-[1]">
-        项目
-        <TitleBadge />
-      </span>
-    ),
-    theme: {
-      timestamp: false,
-      layout: 'full',
-      toc: false,
-    },
-  },
-
 } satisfies MetaRecord

@@ -49,7 +49,7 @@ export default {
       description: '采用轻量化设计，精简项目设置，专注于内容编写',
     },
   ],
-  featuresDesc: '轻松构建现代应用，快速启动您的开发流程',
+  featuresDesc: '如果以下项目对你有帮助或者对这个项目感兴趣，欢迎Star⭐️⭐️⭐️',
   faqs: [
     {
       question: '这个启动模板支持哪些框架和技术栈？',
@@ -81,28 +81,28 @@ export default {
       name: 'online-edit-web', // 项目名称
       github: 'https://github.com/xun082/online-edit-web',
       link: 'https://online-edit-web.vercel.app/',
-      image:'https://online-edit-web.vercel.app/images/home.png',
-      status: "已完成",
+      image: 'https://online-edit-web.vercel.app/images/home.png',
+      status: '已完成',
       description: '一款集成AI能力的Online IDE，提供开箱即用的开发环境，简化开发过程，提高效率',
       tags: ['react', 'next', 'Tailwindcss', 'TypeScript', 'shadcn', 'zustand', 'swr'],
     },
     {
-      name:'create-neat',//项目名称
-      github:'https://github.com/xun082/create-neat',
-      link:'',
-      image:'',
-      status: "已完成",
-      description:'Create-Neat 是一款轻量级脚手架工具，专为提供 开箱即用和 零配置体验而设计，旨在帮助用户快速且轻松地构建项目，同时支持多样的技术栈选择。',
-      tags:['webpack','vite','eslint','react','vue','prettier']
+      name: 'create-neat', // 项目名称
+      github: 'https://github.com/xun082/create-neat',
+      link: '',
+      image: '',
+      status: '已完成',
+      description: 'Create-Neat 是一款轻量级脚手架工具，专为提供 开箱即用和 零配置体验而设计，旨在帮助用户快速且轻松地构建项目，同时支持多样的技术栈选择。',
+      tags: ['webpack', 'vite', 'eslint', 'react', 'vue', 'prettier'],
     },
     {
-      name:'create-neat2',//项目名称
-      github:'https://github.com/xun082/create-neat',
-      link:'',
-      image:'',
-      status: "已完成",
-      description:'Create-Neat 是一款轻量级脚手架工具，专为提供 开箱即用和 零配置体验而设计',
-      tags:['webpack','vite','eslint','react','vue','prettier']
-    }
+      name: 'create-neat2', // 项目名称
+      github: 'https://github.com/xun082/create-neat',
+      link: '',
+      image: '',
+      status: '已完成',
+      description: 'Create-Neat 是一款轻量级脚手架工具，专为提供 开箱即用和 零配置体验而设计',
+      tags: ['webpack', 'vite', 'eslint', 'react', 'vue', 'prettier'],
+    },
   ],
 }
