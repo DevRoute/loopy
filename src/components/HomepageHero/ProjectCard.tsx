@@ -17,25 +17,18 @@ interface Project {
   tags: string[]
 }
 
+// 定义一些好看的渐变色
+const colorMap = [
+  'linear-gradient(135deg, #FF5733, #33FF57)',
+  'linear-gradient(135deg, #3357FF, #F3FF33)',
+  'linear-gradient(135deg, #FF33A1, #33A1FF)',
+  'linear-gradient(135deg, #FF8C00, #FFD700)',
+  'linear-gradient(135deg, #8A2BE2, #7FFF00)',
+]
+
 // 更新 ProjectCard 组件的参数类型
-const CardItem = ({ item }: { item: Project }) => {
-  // 定义一个状态来存储渐变颜色
-  const [bgGradient, setBgGradient] = useState<string>('')
-
-  // 生成随机渐变颜色的函数
-  const getRandomGradient = () => {
-    const colors = ['#FF5733', '#33FF57', '#3357FF', '#F3FF33', '#FF33A1']
-    const color1 = colors[Math.floor(Math.random() * colors.length)]
-    const color2 = colors[Math.floor(Math.random() * colors.length)]
-    return `linear-gradient(135deg, ${color1}, ${color2})`
-  }
-
-  // 在组件挂载时生成随机渐变颜色
-  useEffect(() => {
-    if (!item.image) {
-      setBgGradient(getRandomGradient())
-    }
-  }, [item.image])
+const CardItem = ({ item, index }: { item: Project, index: number }) => {
+  const [bgGradient, setBgGradient] = useState<string>(colorMap[index % colorMap.length]) // 使用 colorMap 生成初始值
 
   const statusColors: { [key: string]: string } = {
     已完成: 'bg-green-100 text-green-800',
@@ -144,7 +137,7 @@ export const ProjectCard = ({
             )}
           </AnimatePresence>
           <Card>
-            <CardItem item={item} />
+            <CardItem item={item} index={idx} />
           </Card>
         </div>
       ))}
