@@ -1,145 +1,306 @@
 'use client'
 
-import styles from '@/components/HomepageHero/SetupHero.module.css'
-import { MotionWrapperFlash } from '@/components/MotionWrapper/Flash'
 import { Button } from '@/components/ui/button'
-import { FlipWords } from '@/components/ui/flip-words'
-import { LinkPreview } from '@/components/ui/link-preview'
 import { useLocale } from '@/hooks'
-import clsx from 'clsx'
+import { categories, features } from '@/lib/data'
+import { motion } from 'framer-motion'
 import Link from 'next/link'
 
 interface Props {
 }
+
 export function SetupHero(props: Props) {
   const { t, currentLocale } = useLocale()
 
-  return (
-    <div className={styles.container}>
-      <div className={styles.content}>
-        <div className={styles.badgeContainer}>
-          <a
-            className={styles.badge}
-            href="https://github.com/pdsuwwz/nextjs-nextra-starter"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {t('badgeTitle')}
-          </a>
-        </div>
-        <h1 className={styles.headline}>
-          <MotionWrapperFlash className="flex items-center">
-            <span className="icon-[emojione-v1--lightning-mood]"></span>
-          </MotionWrapperFlash>
-          {' '}
-          Nextra
-          {' '}
-          <br className="sm:hidden"></br>
-          {' '}
-          Starter
-          <br className="sm:hidden"></br>
-          {' '}
-          Template
-        </h1>
+  const container = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  }
 
-        <Link
-          href={`/${currentLocale}/upgrade`}
-          className={clsx([
-            'bg-linear-to-r from-yellow-400 via-orange-500 to-red-500 text-white shadow-lg',
-            'dark:bg-linear-to-r dark:from-green-400 dark:via-teal-500 dark:to-cyan-500 dark:text-white',
-            'text-sm mt-2 inline-block px-3 py-1 rounded-lg',
-            '[&>span]:font-bold',
-            'animate-pulse',
-            '[animation-duration:2s]',
-          ])}
-          dangerouslySetInnerHTML={{
-            __html: t('featureSupport', {
-              feature: `<span>Tailwind CSS v4, Nextra v4</span>`,
-            }),
+  const item = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0 },
+  }
+
+  return (
+    <div className="relative min-h-screen w-full overflow-hidden">
+      {/* 背景层 */}
+      <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-purple-900 to-slate-900" />
+
+      {/* 动态网格背景 */}
+      <motion.div
+        className="fixed inset-0 bg-grid-white/[0.02] bg-[size:50px_50px]"
+        animate={{
+          y: ['0%', '50%'],
+        }}
+        transition={{
+          duration: 20,
+          repeat: Infinity,
+          ease: 'linear',
+        }}
+      />
+
+      {/* 光效背景 */}
+      <div className="fixed inset-0">
+        <motion.div
+          className="absolute top-0 -left-4 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-20"
+          animate={{
+            scale: [1, 1.1, 0.9, 1],
+            x: [0, 30, -20, 0],
+            y: [0, -50, 20, 0],
+          }}
+          transition={{
+            duration: 7,
+            repeat: Infinity,
+            ease: 'easeInOut',
           }}
         />
+        <motion.div
+          className="absolute top-0 -right-4 w-72 h-72 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-20"
+          animate={{
+            scale: [1, 0.9, 1.1, 1],
+            x: [0, -20, 30, 0],
+            y: [0, 20, -50, 0],
+          }}
+          transition={{
+            duration: 7,
+            repeat: Infinity,
+            ease: 'easeInOut',
+            delay: 2,
+          }}
+        />
+        <motion.div
+          className="absolute -bottom-8 left-20 w-72 h-72 bg-indigo-500 rounded-full mix-blend-multiply filter blur-xl opacity-20"
+          animate={{
+            scale: [1, 1.1, 0.9, 1],
+            x: [0, 30, -20, 0],
+            y: [0, -20, 50, 0],
+          }}
+          transition={{
+            duration: 7,
+            repeat: Infinity,
+            ease: 'easeInOut',
+            delay: 4,
+          }}
+        />
+      </div>
 
+      <motion.div
+        className="relative container mx-auto px-4 py-20"
+        variants={container}
+        initial="hidden"
+        animate="show"
+      >
+        {/* 顶部标签 */}
+        <motion.div variants={item} className="text-center">
+          <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg hover:shadow-xl transition-all duration-300">
+            <motion.span
+              className="icon-[material-symbols--new-releases] mr-2"
+              animate={{ scale: [1, 1.2, 1] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            />
+            系统化的前端面试题库
+          </span>
+        </motion.div>
 
-        <div className={clsx([
-          styles.subtitle,
-          'text-neutral-500 dark:text-neutral-300',
-        ])}
+        {/* 主标题 */}
+        <motion.h1
+          variants={item}
+          className="mt-8 text-center font-bold"
         >
-          Template made
-          {' '}
-          <FlipWords
-            words={[
-              'Fast',
-              'Simple',
-              'Modern',
-              'Flexible',
-              'Easy',
-              'Functional',
-              'Efficient',
-              'Scalable',
-              'Reusable',
-            ]}
-          />
-          <br />
-          With
-          {' '}
-          <LinkPreview
-            url="https://nextjs.org"
+          <span className="block text-5xl md:text-6xl lg:text-7xl mb-2
+            text-transparent bg-clip-text bg-gradient-to-r
+            from-blue-400 via-purple-500 to-pink-500
+            animate-gradient-x"
           >
-            Next.js
-          </LinkPreview>
-          ,
-          {' '}
-          <LinkPreview
-            url="https://tailwindcss.com"
+            面试宝典
+          </span>
+          <span className="block text-4xl md:text-5xl lg:text-6xl
+            text-transparent bg-clip-text bg-gradient-to-r
+            from-indigo-300 via-white to-indigo-300
+            hover:from-white hover:via-indigo-300 hover:to-white
+            transition-all duration-500"
           >
-            Tailwind CSS
-          </LinkPreview>
-          , and
-          {' '}
-          <LinkPreview
-            url="https://ui.shadcn.com"
-          >
-            Shadcn UI
-          </LinkPreview>
-          {', '}
-          <LinkPreview
-            url="https://ui.aceternity.com"
-          >
-            Aceternity UI
-          </LinkPreview>
-        </div>
-        <div className="flex justify-center pt-10">
-          <div className="max-w-[500px] flex flex-wrap gap-[20px] max-sm:justify-center">
+            知识体系精选
+          </span>
+        </motion.h1>
+
+        {/* 技术标签 */}
+        <motion.div
+          variants={container}
+          className="mt-8 grid grid-cols-2 sm:grid-cols-3 md:flex md:flex-wrap justify-center gap-3 max-w-4xl mx-auto px-4"
+        >
+          {categories.map((category) => (
+            <motion.div
+              key={category.name}
+              variants={item}
+              whileHover={{
+                scale: 1.05,
+                y: -2,
+                transition: { duration: 0.2 },
+              }}
+              className={`
+                group w-full md:w-auto md:min-w-[140px]
+                px-4 sm:px-6 py-2.5 rounded-full
+                bg-gradient-to-r ${category.color}
+                bg-opacity-20 backdrop-blur-md
+                border border-white/20 hover:border-white/40
+                cursor-pointer transition-all duration-300
+                shadow-lg shadow-black/10 hover:shadow-xl hover:shadow-black/20
+                flex items-center justify-center gap-2 sm:gap-3
+              `}
+            >
+              <span
+                className={`
+                  ${category.icon} text-lg sm:text-xl text-white shrink-0
+                  drop-shadow-[0_0_4px_rgba(255,255,255,0.5)]
+                  filter brightness-125
+                  group-hover:scale-110 transition-transform duration-300
+                `}
+              />
+              <span className="font-semibold text-sm sm:text-[15px] text-white/90 group-hover:text-white whitespace-nowrap">
+                {category.name}
+              </span>
+            </motion.div>
+          ))}
+        </motion.div>
+
+        {/* 特性说明 */}
+        <motion.div
+          variants={item}
+          className="mt-12 text-center"
+        >
+          <span className="inline-flex items-center px-4 py-2 rounded-full text-sm bg-white/10 text-white/80 backdrop-blur-sm">
+            <span className="icon-[material-symbols--info-outline] mr-2" />
+            每个知识点都提供完整的知识图谱和深度解析
+          </span>
+        </motion.div>
+
+        {/* 特性卡片 */}
+        <motion.div
+          variants={container}
+          className="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+        >
+          {features.map((feature) => (
+            <motion.div
+              key={feature.title}
+              variants={item}
+              whileHover={{ y: -5 }}
+              className={`
+                p-6 rounded-2xl
+                bg-gradient-to-br ${feature.color} bg-opacity-10
+                backdrop-blur-sm border border-white/10
+                hover:border-white/20 transition-all duration-300
+              `}
+            >
+              <motion.span
+                className="text-3xl mb-4 block text-white"
+                whileHover={{ scale: 1.1 }}
+                animate={{ y: [0, -5, 0] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
+                <span className={feature.icon} />
+              </motion.span>
+              <h3 className="text-xl font-bold mb-2 text-white">{feature.title}</h3>
+              <p className="text-sm text-white/80">{feature.desc}</p>
+            </motion.div>
+          ))}
+        </motion.div>
+
+        {/* 统计数据 */}
+        <motion.div
+          variants={container}
+          className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-3xl mx-auto"
+        >
+          {[
+            { icon: 'icon-[material-symbols--person]', count: '10000+', label: '学习者' },
+            { icon: 'icon-[material-symbols--library-books]', count: '500+', label: '知识点' },
+            { icon: 'icon-[material-symbols--workspace-premium]', count: '200+', label: '面试真题' },
+          ].map((stat) => (
+            <motion.div
+              key={stat.label}
+              variants={item}
+              whileHover={{ scale: 1.05 }}
+              className="flex flex-col items-center p-4 rounded-xl bg-white/5 backdrop-blur-sm"
+            >
+              <motion.span
+                className={`${stat.icon} text-3xl text-blue-400 mb-2`}
+                animate={{ scale: [1, 1.1, 1] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              />
+              <span className="text-2xl font-bold text-white">
+                {stat.count}
+              </span>
+              <span className="text-sm text-slate-300">{stat.label}</span>
+            </motion.div>
+          ))}
+        </motion.div>
+
+        {/* 按钮组 */}
+        <motion.div
+          variants={item}
+          className="mt-12 flex flex-wrap gap-4 justify-center"
+        >
+          <motion.div whileHover={{ scale: 1.05 }}>
             <Button
               asChild
               size="lg"
-              className="font-bold group max-sm:w-[100%]"
+              className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-bold px-8 py-4 rounded-xl shadow-lg"
             >
-              <Link
-                href={`/${currentLocale}/introduction`}
-              >
-                {t('getStarted')}
-                <span className="w-[20px] translate-x-[6px] transition-all group-hover:translate-x-[10px] icon-[mingcute--arrow-right-fill]"></span>
+              <Link href={`/${currentLocale}/getting-started`}>
+                开始学习
+                <motion.span
+                  className="ml-2 icon-[mingcute--arrow-right-fill]"
+                  animate={{ x: [0, 5, 0] }}
+                  transition={{ duration: 1, repeat: Infinity }}
+                />
               </Link>
             </Button>
+          </motion.div>
+          <motion.div whileHover={{ scale: 1.05 }}>
             <Button
               asChild
               size="lg"
               variant="secondary"
-              className="font-bold group max-sm:w-[100%]"
+              className="bg-white/10 hover:bg-white/20 text-white font-bold px-8 py-4 rounded-xl shadow-lg"
             >
-              <Link
-                href="https://github.com/pdsuwwz/nextjs-nextra-starter"
-                target="_blank"
-              >
-                Github
-                <span className="ml-[6px] icon-[mingcute--github-line]"></span>
+              <Link href={`/${currentLocale}/mock-interview`}>
+                模拟面试
+                <motion.span
+                  className="ml-2 icon-[material-symbols--psychology]"
+                  animate={{ rotate: [0, 10, -10, 0] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                />
               </Link>
             </Button>
-          </div>
-        </div>
-      </div>
+          </motion.div>
+          <motion.div whileHover={{ scale: 1.05 }}>
+            <Button
+              asChild
+              size="lg"
+              variant="secondary"
+              className="bg-white/10 hover:bg-white/20 text-white font-bold px-8 py-4 rounded-xl shadow-lg"
+            >
+              <Link href={`/${currentLocale}/ai-podcast`}>
+                AI 播客
+                <motion.span
+                  className="ml-2 icon-[material-symbols--podcasts]"
+                  animate={{
+                    scale: [1, 1.2, 1],
+                    opacity: [1, 0.8, 1],
+                  }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                />
+              </Link>
+            </Button>
+          </motion.div>
+        </motion.div>
+      </motion.div>
     </div>
   )
 }
