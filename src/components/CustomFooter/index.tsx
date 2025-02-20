@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils'
 import LocaleToggle from '@/widgets/locale-toggle'
 import ThemeToggle from '@/widgets/theme-toggle'
 import Link from 'next/link'
-import { Suspense } from 'react'
+
 
 const UnderlineLink = ({
   link,
