@@ -2,8 +2,6 @@
 
 import { motion } from 'framer-motion'
 import Image from 'next/image'
-import Link from 'next/link'
-import { useState } from 'react'
 
 interface ProjectProps {
   title: string
@@ -64,109 +62,148 @@ export function Project() {
     },
   ]
 
-
   const container = {
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1,
+        staggerChildren: 0.2,
+        delayChildren: 0.3,
       },
     },
   }
 
   const item = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.3 } },
+    hidden: { opacity: 0, y: 30 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        type: 'spring',
+        duration: 0.5,
+        bounce: 0.3,
+      },
+    },
   }
 
   return (
-    <div className="flex flex-col items-center">
-      <div className="w-full text-center mb-12">
-        <h2 className="text-3xl font-bold text-[#00DC82] mb-4">GitHub 项目</h2>
-        <p className="text-slate-400 max-w-3xl mx-auto">
-          这些项目都是与社区的朋友们一起完成的，期待更多开发者的参与和贡献！
-        </p>
-      </div>
-
-      <motion.div
-        variants={container}
-        initial="hidden"
-        animate="show"
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4 w-full"
-      >
-        {projects.map((project, index) => (
-          <motion.div
-            key={index}
-            variants={item}
-            whileHover={{ y: -5 }}
-            className="group flex flex-col overflow-hidden rounded-2xl bg-[#0D1117] border border-slate-800 transition-shadow duration-300 hover:shadow-lg hover:shadow-violet-500/20"
+    <div className="py-24 relative">
+      <div className="absolute inset-0 bg-gradient-to-b from-black/0 via-[#00DC82]/5 to-black/0" />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+        <div className="text-center space-y-6 mb-16">
+          <motion.span
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="inline-block text-[#00DC82] font-medium bg-[#00DC82]/10 border border-[#00DC82]/20 px-6 py-2 rounded-full text-sm"
           >
-            <div className="relative h-40">
-              <Image
-                src={project.image}
-                alt={project.title}
-                fill
-                priority
-                className="object-cover transition-transform duration-300 group-hover:scale-105"
-              />
-            </div>
+            开源项目
+          </motion.span>
+          <h2 className="text-4xl sm:text-5xl font-bold bg-gradient-to-r from-[#00DC82] to-[#4F46E5] bg-clip-text text-transparent">
+            GitHub 项目
+          </h2>
+          <p className="text-slate-300 max-w-2xl mx-auto text-base sm:text-lg">
+            这些项目都是与社区的朋友们一起完成的，期待更多开发者的参与和贡献！
+          </p>
+        </div>
 
-            <div className="relative p-5 flex-1 bg-[#0D1117]">
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="text-lg font-bold text-white">{project.title}</h3>
-                <div className="flex items-center gap-3">
-                  <div className="flex items-center gap-1">
-                    <span className="icon-[octicon--star-16] text-yellow-500" />
-                    <span className="text-slate-400">{project.stars}</span>
+        <motion.div
+          variants={container}
+          initial="hidden"
+          animate="show"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8"
+        >
+          {projects.map((project, index) => (
+            <motion.div
+              key={index}
+              variants={item}
+              className="group bg-black/30 backdrop-blur-lg border border-white/10 rounded-xl
+                overflow-hidden hover:border-[#00DC82]/30 transition-all duration-500
+                hover:shadow-[0_0_30px_rgba(0,220,130,0.1)] flex flex-col"
+            >
+              <div className="relative h-48 overflow-hidden">
+                <Image
+                  src={project.image}
+                  alt={project.title}
+                  fill
+                  priority
+                  className="object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
+              </div>
+
+              <div className="p-6 flex-1 flex flex-col">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-xl font-bold text-white group-hover:text-[#00DC82] transition-colors duration-300">
+                    {project.title}
+                  </h3>
+                  <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-1.5">
+                      <span className="icon-[octicon--star-16] text-yellow-500" />
+                      <span className="text-slate-300">{project.stars}</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <span className="icon-[octicon--repo-forked-16] text-blue-500" />
+                      <span className="text-slate-300">{project.forks}</span>
+                    </div>
+                    <a
+                      href={project.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-slate-300 hover:text-white transition-colors"
+                    >
+                      <span className="icon-[mdi--github] text-xl" />
+                    </a>
                   </div>
-                  <div className="flex items-center gap-1">
-                    <span className="icon-[octicon--repo-forked-16] text-blue-500" />
-                    <span className="text-slate-400">{project.forks}</span>
-                  </div>
-                  <a href={project.link} target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-white">
-                    <span className="icon-[mdi--github] text-xl" />
+                </div>
+
+                <p className="text-slate-300 text-sm mb-4 line-clamp-2">
+                  {project.description}
+                </p>
+
+                <div className="flex flex-wrap gap-2 mb-6">
+                  {project.tech.map((tech, i) => (
+                    <span
+                      key={i}
+                      className={`px-3 py-1 text-xs rounded-full font-medium ${
+                        techColors[tech] || 'bg-slate-800/50 text-slate-300'
+                      }`}
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+
+                <div className="mt-auto text-center w-full">
+                  <a
+                    href={project.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full inline-flex items-center justify-center gap-2 px-6 py-3
+                      relative overflow-hidden group/link
+                      bg-gradient-to-r from-[#8B5CF6] to-[#6366F1]
+                      before:absolute before:inset-0
+                      before:bg-gradient-to-r before:from-[#9333EA] before:to-[#4F46E5]
+                      before:translate-x-[-100%] before:transition-transform before:duration-500
+                      before:ease-out hover:before:translate-x-0
+                      text-white font-medium
+                      transition-all duration-300
+                      rounded-md shadow-[0_0_0_3px_rgba(139,92,246,0.1)]
+                      hover:shadow-[0_0_0_3px_rgba(139,92,246,0.2)]
+                      active:scale-[0.98]"
+                  >
+                    <span className="relative z-10 flex items-center gap-2">
+                      <span>查看项目</span>
+                      <span className="icon-[material-symbols--arrow-right-alt-rounded] text-lg
+                        transform transition-transform duration-300 group-hover/link:translate-x-1"
+                      />
+                    </span>
                   </a>
                 </div>
               </div>
-
-              <p className="text-slate-400 text-sm mb-3 line-clamp-2">{project.description}</p>
-
-              <div className="flex flex-wrap gap-1.5">
-                {project.tech.map((tech, i) => (
-                  <span
-                    key={i}
-                    className={`px-2 py-0.5 text-xs rounded-full ${
-                      techColors[tech] || 'bg-slate-800/50 text-slate-300'
-                    }`}
-                  >
-                    {tech}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            <a
-              href={project.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block bg-gradient-to-r from-violet-600 to-blue-500
-              hover:from-violet-700 hover:to-blue-600
-              text-white text-sm font-medium py-3 text-center
-              transition-all duration-300 group cursor-pointer"
-            >
-              <motion.div
-                className="flex items-center justify-center gap-2"
-                whileHover={{ x: 5 }}
-                transition={{ duration: 0.2 }}
-              >
-                <span>查看项目</span>
-                <span className="icon-[material-symbols--arrow-right-alt-rounded] text-lg" />
-              </motion.div>
-            </a>
-          </motion.div>
-        ))}
-      </motion.div>
+            </motion.div>
+          ))}
+        </motion.div>
+      </div>
     </div>
   )
 }

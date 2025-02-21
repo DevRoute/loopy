@@ -1,29 +1,9 @@
 'use client'
 
-import { Button } from '@/components/ui/button'
 import { motion } from 'framer-motion'
-import { useState } from 'react'
+import { MailIcon, MapPinIcon, MessageCircle, PhoneIcon } from 'lucide-react'
 
 export function Contact() {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: '',
-  })
-  const [emailError, setEmailError] = useState(false)
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
-    setFormData(prev => ({
-      ...prev,
-      [name]: value,
-    }))
-
-    if (name === 'email') {
-      setEmailError(!value.match(/^[^\s@]+@[^\s@][^\s.@]*\.[^\s@]+$/))
-    }
-  }
-
   const handleCopyWechat = async (wechat: string) => {
     try {
       await navigator.clipboard.writeText(wechat)
@@ -38,153 +18,127 @@ export function Contact() {
     show: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1,
+        staggerChildren: 0.2,
+        delayChildren: 0.3,
       },
     },
   }
 
   const item = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0 },
+    hidden: { opacity: 0, y: 30 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        type: 'spring',
+        duration: 0.5,
+        bounce: 0.3,
+      },
+    },
   }
 
   return (
-    <div className="relative w-full overflow-hidden">
-      {/* 背景层 */}
-      <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-purple-900 to-slate-900" />
-
-      <motion.div
-        className="relative container mx-auto px-4 py-12"
-        variants={container}
-        initial="hidden"
-        animate="show"
-      >
-        {/* 标题 */}
-        <motion.div variants={item} className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-[#00DC82]">联系我们</h2>
-          <p className="mt-4 text-slate-300 max-w-2xl mx-auto">
-            如果您有任何问题或建议，请随时与我们联系。我们很乐意与您交流并探讨合作机会。
+    <div className="py-24 relative">
+      <div className="absolute inset-0 bg-gradient-to-b from-black/0 via-[#00DC82]/5 to-black/0" />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+        <div className="text-center space-y-6 mb-16">
+          <motion.span
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="inline-block text-[#00DC82] font-medium bg-[#00DC82]/10 border border-[#00DC82]/20 px-6 py-2 rounded-full text-sm"
+          >
+            联系我们
+          </motion.span>
+          <h2 className="text-4xl sm:text-5xl font-bold bg-gradient-to-r from-[#00DC82] to-[#4F46E5] bg-clip-text text-transparent">
+            随时与我们联系
+          </h2>
+          <p className="text-slate-300 max-w-2xl mx-auto text-base sm:text-lg">
+            如果您有任何问题或建议，我们很乐意与您交流。
           </p>
-        </motion.div>
-
-        <div className="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
-          {/* 表单部分 */}
-          <motion.div variants={item} className="space-y-6">
-            <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">您的姓名：</label>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleInputChange}
-                className="w-full px-4 py-3 rounded-xl bg-black/20 border border-white/10
-                focus:border-[#00DC82] focus:ring-1 focus:ring-[#00DC82]
-                text-white placeholder-white/30"
-                placeholder="请输入您的姓名"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">您的邮箱：</label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                className="w-full px-4 py-3 rounded-xl bg-black/20 border border-white/10
-                focus:border-[#00DC82] focus:ring-1 focus:ring-[#00DC82]
-                text-white placeholder-white/30"
-                placeholder="请输入您的邮箱"
-              />
-              {emailError && formData.email && (
-                <p className="mt-2 text-sm text-red-400">请输入有效的邮箱地址！</p>
-              )}
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">留言内容：</label>
-              <textarea
-                name="message"
-                value={formData.message}
-                onChange={handleInputChange}
-                className="w-full px-4 py-3 rounded-xl bg-black/20 border border-white/10
-                focus:border-[#00DC82] focus:ring-1 focus:ring-[#00DC82]
-                text-white placeholder-white/30 min-h-[150px] resize-none"
-                placeholder="请输入您的留言"
-              />
-            </div>
-
-            <Button
-              size="lg"
-              className="w-full bg-gradient-to-r from-blue-500 to-purple-500
-              hover:from-blue-600 hover:to-purple-600 text-white font-bold"
-            >
-              发送消息
-              <motion.span
-                className="ml-2 icon-[material-symbols--send]"
-                animate={{ x: [0, 5, 0] }}
-                transition={{ duration: 1, repeat: Infinity }}
-              />
-            </Button>
-          </motion.div>
-
-          {/* 联系信息部分 */}
-          <motion.div variants={item} className="space-y-8">
-            <div className="flex items-center justify-between p-6 rounded-xl bg-black/20 backdrop-blur-sm border border-white/10 hover:border-[#00DC82]/50 transition-colors duration-300">
-              <div className="flex items-center space-x-4">
-                <div className="flex items-center justify-center w-12 h-12 rounded-full bg-[#00DC82]/10">
-                  <span className="icon-[ri--wechat-fill] text-2xl text-[#00DC82]" />
-                </div>
-                <span className="text-white">微信号：yunmz777</span>
-              </div>
-              <button
-                onClick={() => handleCopyWechat('yunmz777')}
-                className="p-2 rounded-full hover:bg-[#00DC82]/10 transition-colors duration-300"
-              >
-                <span className="icon-[mdi--content-copy] text-[#00DC82] text-xl" />
-              </button>
-            </div>
-
-            <div className="flex items-center justify-between p-6 rounded-xl bg-black/20 backdrop-blur-sm border border-white/10 hover:border-[#00DC82]/50 transition-colors duration-300">
-              <div className="flex items-center space-x-4">
-                <div className="flex items-center justify-center w-12 h-12 rounded-full bg-[#00DC82]/10">
-                  <span className="icon-[ri--wechat-fill] text-2xl text-[#00DC82]" />
-                </div>
-                <span className="text-white">微信号：yunmz777</span>
-              </div>
-              <button
-                onClick={() => handleCopyWechat('luojinan1010')}
-                className="p-2 rounded-full hover:bg-[#00DC82]/10 transition-colors duration-300"
-              >
-                <span className="icon-[mdi--content-copy] text-[#00DC82] text-xl" />
-              </button>
-            </div>
-
-            {/* 社交链接 */}
-            <div className="flex flex-wrap gap-4">
-              {[
-                { icon: 'icon-[mdi--github]', href: 'https://github.com', label: 'GitHub' },
-                { icon: 'icon-[simple-icons--juejin]', href: 'https://juejin.cn', label: '掘金' },
-              ].map((social, index) => (
-                <motion.a
-                  key={index}
-                  href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  whileHover={{ scale: 1.1 }}
-                  className="flex items-center justify-center w-12 h-12 rounded-full
-                  bg-black/20 hover:bg-[#00DC82]/10
-                  backdrop-blur-sm border border-white/10 hover:border-[#00DC82]/50
-                  transition-all duration-300 group"
-                  title={social.label}
-                >
-                  <span className={`${social.icon} text-xl text-[#00DC82] group-hover:scale-110 transition-transform duration-300`} />
-                </motion.a>
-              ))}
-            </div>
-          </motion.div>
         </div>
-      </motion.div>
+
+        <motion.div
+          variants={container}
+          initial="hidden"
+          animate="show"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8"
+        >
+          {[
+            {
+              icon: <MailIcon className="w-5 h-5" />,
+              title: '电子邮件',
+              desc: '我们的团队随时为您服务',
+              link: 'mailto:contact@example.com',
+              text: 'contact@example.com',
+            },
+            {
+              icon: <MessageCircle className="w-5 h-5" />,
+              title: '微信咨询',
+              desc: '添加微信，获取更多支持',
+              text: 'yunmz777',
+              isWechat: true,
+            },
+            {
+              icon: <MapPinIcon className="w-5 h-5" />,
+              title: '办公地址',
+              desc: '欢迎来访我们的办公室',
+              link: 'https://map.google.com',
+              text: '深圳市南山区科技园',
+            },
+            {
+              icon: <PhoneIcon className="w-5 h-5" />,
+              title: '联系电话',
+              desc: '周一至周五 9:00-18:00',
+              link: 'tel:+86123456789',
+              text: '+86 123-4567-89',
+            },
+          ].map((card, index) => (
+            <motion.div
+              key={index}
+              variants={item}
+              className="group bg-black/30 backdrop-blur-lg border border-white/10 rounded-xl p-6
+                hover:border-[#00DC82]/30 hover:bg-black/40 transition-all duration-500
+                hover:shadow-[0_0_30px_rgba(0,220,130,0.1)] relative overflow-hidden"
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-[#00DC82]/5 to-[#4F46E5]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="relative">
+                <div className="h-12 w-12 flex items-center justify-center bg-gradient-to-br from-[#00DC82]/20 to-[#4F46E5]/20
+                  text-[#00DC82] rounded-xl group-hover:scale-110 transition-transform duration-500"
+                >
+                  {card.icon}
+                </div>
+                <h3 className="mt-5 font-semibold text-white text-xl">
+                  {card.title}
+                </h3>
+                <p className="mt-3 text-slate-400">
+                  {card.desc}
+                </p>
+                {card.isWechat
+                  ? (
+                      <button
+                        onClick={() => handleCopyWechat(card.text)}
+                        className="mt-4 text-[#00DC82] font-medium flex items-center gap-2
+                      hover:text-[#4F46E5] transition-colors duration-300"
+                      >
+                        {card.text}
+                        <span className="icon-[mdi--content-copy] text-lg opacity-80" />
+                      </button>
+                    )
+                  : (
+                      <a
+                        className="mt-4 text-[#00DC82] font-medium hover:text-[#4F46E5] transition-colors duration-300 block"
+                        href={card.link}
+                        target={card.link?.startsWith('http') ? '_blank' : undefined}
+                        rel={card.link?.startsWith('http') ? 'noopener noreferrer' : undefined}
+                      >
+                        {card.text}
+                      </a>
+                    )}
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
+      </div>
     </div>
   )
 }
