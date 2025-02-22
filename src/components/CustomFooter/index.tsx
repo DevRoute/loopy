@@ -35,7 +35,7 @@ const UnderlineLink = ({
   )
 }
 
-export function CustomFooter() {
+export function CustomFooter({ lang }: { lang: string }) {
   return (
     <div className="w-full flex justify-center items-center">
       <div className={cn(
@@ -68,7 +68,7 @@ export function CustomFooter() {
           className="max-sm:hidden h-5 mx-2"
         />
         <div className="flex justify-center h-5 items-center space-x-2 text-sm">
-          <ThemeToggle />
+          <ThemeToggle lang={lang} />
           <Separator orientation="vertical" />
           <LocaleToggle />
         </div>

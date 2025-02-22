@@ -3,6 +3,7 @@
 import { Button } from '@/components/ui/button'
 import { useLocale } from '@/hooks'
 import { categories, features } from '@/lib/data'
+import { cn } from '@/lib/utils'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 
@@ -98,7 +99,13 @@ export function SetupHero(props: Props) {
       >
         {/* 顶部标签 */}
         <motion.div variants={item} className="text-center">
-          <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg hover:shadow-xl transition-all duration-300">
+          <span className={cn(
+            'inline-flex items-center px-4 py-2 rounded-full text-sm font-medium  ',
+            'shadow-lg hover:shadow-xl transition-all duration-300',
+            'bg-linear-to-r from-yellow-400 via-orange-400 to-red-400 text-white',
+            'dark:bg-gradient-to-r dark:from-blue-500 dark:via-indigo-500 dark:to-purple-500 ',
+          )}
+          >
             <motion.span
               className="icon-[material-symbols--new-releases] mr-2"
               animate={{ scale: [1, 1.2, 1] }}
@@ -113,18 +120,24 @@ export function SetupHero(props: Props) {
           variants={item}
           className="mt-8 text-center font-bold"
         >
-          <span className="block text-5xl md:text-6xl lg:text-7xl mb-2
-            text-transparent bg-clip-text bg-gradient-to-r
-            from-blue-400 via-purple-500 to-pink-500
-            animate-gradient-x"
+          <span className={cn(
+            'block text-5xl md:text-6xl lg:text-7xl mb-2',
+            'text-transparent bg-clip-text bg-gradient-to-r',
+            'from-blue-400 via-blue-500 to-blue-600',
+            'dark:from-blue-400 dark:via-purple-500 dark:to-pink-500',
+            'animate-gradient-x',
+          )}
           >
             面试宝典
           </span>
-          <span className="block text-4xl md:text-5xl lg:text-6xl
-            text-transparent bg-clip-text bg-gradient-to-r
-            from-indigo-300 via-white to-indigo-300
-            hover:from-white hover:via-indigo-300 hover:to-white
-            transition-all duration-500"
+          <span className={cn(
+            'block text-4xl md:text-5xl lg:text-6xl',
+            'text-transparent bg-clip-text bg-gradient-to-r',
+            'from-gray-700 via-gray-700 to-gray-700',
+            'dark:from-indigo-300 dark:via-white dark:to-indigo-300',
+            'dark:hover:from-white dark:hover:via-indigo-300 dark:hover:to-white',
+            'transition-all duration-500',
+          )}
           >
             知识体系精选
           </span>
@@ -175,7 +188,12 @@ export function SetupHero(props: Props) {
           variants={item}
           className="mt-12 text-center"
         >
-          <span className="inline-flex items-center px-4 py-2 rounded-full text-sm bg-white/10 text-white/80 backdrop-blur-sm">
+          <span className={cn(
+            'inline-flex items-center px-4 py-2 rounded-full text-sm ',
+            'border border-gray-300',
+            'dark:bg-white/10 dark:text-white/80 dark:backdrop-blur-sm dark:border-none',
+          )}
+          >
             <span className="icon-[material-symbols--info-outline] mr-2" />
             每个知识点都提供完整的知识图谱和深度解析
           </span>

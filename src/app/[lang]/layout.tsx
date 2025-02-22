@@ -34,7 +34,7 @@ const CustomNavbar = async ({ lang }: I18nLangAsyncProps) => {
     >
       <>
         <LocaleToggle className="max-md:hidden" />
-        <ThemeToggle className="max-md:hidden" />
+        <ThemeToggle className="max-md:hidden" lang={lang} />
       </>
 
     </Navbar>
@@ -93,7 +93,7 @@ export default async function RootLayout({ children, params }: Props) {
             docsRepositoryBase="https://github.com/pdsuwwz/nextjs-nextra-starter"
             footer={(
               <Footer className="bg-background py-5!">
-                <CustomFooter />
+                <CustomFooter lang={lang} />
               </Footer>
             )}
             search={<Search />}
