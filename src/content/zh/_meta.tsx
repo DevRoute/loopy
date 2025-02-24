@@ -16,7 +16,13 @@ export default {
     type: 'page',
   },
   performance: {
-    title: '前端性能优化',
+    title: (
+      <span className="flex items-center leading-[1] ">
+        前端性能优化
+        <TitleBadge />
+      </span>
+    ),
     type: 'page',
   },
+
 } satisfies MetaRecord
