@@ -1,3 +1,4 @@
+
 'use client'
 
 import { useLocale } from '@/hooks'
@@ -10,7 +11,7 @@ import { SetupHero } from './Setup'
 
 // 懒加载其他组件
 const Project = lazy(() => import('./Project').then(mod => ({ default: mod.Project })))
-const Team = lazy(() => import('./Team').then(mod => ({ default: mod.Team })))
+const Donation = lazy(() => import('./Donation').then(mod => ({ default: mod.Team })))
 const Contact = lazy(() => import('./Contact').then(mod => ({ default: mod.Contact })))
 const Faq = lazy(() => import('./Faq').then(mod => ({ default: mod.Faq })))
 
@@ -24,7 +25,7 @@ const LoadingFallback = () => (
 export default function HomepageHero() {
   const { t } = useLocale()
   const [projectRef, projectInView] = useInView()
-  const [teamRef, teamInView] = useInView()
+  const [donationRef, donationInView] = useInView()
   const [contactRef, contactInView] = useInView()
   const [faqRef, faqInView] = useInView()
 
@@ -43,16 +44,6 @@ export default function HomepageHero() {
         </Suspense>
       </motion.div>
 
-      <motion.div
-        ref={teamRef}
-        initial={{ opacity: 0, y: 50 }}
-        animate={teamInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-        transition={{ duration: 0.6 }}
-      >
-        <Suspense fallback={<LoadingFallback />}>
-          <Team />
-        </Suspense>
-      </motion.div>
 
       <motion.div
         ref={contactRef}
@@ -73,6 +64,17 @@ export default function HomepageHero() {
       >
         <Suspense fallback={<LoadingFallback />}>
           <Faq />
+        </Suspense>
+      </motion.div>
+
+      <motion.div
+        ref={donationRef}
+        initial={{ opacity: 0, y: 50 }}
+        animate={donationInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+        transition={{ duration: 0.6 }}
+      >
+        <Suspense fallback={<LoadingFallback />}>
+          <Donation />
         </Suspense>
       </motion.div>
     </div>

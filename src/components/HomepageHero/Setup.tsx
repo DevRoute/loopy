@@ -148,7 +148,15 @@ export function SetupHero(props: Props) {
           variants={container}
           className="mt-8 grid grid-cols-2 sm:grid-cols-3 md:flex md:flex-wrap justify-center gap-3 max-w-4xl mx-auto px-4"
         >
-          {categories.map((category) => (
+          {[
+            { name: 'JavaScript', icon: 'JS', color: 'from-yellow-400 to-orange-500' },
+            { name: 'Node.js', icon: '⚙️', color: 'from-green-400 to-green-600' },
+            { name: 'React', icon: '⚛️', color: 'from-blue-400 to-cyan-400' },
+            { name: '前端工程化', icon: '🔧', color: 'from-purple-400 to-indigo-500' },
+            { name: 'TypeScript', icon: 'TS', color: 'from-blue-500 to-blue-700' },
+            { name: '计算机网络', icon: '🌐', color: 'from-pink-400 to-red-400' },
+            { name: '性能优化', icon: '🚀', color: 'from-yellow-400 to-orange-500' },
+          ].map((category) => (
             <motion.div
               key={category.name}
               variants={item}
@@ -170,12 +178,15 @@ export function SetupHero(props: Props) {
             >
               <span
                 className={`
-                  ${category.icon} text-lg sm:text-xl text-white shrink-0
+                  text-lg sm:text-xl text-white shrink-0
                   drop-shadow-[0_0_4px_rgba(255,255,255,0.5)]
                   filter brightness-125
                   group-hover:scale-110 transition-transform duration-300
+                  font-bold
                 `}
-              />
+              >
+                {category.icon}
+              </span>
               <span className="font-semibold text-sm sm:text-[15px] text-white/90 group-hover:text-white whitespace-nowrap">
                 {category.name}
               </span>
