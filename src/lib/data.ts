@@ -1,46 +1,11 @@
 export const categories = [
-  {
-    name: 'JavaScript',
-    icon: 'icon-[logos--javascript]',
-    color: 'from-yellow-400 to-orange-500',
-    desc: '核心概念与高级特性',
-  },
-  {
-    name: 'Node.js',
-    icon: 'icon-[logos--nodejs-icon]',
-    color: 'from-green-500 to-emerald-600',
-    desc: '服务端开发与工具链',
-  },
-  {
-    name: 'React',
-    icon: 'icon-[logos--react]',
-    color: 'from-cyan-400 to-blue-500',
-    desc: '组件设计与状态管理',
-  },
-  {
-    name: '前端工程化',
-    icon: 'icon-[carbon--tool-kit]',
-    color: 'from-indigo-400 to-purple-500',
-    desc: '构建、部署与开发效率',
-  },
-  {
-    name: 'TypeScript',
-    icon: 'icon-[logos--typescript-icon]',
-    color: 'from-blue-500 to-blue-600',
-    desc: '类型系统与工程实践',
-  },
-  {
-    name: '计算机网络',
-    icon: 'icon-[carbon--network-3]',
-    color: 'from-rose-400 to-pink-500',
-    desc: 'HTTP协议与网络优化',
-  },
-  {
-    name: '性能优化',
-    icon: 'icon-[carbon--optimize]',
-    color: 'from-amber-400 to-orange-500',
-    desc: '加载性能与运行时优化',
-  },
+  { name: 'JavaScript', icon: 'JS', color: 'from-yellow-400 to-orange-500' },
+  { name: 'Node.js', icon: '⚙️', color: 'from-green-400 to-green-600' },
+  { name: 'React', icon: '⚛️', color: 'from-blue-400 to-cyan-400' },
+  { name: '前端工程化', icon: '🔧', color: 'from-purple-400 to-indigo-500' },
+  { name: 'TypeScript', icon: 'TS', color: 'from-blue-500 to-blue-700' },
+  { name: '计算机网络', icon: '🌐', color: 'from-pink-400 to-red-400' },
+  { name: '性能优化', icon: '🚀', color: 'from-yellow-400 to-orange-500' },
 ]
 
 export const features = [
