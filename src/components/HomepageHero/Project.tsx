@@ -1,17 +1,17 @@
-'use client'
+'use client';
 
-import { motion } from 'framer-motion'
-import Image from 'next/image'
+import { motion } from 'framer-motion';
+import Image from 'next/image';
 
 interface ProjectProps {
-  title: string
-  description: string
-  image: string
-  link: string
-  repo: string
-  stars: number
-  forks: number
-  tech: string[]
+  title: string;
+  description: string;
+  image: string;
+  link: string;
+  repo: string;
+  stars: number;
+  forks: number;
+  tech: string[];
 }
 
 const techColors: { [key: string]: string } = {
@@ -26,7 +26,7 @@ const techColors: { [key: string]: string } = {
   'Tailwind CSS': 'bg-cyan-500/20 text-cyan-400',
   Yjs: 'bg-yellow-500/20 text-yellow-400',
   OpenAI: 'bg-emerald-500/20 text-emerald-400',
-}
+};
 
 export function Project() {
   const projects: ProjectProps[] = [
@@ -42,7 +42,8 @@ export function Project() {
     },
     {
       title: 'Online Editor',
-      description: '基于 Next.js 和 NestJS 的在线代码编辑器，使用 Monaco Editor 和 Yjs 实现实时协作编辑和同步功能。',
+      description:
+        '基于 Next.js 和 NestJS 的在线代码编辑器，使用 Monaco Editor 和 Yjs 实现实时协作编辑和同步功能。',
       image: 'https://cdn.pixabay.com/photo/2023/01/30/07/24/losangeles-7754986_1280.jpg',
       link: 'https://github.com/xun082/online-edit-web',
       repo: 'xun082/online-edit-web',
@@ -52,7 +53,8 @@ export function Project() {
     },
     {
       title: 'Create AI Toolkit',
-      description: '一个 AI 驱动的开发工具包，提供智能化功能如自动生成提交信息、代码审查、根据描述生成 React 组件等，帮助开发者提升效率和代码质量。',
+      description:
+        '一个 AI 驱动的开发工具包，提供智能化功能如自动生成提交信息、代码审查、根据描述生成 React 组件等，帮助开发者提升效率和代码质量。',
       image: 'https://cdn.pixabay.com/photo/2023/01/30/07/24/losangeles-7754986_1280.jpg',
       link: 'https://github.com/xun082/create-ai-toolkit',
       repo: 'xun082/create-ai-toolkit',
@@ -60,7 +62,7 @@ export function Project() {
       forks: 4,
       tech: ['Node.js', 'TypeScript', 'OpenAI'],
     },
-  ]
+  ];
 
   const container = {
     hidden: { opacity: 0 },
@@ -71,7 +73,7 @@ export function Project() {
         delayChildren: 0.3,
       },
     },
-  }
+  };
 
   const item = {
     hidden: { opacity: 0, y: 30 },
@@ -84,7 +86,7 @@ export function Project() {
         bounce: 0.3,
       },
     },
-  }
+  };
 
   return (
     <div className="py-24 relative">
@@ -156,9 +158,7 @@ export function Project() {
                   </div>
                 </div>
 
-                <p className="text-slate-300 text-sm mb-4 line-clamp-2">
-                  {project.description}
-                </p>
+                <p className="text-slate-300 text-sm mb-4 line-clamp-2">{project.description}</p>
 
                 <div className="flex flex-wrap gap-2 mb-6">
                   {project.tech.map((tech, i) => (
@@ -193,7 +193,8 @@ export function Project() {
                   >
                     <span className="relative z-10 flex items-center gap-2">
                       <span>查看项目</span>
-                      <span className="icon-[material-symbols--arrow-right-alt-rounded] text-lg
+                      <span
+                        className="icon-[material-symbols--arrow-right-alt-rounded] text-lg
                         transform transition-transform duration-300 group-hover/link:translate-x-1"
                       />
                     </span>
@@ -205,5 +206,5 @@ export function Project() {
         </motion.div>
       </div>
     </div>
-  )
+  );
 }

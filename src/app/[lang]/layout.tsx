@@ -1,59 +1,52 @@
-import type { I18nLangAsyncProps, I18nLangKeys } from '@/i18n'
+import type { Metadata } from 'next';
+import type { ReactNode } from 'react';
+import { Footer, LastUpdated, Layout, Navbar } from 'nextra-theme-docs';
+import { Head, Search } from 'nextra/components';
+import { getPageMap } from 'nextra/page-map';
 
-import type { Metadata } from 'next'
-import type { ReactNode } from 'react'
+import { getDirection } from '../_dictionaries/get-dictionary';
+import { ThemeProvider } from './_components/ThemeProvider';
 
-import { CustomFooter } from '@/components/CustomFooter'
-import { useServerLocale } from '@/hooks'
-import LocaleToggle from '@/widgets/locale-toggle'
-import ThemeToggle from '@/widgets/theme-toggle'
-import { Footer, LastUpdated, Layout, Navbar } from 'nextra-theme-docs'
-import { Head, Search } from 'nextra/components'
-import { getPageMap } from 'nextra/page-map'
-import { getDirection } from '../_dictionaries/get-dictionary'
-
-import { ThemeProvider } from './_components/ThemeProvider'
-import './styles/index.css'
+import ThemeToggle from '@/widgets/theme-toggle';
+import LocaleToggle from '@/widgets/locale-toggle';
+import { useServerLocale } from '@/hooks';
+import { CustomFooter } from '@/components/CustomFooter';
+import type { I18nLangAsyncProps, I18nLangKeys } from '@/i18n';
+import './styles/index.css';
 
 export const metadata = {
   metadataBase: new URL('https://nextjs-nextra-starter-green.vercel.app'),
   icons: '/img/favicon.svg',
-} satisfies Metadata
+} satisfies Metadata;
 
-const repo = 'https://github.com/pdsuwwz/nextjs-nextra-starter'
+const repo = 'https://github.com/pdsuwwz/nextjs-nextra-starter';
 
 const CustomNavbar = async ({ lang }: I18nLangAsyncProps) => {
-  const { t } = await useServerLocale(lang)
+  const { t } = await useServerLocale(lang);
+
   return (
-    <Navbar
-      logo={(
-        <span>{ t('systemTitle') }</span>
-      )}
-      logoLink={`/${lang}`}
-      projectLink={repo}
-    >
+    <Navbar logo={<span>{t('systemTitle')}</span>} logoLink={`/${lang}`} projectLink={repo}>
       <>
         <LocaleToggle className="max-md:hidden" />
         <ThemeToggle className="max-md:hidden" lang={lang} />
       </>
-
     </Navbar>
-  )
-}
+  );
+};
 
 interface Props {
-  children: ReactNode
-  params: Promise<{ lang: I18nLangKeys }>
+  children: ReactNode;
+  params: Promise<{ lang: I18nLangKeys }>;
 }
 
 export default async function RootLayout({ children, params }: Props) {
-  const { lang } = await params
-  const pageMap = await getPageMap(lang)
+  const { lang } = await params;
+  const pageMap = await getPageMap(lang);
 
-  const title = 'My Nextra Starter'
-  const description = 'A Starter template with Next.js, Nextra'
+  const title = 'My Nextra Starter';
+  const description = 'A Starter template with Next.js, Nextra';
 
-  const { t } = await useServerLocale(lang)
+  const { t } = await useServerLocale(lang);
 
   return (
     <html
@@ -81,21 +74,15 @@ export default async function RootLayout({ children, params }: Props) {
           disableTransitionOnChange
         >
           <Layout
-            navbar={
-              <CustomNavbar lang={lang} />
-            }
-            lastUpdated={(
-              <LastUpdated>
-                { t('lastUpdated') }
-              </LastUpdated>
-            )}
+            navbar={<CustomNavbar lang={lang} />}
+            lastUpdated={<LastUpdated>{t('lastUpdated')}</LastUpdated>}
             editLink={null}
             docsRepositoryBase="https://github.com/pdsuwwz/nextjs-nextra-starter"
-            footer={(
+            footer={
               <Footer className="bg-background py-5!">
                 <CustomFooter lang={lang} />
               </Footer>
-            )}
+            }
             search={<Search />}
             i18n={[
               { locale: 'en', name: 'English' },
@@ -109,5 +96,5 @@ export default async function RootLayout({ children, params }: Props) {
         </ThemeProvider>
       </body>
     </html>
-  )
+  );
 }

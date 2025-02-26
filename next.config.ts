@@ -1,10 +1,9 @@
-import createWithNextra from 'nextra'
+import createWithNextra from 'nextra';
 
 const withNextra = createWithNextra({
   defaultShowCopyCode: true,
   unstable_shouldAddLocaleToLinks: true,
-})
-
+});
 
 /**
  * @type {import("next").NextConfig}
@@ -26,4 +25,4 @@ export default withNextra({
     silenceDeprecations: ['legacy-js-api'],
   },
   output: 'standalone',
-})
+});

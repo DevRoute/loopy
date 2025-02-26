@@ -1,5 +1,4 @@
-import type { MetaRecord } from 'nextra'
-import { TitleBadge } from '@/components/TitleBadge'
+import type { MetaRecord } from 'nextra';
 
 export default {
   index: {
@@ -19,4 +18,4 @@ export default {
     title: '前端性能优化',
     type: 'page',
   },
-} satisfies MetaRecord
+} satisfies MetaRecord;

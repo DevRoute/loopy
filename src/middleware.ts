@@ -1,4 +1,4 @@
-export { middleware } from 'nextra/locales'
+export { middleware } from 'nextra/locales';
 
 export const config = {
   matcher: [
@@ -12,4 +12,4 @@ export const config = {
      */
     '/((?!api|_next/static|_next/image|favicon.ico|img|_pagefind).*)',
   ],
-}
+};

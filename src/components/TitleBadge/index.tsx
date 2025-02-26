@@ -1,17 +1,15 @@
-'use client'
-import type { ReactNode } from 'react'
-import clsx from 'clsx'
-import { motion } from 'framer-motion'
+'use client';
+
+import type { ReactNode } from 'react';
+import clsx from 'clsx';
+import { motion } from 'framer-motion';
 
 interface Props {
-  className?: string
-  children?: ReactNode
+  className?: string;
+  children?: ReactNode;
 }
 
-export const TitleBadge = ({
-  className,
-  children = 'NEW',
-}: Props) => {
+export const TitleBadge = ({ className, children = 'NEW' }: Props) => {
   return (
     <motion.span
       animate={{ backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'] }}
@@ -28,5 +26,5 @@ export const TitleBadge = ({
     >
       {children}
     </motion.span>
-  )
-}
+  );
+};

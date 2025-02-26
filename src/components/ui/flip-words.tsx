@@ -1,39 +1,40 @@
-'use client'
+'use client';
 
-import type { TargetAndTransition } from 'framer-motion'
-import { useBreakpoint } from '@/hooks'
-import { cn } from '@/lib/utils'
-import { AnimatePresence, motion } from 'framer-motion'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import type { TargetAndTransition } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+
+import { useBreakpoint } from '@/hooks';
+import { cn } from '@/lib/utils';
 
 export const FlipWords = ({
   words,
   duration = 3000,
   className,
 }: {
-  words: string[]
-  duration?: number
-  className?: string
+  words: string[];
+  duration?: number;
+  className?: string;
 }) => {
-  const [currentWord, setCurrentWord] = useState(words[0])
-  const [isAnimating, setIsAnimating] = useState<boolean>(false)
+  const [currentWord, setCurrentWord] = useState(words[0]);
+  const [isAnimating, setIsAnimating] = useState<boolean>(false);
 
   // thanks for the fix Julian - https://github.com/Julian-AT
   const startAnimation = useCallback(() => {
-    const word = words[words.indexOf(currentWord) + 1] || words[0]
-    setCurrentWord(word)
-    setIsAnimating(true)
-  }, [currentWord, words])
+    const word = words[words.indexOf(currentWord) + 1] || words[0];
+    setCurrentWord(word);
+    setIsAnimating(true);
+  }, [currentWord, words]);
 
   useEffect(() => {
     if (!isAnimating) {
       setTimeout(() => {
-        startAnimation()
-      }, duration)
+        startAnimation();
+      }, duration);
     }
-  }, [isAnimating, duration, startAnimation])
+  }, [isAnimating, duration, startAnimation]);
 
-  const { isMd } = useBreakpoint()
+  const { isMd } = useBreakpoint();
 
   const motionExit = useMemo<TargetAndTransition>(() => {
     if (isMd) {
@@ -41,8 +42,9 @@ export const FlipWords = ({
         opacity: 0,
         filter: 'blur(0px)',
         position: 'absolute',
-      }
+      };
     }
+
     return {
       opacity: 0,
       y: -40,
@@ -50,13 +52,13 @@ export const FlipWords = ({
       filter: 'blur(8px)',
       scale: 2,
       position: 'absolute',
-    }
-  }, [isMd])
+    };
+  }, [isMd]);
 
   return (
     <AnimatePresence
       onExitComplete={() => {
-        setIsAnimating(false)
+        setIsAnimating(false);
       }}
     >
       <motion.div
@@ -96,5 +98,5 @@ export const FlipWords = ({
         ))}
       </motion.div>
     </AnimatePresence>
-  )
-}
+  );
+};

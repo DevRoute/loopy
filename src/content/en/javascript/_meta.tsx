@@ -1,4 +1,4 @@
-import type { MetaRecord } from 'nextra'
+import type { MetaRecord } from 'nextra';
 
 export default {
   typeChange: '类型转换',
@@ -7,5 +7,4 @@ export default {
   nullAndUndefined: 'null和undefined',
 
   prototype: '原型链',
-
-} satisfies MetaRecord
+} satisfies MetaRecord;

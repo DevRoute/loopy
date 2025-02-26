@@ -1,17 +1,22 @@
-'use client'
+'use client';
 
-import { cn } from '@/lib/utils'
-import * as HoverCardPrimitive from '@radix-ui/react-hover-card'
+import * as HoverCardPrimitive from '@radix-ui/react-hover-card';
+import * as React from 'react';
 
-import * as React from 'react'
+import { cn } from '@/lib/utils';
 
-const HoverCard = HoverCardPrimitive.Root
+const HoverCard = HoverCardPrimitive.Root;
 
-const HoverCardTrigger = HoverCardPrimitive.Trigger
+const HoverCardTrigger = HoverCardPrimitive.Trigger;
 
+const HoverCardContent = ({
+  className,
+  align = 'center',
+  sideOffset = 4,
+  ...props
+}: React.ComponentPropsWithoutRef<typeof HoverCardPrimitive.Content>) => {
+  const itemRef = React.useRef<React.ComponentRef<typeof HoverCardPrimitive.Content>>(null);
 
-const HoverCardContent = ({ className, align = 'center', sideOffset = 4, ...props }: React.ComponentPropsWithoutRef<typeof HoverCardPrimitive.Content>) => {
-  const itemRef = React.useRef<React.ComponentRef<typeof HoverCardPrimitive.Content>>(null)
   return (
     <HoverCardPrimitive.Content
       ref={itemRef}
@@ -23,8 +28,9 @@ const HoverCardContent = ({ className, align = 'center', sideOffset = 4, ...prop
       )}
       {...props}
     />
-  )
-}
-HoverCardContent.displayName = HoverCardPrimitive.Content.displayName
+  );
+};
 
-export { HoverCard, HoverCardContent, HoverCardTrigger }
+HoverCardContent.displayName = HoverCardPrimitive.Content.displayName;
+
+export { HoverCard, HoverCardContent, HoverCardTrigger };

@@ -1,27 +1,21 @@
-'use client'
+'use client';
 
-
-import type { ReactNode } from 'react'
-import { motion } from 'framer-motion'
-import React from 'react'
+import type { ReactNode } from 'react';
+import { motion } from 'framer-motion';
+import React from 'react';
 
 interface Props {
-  className?: string
-  disabledAnimation?: boolean
-  disabledHover?: boolean
-  children: ReactNode
+  className?: string;
+  disabledAnimation?: boolean;
+  disabledHover?: boolean;
+  children: ReactNode;
 }
 
 export const MotionWrapperFlash: React.FC<Props> = (props) => {
-  const {
-    disabledAnimation = true,
-    disabledHover = false,
-    children,
-    className,
-  } = props
+  const { disabledAnimation = true, disabledHover = false, children, className } = props;
 
   if (disabledAnimation) {
-    return children
+    return children;
   }
 
   return (
@@ -29,7 +23,6 @@ export const MotionWrapperFlash: React.FC<Props> = (props) => {
       className={className}
       initial={{ opacity: 0, scale: 0.8, rotate: -20 }}
       animate={{ opacity: 1, scale: 1, rotate: 0 }}
-
       whileHover={
         !disabledHover
           ? {
@@ -57,5 +50,5 @@ export const MotionWrapperFlash: React.FC<Props> = (props) => {
     >
       {children}
     </motion.span>
-  )
-}
+  );
+};

@@ -22,7 +22,8 @@ export default {
     },
     {
       title: 'TypeScript 类型安全',
-      description: '全面集成 TypeScript，提供静态类型检查，减少运行时错误，提高代码可靠性和可维护性',
+      description:
+        '全面集成 TypeScript，提供静态类型检查，减少运行时错误，提高代码可靠性和可维护性',
     },
     {
       title: 'Iconify 图标集',
@@ -53,15 +54,18 @@ export default {
   faqs: [
     {
       question: '这个启动模板支持哪些框架和技术栈？',
-      answer: '本启动模板支持 Next.js 和 Nextra，并集成了 Tailwind CSS、Framer Motion、Shadcn UI 组件等现代开发技术栈。',
+      answer:
+        '本启动模板支持 Next.js 和 Nextra，并集成了 Tailwind CSS、Framer Motion、Shadcn UI 组件等现代开发技术栈。',
     },
     {
       question: '我如何开始使用这个模板进行开发？',
-      answer: '只需克隆我们的 GitHub 仓库并按照文档中的步骤运行安装命令，即可开始使用本模板进行开发。',
+      answer:
+        '只需克隆我们的 GitHub 仓库并按照文档中的步骤运行安装命令，即可开始使用本模板进行开发。',
     },
     {
       question: '这个模板适合哪些类型的项目？',
-      answer: '该模板适合用于创建快速、高效的现代 Web 应用程序，包括企业站点、个人博客、电子商务平台等。',
+      answer:
+        '该模板适合用于创建快速、高效的现代 Web 应用程序，包括企业站点、个人博客、电子商务平台等。',
     },
     {
       question: '如何添加或修改项目中的组件？',
@@ -69,7 +73,8 @@ export default {
     },
     {
       question: '模板是否提供多语言支持？',
-      answer: '是的，模板内置国际化 (i18n) 功能，可以轻松添加和管理多语言内容，扩大应用的国际用户群。',
+      answer:
+        '是的，模板内置国际化 (i18n) 功能，可以轻松添加和管理多语言内容，扩大应用的国际用户群。',
     },
     {
       question: '如何获得技术支持或帮助？',
@@ -92,7 +97,8 @@ export default {
       link: '',
       image: '',
       status: '已完成',
-      description: 'Create-Neat 是一款轻量级脚手架工具，专为提供 开箱即用和 零配置体验而设计，旨在帮助用户快速且轻松地构建项目，同时支持多样的技术栈选择。',
+      description:
+        'Create-Neat 是一款轻量级脚手架工具，专为提供 开箱即用和 零配置体验而设计，旨在帮助用户快速且轻松地构建项目，同时支持多样的技术栈选择。',
       tags: ['webpack', 'vite', 'eslint', 'react', 'vue', 'prettier'],
     },
     {
@@ -105,4 +111,4 @@ export default {
       tags: ['webpack', 'vite', 'eslint', 'react', 'vue', 'prettier'],
     },
   ],
-}
+};

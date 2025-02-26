@@ -1,12 +1,9 @@
 {
-  "css.customData": [".vscode/tailwind.json"],
-  "editor.formatOnSave": false,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit",
-    "source.fixAll.stylelint": "explicit"
+    "source.fixAll": "always",
+    "source.fixAll.eslint": "always"
   },
-  "javascript.preferences.importModuleSpecifier": "project-relative",
-  "typescript.suggest.jsdoc.generateReturns": false,
-  "typescript.tsserver.experimental.enableProjectDiagnostics": true,
-  "typescript.tsdk": "node_modules/typescript/lib"
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"]
 }

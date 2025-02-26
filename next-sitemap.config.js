@@ -1,5 +1,5 @@
 /** @type {import('next-sitemap').IConfig} */
-import { env } from 'node:process'
+import { env } from 'node:process';
 
 export default {
   siteUrl: env.NEXT_PUBLIC_SITE_URL, // 你的网站域名
@@ -20,4 +20,4 @@ export default {
   //     { userAgent: 'BadBot', disallow: '/' }, // 禁止特定爬虫
   //   ],
   // },
-}
+};

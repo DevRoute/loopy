@@ -1,19 +1,19 @@
-import type { ReactNode } from 'react'
-import { Separator } from '@/components/ui/separator'
-import { cn } from '@/lib/utils'
-import LocaleToggle from '@/widgets/locale-toggle'
-import ThemeToggle from '@/widgets/theme-toggle'
-import Link from 'next/link'
+import type { ReactNode } from 'react';
+import Link from 'next/link';
 
+import { Separator } from '@/components/ui/separator';
+import { cn } from '@/lib/utils';
+import LocaleToggle from '@/widgets/locale-toggle';
+import ThemeToggle from '@/widgets/theme-toggle';
 
 const UnderlineLink = ({
   link,
   label,
   underlineByDefault = false,
 }: {
-  label: ReactNode | string
-  link: string
-  underlineByDefault?: boolean
+  label: ReactNode | string;
+  link: string;
+  underlineByDefault?: boolean;
 }) => {
   return (
     <Link
@@ -30,20 +30,21 @@ const UnderlineLink = ({
           : 'hover:border-b',
       )}
     >
-      { label }
+      {label}
     </Link>
-  )
-}
+  );
+};
 
 export function CustomFooter({ lang }: { lang: string }) {
   return (
     <div className="w-full flex justify-center items-center">
-      <div className={cn(
-        'flex justify-center items-center gap-[2px]',
-        'max-sm:flex-col max-sm:gap-5 max-sm:pb-10',
-        'tracking-wide text-[15px] text-center group',
-        'text-gray-500/[0.8] dark:text-zinc-300/[0.8]',
-      )}
+      <div
+        className={cn(
+          'flex justify-center items-center gap-[2px]',
+          'max-sm:flex-col max-sm:gap-5 max-sm:pb-10',
+          'tracking-wide text-[15px] text-center group',
+          'text-gray-500/[0.8] dark:text-zinc-300/[0.8]',
+        )}
       >
         <UnderlineLink
           link="https://creativecommons.org/licenses/by-nc-sa/4.0/"
@@ -52,28 +53,17 @@ export function CustomFooter({ lang }: { lang: string }) {
         />
 
         <div className="flex items-center gap-[2px]">
-          <span className="pl-[4px]">
-            Copyright ©
-            {' '}
-            { new Date().getFullYear() }
-          </span>
-          <UnderlineLink
-            link="https://github.com/pdsuwwz"
-            label="Wisdom"
-          />
+          <span className="pl-[4px]">Copyright © {new Date().getFullYear()}</span>
+          <UnderlineLink link="https://github.com/pdsuwwz" label="Wisdom" />
         </div>
 
-        <Separator
-          orientation="vertical"
-          className="max-sm:hidden h-5 mx-2"
-        />
+        <Separator orientation="vertical" className="max-sm:hidden h-5 mx-2" />
         <div className="flex justify-center h-5 items-center space-x-2 text-sm">
           <ThemeToggle lang={lang} />
           <Separator orientation="vertical" />
           <LocaleToggle />
         </div>
-
       </div>
     </div>
-  )
+  );
 }

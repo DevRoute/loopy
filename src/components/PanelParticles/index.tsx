@@ -1,20 +1,19 @@
-'use client'
+'use client';
 
-import type { ISourceOptions } from '@tsparticles/engine'
-import Particles, { initParticlesEngine } from '@tsparticles/react'
-import { useTheme } from 'nextra-theme-docs'
-import { useEffect, useMemo } from 'react'
-import { loadFull } from 'tsparticles'
+import type { ISourceOptions } from '@tsparticles/engine';
+import Particles, { initParticlesEngine } from '@tsparticles/react';
+import { useTheme } from 'nextra-theme-docs';
+import { useEffect, useMemo } from 'react';
+import { loadFull } from 'tsparticles';
 
 const PanelParticles = () => {
-  const { resolvedTheme } = useTheme()
+  const { resolvedTheme } = useTheme();
 
   useEffect(() => {
     initParticlesEngine(async (engine) => {
-      await loadFull(engine)
-    })
-  }, [])
-
+      await loadFull(engine);
+    });
+  }, []);
 
   const options = useMemo<ISourceOptions>(
     () => ({
@@ -78,16 +77,9 @@ const PanelParticles = () => {
       detectRetina: true,
     }),
     [resolvedTheme],
-  )
+  );
 
-  return (
-    <Particles
-      className="max-sm:hidden pointer-events-none"
-      options={options}
-    />
-  )
-}
+  return <Particles className="max-sm:hidden pointer-events-none" options={options} />;
+};
 
-export {
-  PanelParticles,
-}
+export { PanelParticles };

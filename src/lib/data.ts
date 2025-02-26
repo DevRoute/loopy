@@ -6,7 +6,7 @@ export const categories = [
   { name: 'TypeScript', icon: 'TS', color: 'from-blue-500 to-blue-700' },
   { name: '计算机网络', icon: '🌐', color: 'from-pink-400 to-red-400' },
   { name: '性能优化', icon: '🚀', color: 'from-yellow-400 to-orange-500' },
-]
+];
 
 export const features = [
   {
@@ -45,4 +45,4 @@ export const features = [
     desc: '在线模拟面试，实时反馈和评估',
     color: 'from-indigo-400 to-violet-400',
   },
-]
+];

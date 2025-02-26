@@ -3,18 +3,12 @@
     "incremental": true,
     "target": "ES2017",
     "jsx": "preserve",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "baseUrl": ".",
     "module": "esnext",
     "moduleResolution": "bundler",
     "paths": {
-      "@/*": [
-        "./src/*"
-      ]
+      "@/*": ["./src/*"]
     },
     "resolveJsonModule": true,
     "allowJs": true,
@@ -37,7 +31,5 @@
     "./.next/types/**/*.ts",
     "next-sitemap.config.js"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }

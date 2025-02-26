@@ -1,2 +1,2 @@
-export * from './FadeIn'
-export * from './Flash'
+export * from './FadeIn';
+export * from './Flash';

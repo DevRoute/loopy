@@ -1,5 +1,6 @@
-import type { MetaRecord } from 'nextra'
-import { TitleBadge } from '@/components/TitleBadge'
+import type { MetaRecord } from 'nextra';
+
+import { TitleBadge } from '@/components/TitleBadge';
 
 export default {
   whiteScreen: {
@@ -13,6 +14,4 @@ export default {
 
   FCP: '前端性能指标--FCP',
   FMP: '前端性能指标--FMP',
-
-
-} satisfies MetaRecord
+} satisfies MetaRecord;

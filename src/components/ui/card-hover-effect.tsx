@@ -1,17 +1,17 @@
-'use client'
+'use client';
 
-import type { ReactNode } from 'react'
-import { cn } from '@/lib/utils'
-import { AnimatePresence, motion } from 'framer-motion'
-import { useState } from 'react'
+import type { ReactNode } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useState } from 'react';
 
+import { cn } from '@/lib/utils';
 
 export const Card = ({
   className,
   children,
 }: {
-  className?: string
-  children: React.ReactNode
+  className?: string;
+  children: React.ReactNode;
 }) => {
   return (
     <div
@@ -28,57 +28,56 @@ export const Card = ({
         <div className="p-4">{children}</div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export const CardIcon = ({
   className,
   children,
 }: {
-  className?: string
-  children?: React.ReactNode
+  className?: string;
+  children?: React.ReactNode;
 }) => {
   return (
-    <div className={cn(
-      'flex justify-center items-center',
-      'rounded-[6px]',
-      'text-zinc-600 dark:text-zinc-200',
-      'size-[48px] mb-[20px] bg-red-200',
-      'text-[24px]',
-      'bg-[#e3e3e5] dark:bg-[#1e1e20]',
-      'transition-all duration-300 dark:group-hover:text-primary',
-      className,
-    )}
+    <div
+      className={cn(
+        'flex justify-center items-center',
+        'rounded-[6px]',
+        'text-zinc-600 dark:text-zinc-200',
+        'size-[48px] mb-[20px] bg-red-200',
+        'text-[24px]',
+        'bg-[#e3e3e5] dark:bg-[#1e1e20]',
+        'transition-all duration-300 dark:group-hover:text-primary',
+        className,
+      )}
     >
       {children}
     </div>
-  )
-}
+  );
+};
+
 export const CardTitle = ({
   className,
   children,
 }: {
-  className?: string
-  children: React.ReactNode
+  className?: string;
+  children: React.ReactNode;
 }) => {
   return (
-    <h4 className={cn(
-      'text-zinc-600 dark:text-zinc-200',
-      'font-bold tracking-wide mt-4',
-      className,
-    )}
+    <h4
+      className={cn('text-zinc-600 dark:text-zinc-200', 'font-bold tracking-wide mt-4', className)}
     >
       {children}
     </h4>
-  )
-}
+  );
+};
 
 export const CardDescription = ({
   className,
   children,
 }: {
-  className?: string
-  children: React.ReactNode
+  className?: string;
+  children: React.ReactNode;
 }) => {
   return (
     <p
@@ -90,30 +89,25 @@ export const CardDescription = ({
     >
       {children}
     </p>
-  )
-}
+  );
+};
 
 export const HoverEffect = ({
   items,
   className,
 }: {
   items: {
-    title: string
-    description: string
-    link?: string
-    icon: ReactNode
-  }[]
-  className?: string
+    title: string;
+    description: string;
+    link?: string;
+    icon: ReactNode;
+  }[];
+  className?: string;
 }) => {
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   return (
-    <div
-      className={cn(
-        'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 py-[10px]',
-        className,
-      )}
-    >
+    <div className={cn('grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 py-[10px]', className)}>
       {items.map((item, idx) => (
         <div
           key={idx}
@@ -146,5 +140,5 @@ export const HoverEffect = ({
         </div>
       ))}
     </div>
-  )
-}
+  );
+};

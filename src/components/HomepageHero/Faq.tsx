@@ -1,47 +1,45 @@
-'use client'
+'use client';
 
-import { motion } from 'framer-motion'
-import {
-  BadgeDollarSign,
-  Route,
-  ShieldCheck,
-  Truck,
-  Undo2,
-  UserRoundCheck,
-} from 'lucide-react'
+import { motion } from 'framer-motion';
+import { BadgeDollarSign, Route, ShieldCheck, Truck, Undo2, UserRoundCheck } from 'lucide-react';
 
 const faq = [
   {
     icon: Undo2,
     question: '如何开始使用？',
-    answer: '只需要简单几步即可开始：克隆项目仓库，安装依赖，然后按照文档说明进行配置即可。我们提供详细的入门指南。',
+    answer:
+      '只需要简单几步即可开始：克隆项目仓库，安装依赖，然后按照文档说明进行配置即可。我们提供详细的入门指南。',
   },
   {
     icon: Route,
     question: '支持哪些功能？',
-    answer: '我们提供丰富的功能支持，包括但不限于：自动部署、代码生成、性能优化、TypeScript支持等。持续添加新特性。',
+    answer:
+      '我们提供丰富的功能支持，包括但不限于：自动部署、代码生成、性能优化、TypeScript支持等。持续添加新特性。',
   },
   {
     icon: Truck,
     question: '如何获取更新？',
-    answer: '项目使用语义化版本控制，你可以通过 npm 或 yarn 更新到最新版本。我们会定期发布更新日志说明新特性。',
+    answer:
+      '项目使用语义化版本控制，你可以通过 npm 或 yarn 更新到最新版本。我们会定期发布更新日志说明新特性。',
   },
   {
     icon: BadgeDollarSign,
     question: '是否免费使用？',
-    answer: '是的，项目采用 MIT 协议开源，你可以免费使用。如果项目对你有帮助，欢迎给我们一个 star 以示支持。',
+    answer:
+      '是的，项目采用 MIT 协议开源，你可以免费使用。如果项目对你有帮助，欢迎给我们一个 star 以示支持。',
   },
   {
     icon: ShieldCheck,
     question: '遇到问题怎么办？',
-    answer: '你可以查看我们的文档，或在 GitHub Issues 上提问。我们的团队和社区会积极帮助解决你遇到的问题。',
+    answer:
+      '你可以查看我们的文档，或在 GitHub Issues 上提问。我们的团队和社区会积极帮助解决你遇到的问题。',
   },
   {
     icon: UserRoundCheck,
     question: '如何参与贡献？',
     answer: '我们欢迎各种形式的贡献，包括提交 PR、报告 Bug、改进文档等。请查看贡献指南了解详情。',
   },
-]
+];
 
 export function Faq() {
   const container = {
@@ -53,7 +51,7 @@ export function Faq() {
         delayChildren: 0.3,
       },
     },
-  }
+  };
 
   const item = {
     hidden: { opacity: 0, y: 30 },
@@ -66,7 +64,7 @@ export function Faq() {
         bounce: 0.3,
       },
     },
-  }
+  };
 
   return (
     <div className="py-24 relative overflow-hidden">
@@ -107,25 +105,25 @@ export function Faq() {
                 hover:shadow-[0_0_30px_rgba(0,220,130,0.1)]"
             >
               <div className="flex items-center gap-4">
-                <div className="h-12 w-12 flex items-center justify-center rounded-xl
+                <div
+                  className="h-12 w-12 flex items-center justify-center rounded-xl
                   bg-gradient-to-br from-[#00DC82]/20 to-[#4F46E5]/20 text-[#00DC82]
                   group-hover:scale-110 transition-transform duration-500"
                 >
                   <Icon className="h-6 w-6" />
                 </div>
-                <h3 className="text-xl font-bold text-white group-hover:text-[#00DC82]
+                <h3
+                  className="text-xl font-bold text-white group-hover:text-[#00DC82]
                   transition-colors duration-300"
                 >
                   {question}
                 </h3>
               </div>
-              <p className="mt-4 text-slate-400 pl-16">
-                {answer}
-              </p>
+              <p className="mt-4 text-slate-400 pl-16">{answer}</p>
             </motion.div>
           ))}
         </motion.div>
       </div>
     </div>
-  )
+  );
 }

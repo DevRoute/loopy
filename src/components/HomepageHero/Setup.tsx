@@ -1,17 +1,16 @@
-'use client'
+'use client';
 
-import { Button } from '@/components/ui/button'
-import { useLocale } from '@/hooks'
-import { categories, features } from '@/lib/data'
-import { cn } from '@/lib/utils'
-import { motion } from 'framer-motion'
-import Link from 'next/link'
+import { motion } from 'framer-motion';
+import Link from 'next/link';
 
-interface Props {
-}
+import { Button } from '@/components/ui/button';
+import { useLocale } from '@/hooks';
+import { categories, features } from '@/lib/data';
+import { cn } from '@/lib/utils';
 
-export function SetupHero(props: Props) {
-  const { t, currentLocale } = useLocale()
+export function SetupHero() {
+  const { t, currentLocale } = useLocale();
+  console.log(t);
 
   const container = {
     hidden: { opacity: 0 },
@@ -21,12 +20,12 @@ export function SetupHero(props: Props) {
         staggerChildren: 0.1,
       },
     },
-  }
+  };
 
   const item = {
     hidden: { opacity: 0, y: 20 },
     show: { opacity: 1, y: 0 },
-  }
+  };
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden">
@@ -99,12 +98,13 @@ export function SetupHero(props: Props) {
       >
         {/* 顶部标签 */}
         <motion.div variants={item} className="text-center">
-          <span className={cn(
-            'inline-flex items-center px-4 py-2 rounded-full text-sm font-medium  ',
-            'shadow-lg hover:shadow-xl transition-all duration-300',
-            'bg-linear-to-r from-yellow-400 via-orange-400 to-red-400 text-white',
-            'dark:bg-gradient-to-r dark:from-blue-500 dark:via-indigo-500 dark:to-purple-500 ',
-          )}
+          <span
+            className={cn(
+              'inline-flex items-center px-4 py-2 rounded-full text-sm font-medium  ',
+              'shadow-lg hover:shadow-xl transition-all duration-300',
+              'bg-linear-to-r from-yellow-400 via-orange-400 to-red-400 text-white',
+              'dark:bg-gradient-to-r dark:from-blue-500 dark:via-indigo-500 dark:to-purple-500 ',
+            )}
           >
             <motion.span
               className="icon-[material-symbols--new-releases] mr-2"
@@ -116,28 +116,27 @@ export function SetupHero(props: Props) {
         </motion.div>
 
         {/* 主标题 */}
-        <motion.h1
-          variants={item}
-          className="mt-8 text-center font-bold"
-        >
-          <span className={cn(
-            'block text-5xl md:text-6xl lg:text-7xl mb-2',
-            'text-transparent bg-clip-text bg-gradient-to-r',
-            'from-blue-400 via-blue-500 to-blue-600',
-            'dark:from-blue-400 dark:via-purple-500 dark:to-pink-500',
-            'animate-gradient-x',
-          )}
+        <motion.h1 variants={item} className="mt-8 text-center font-bold">
+          <span
+            className={cn(
+              'block text-5xl md:text-6xl lg:text-7xl mb-2',
+              'text-transparent bg-clip-text bg-gradient-to-r',
+              'from-blue-400 via-blue-500 to-blue-600',
+              'dark:from-blue-400 dark:via-purple-500 dark:to-pink-500',
+              'animate-gradient-x',
+            )}
           >
             面试宝典
           </span>
-          <span className={cn(
-            'block text-4xl md:text-5xl lg:text-6xl',
-            'text-transparent bg-clip-text bg-gradient-to-r',
-            'from-gray-700 via-gray-700 to-gray-700',
-            'dark:from-indigo-300 dark:via-white dark:to-indigo-300',
-            'dark:hover:from-white dark:hover:via-indigo-300 dark:hover:to-white',
-            'transition-all duration-500',
-          )}
+          <span
+            className={cn(
+              'block text-4xl md:text-5xl lg:text-6xl',
+              'text-transparent bg-clip-text bg-gradient-to-r',
+              'from-gray-700 via-gray-700 to-gray-700',
+              'dark:from-indigo-300 dark:via-white dark:to-indigo-300',
+              'dark:hover:from-white dark:hover:via-indigo-300 dark:hover:to-white',
+              'transition-all duration-500',
+            )}
           >
             知识体系精选
           </span>
@@ -187,15 +186,13 @@ export function SetupHero(props: Props) {
         </motion.div>
 
         {/* 特性说明 */}
-        <motion.div
-          variants={item}
-          className="mt-12 text-center"
-        >
-          <span className={cn(
-            'inline-flex items-center px-4 py-2 rounded-full text-sm ',
-            'border border-gray-300',
-            'dark:bg-white/10 dark:text-white/80 dark:backdrop-blur-sm dark:border-none',
-          )}
+        <motion.div variants={item} className="mt-12 text-center">
+          <span
+            className={cn(
+              'inline-flex items-center px-4 py-2 rounded-full text-sm ',
+              'border border-gray-300',
+              'dark:bg-white/10 dark:text-white/80 dark:backdrop-blur-sm dark:border-none',
+            )}
           >
             <span className="icon-[material-symbols--info-outline] mr-2" />
             每个知识点都提供完整的知识图谱和深度解析
@@ -241,7 +238,11 @@ export function SetupHero(props: Props) {
           {[
             { icon: 'icon-[material-symbols--person]', count: '10000+', label: '学习者' },
             { icon: 'icon-[material-symbols--library-books]', count: '500+', label: '知识点' },
-            { icon: 'icon-[material-symbols--workspace-premium]', count: '200+', label: '面试真题' },
+            {
+              icon: 'icon-[material-symbols--workspace-premium]',
+              count: '200+',
+              label: '面试真题',
+            },
           ].map((stat) => (
             <motion.div
               key={stat.label}
@@ -254,19 +255,14 @@ export function SetupHero(props: Props) {
                 animate={{ scale: [1, 1.1, 1] }}
                 transition={{ duration: 2, repeat: Infinity }}
               />
-              <span className="text-2xl font-bold text-white">
-                {stat.count}
-              </span>
+              <span className="text-2xl font-bold text-white">{stat.count}</span>
               <span className="text-sm text-slate-300">{stat.label}</span>
             </motion.div>
           ))}
         </motion.div>
 
         {/* 按钮组 */}
-        <motion.div
-          variants={item}
-          className="mt-12 flex flex-wrap gap-4 justify-center"
-        >
+        <motion.div variants={item} className="mt-12 flex flex-wrap gap-4 justify-center">
           <motion.div whileHover={{ scale: 1.05 }}>
             <Button
               asChild
@@ -323,5 +319,5 @@ export function SetupHero(props: Props) {
         </motion.div>
       </motion.div>
     </div>
-  )
+  );
 }
