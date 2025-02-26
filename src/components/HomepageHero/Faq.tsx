@@ -2,46 +2,48 @@
 
 import { motion } from 'framer-motion';
 import { BadgeDollarSign, Route, ShieldCheck, Truck, Undo2, UserRoundCheck } from 'lucide-react';
+import Link from 'next/link';
 
 const faq = [
   {
     icon: Undo2,
-    question: '如何开始使用？',
+    question: '这个网站是做什么的？',
     answer:
-      '只需要简单几步即可开始：克隆项目仓库，安装依赖，然后按照文档说明进行配置即可。我们提供详细的入门指南。',
+      '本网站专注于为前端开发者提供全面的面试准备资料，包括技术知识点、常见面试题、实战项目经验分享以及职业建议，帮助你在前端求职中脱颖而出。',
   },
   {
     icon: Route,
-    question: '支持哪些功能？',
+    question: '谁可以使用这个网站？',
     answer:
-      '我们提供丰富的功能支持，包括但不限于：自动部署、代码生成、性能优化、TypeScript支持等。持续添加新特性。',
+      '无论你是前端初学者、正在准备面试的求职者，还是想提升技能的在职开发者，这个网站都适合你。',
   },
   {
     icon: Truck,
-    question: '如何获取更新？',
+    question: '使用这个网站需要付费吗？',
     answer:
-      '项目使用语义化版本控制，你可以通过 npm 或 yarn 更新到最新版本。我们会定期发布更新日志说明新特性。',
+      '网站的基础内容完全免费，我们也提供部分高级功能或独家资源（如模拟面试服务、高级课程），可以通过订阅解锁。',
   },
   {
     icon: BadgeDollarSign,
-    question: '是否免费使用？',
+    question: '网站的内容包括哪些方面？',
     answer:
-      '是的，项目采用 MIT 协议开源，你可以免费使用。如果项目对你有帮助，欢迎给我们一个 star 以示支持。',
+      '我们涵盖HTML、CSS、JavaScript、React/Vue等前端核心技术，算法与数据结构，系统设计问题，以及软技能（如沟通技巧、自我介绍）。还有真实面试经验分享和企业常见考题。',
   },
   {
     icon: ShieldCheck,
-    question: '遇到问题怎么办？',
+    question: '内容会定期更新吗？',
     answer:
-      '你可以查看我们的文档，或在 GitHub Issues 上提问。我们的团队和社区会积极帮助解决你遇到的问题。',
+      '是的，我们会根据前端技术趋势和用户反馈定期更新内容，确保你获取的信息是最新的，比如新增热门框架或工具的相关资料。',
   },
   {
     icon: UserRoundCheck,
-    question: '如何参与贡献？',
-    answer: '我们欢迎各种形式的贡献，包括提交 PR、报告 Bug、改进文档等。请查看贡献指南了解详情。',
+    question: '如果我有疑问，能提问吗？',
+    answer:
+      '可以！我们有讨论区，你可以发帖提问，社区成员或专家会尽力解答。订阅用户还能享受一对一答疑服务。',
   },
 ];
 
-export function Faq() {
+export function Faq({ lang }: { lang: string }) {
   const container = {
     hidden: { opacity: 0 },
     show: {
@@ -122,6 +124,38 @@ export function Faq() {
               <p className="mt-4 text-slate-400 pl-16">{answer}</p>
             </motion.div>
           ))}
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.2 }}
+          className="flex justify-center mt-12"
+        >
+          <Link href={`/${lang}/questions`}>
+            <button
+              className="group flex items-center gap-2 px-8 py-3 rounded-full
+              bg-gradient-to-r from-[#00DC82] to-[#4F46E5]/80
+              text-white font-medium transition-all duration-300
+              hover:shadow-[0_0_30px_rgba(0,220,130,0.3)] transform hover:scale-105"
+            >
+              <span>{lang === 'zh' ? '查看更多问题' : 'View More Questions'}</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 transform group-hover:translate-x-1 transition-transform duration-300"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M13 7l5 5m0 0l-5 5m5-5H6"
+                />
+              </svg>
+            </button>
+          </Link>
         </motion.div>
       </div>
     </div>

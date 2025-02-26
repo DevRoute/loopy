@@ -18,4 +18,8 @@ export default {
     title: '前端性能优化',
     type: 'page',
   },
+  questions: {
+    title: '常见问题',
+    type: 'page',
+  },
 } satisfies MetaRecord;

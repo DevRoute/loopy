@@ -25,4 +25,14 @@ export default {
     ),
     type: 'page',
   },
+  questions: {
+    title: '常见问题',
+    display: 'hidden',
+    type: 'page',
+    theme: {
+      breadcrumb: false,
+      timestamp: false,
+      layout: 'full',
+    },
+  },
 } satisfies MetaRecord;

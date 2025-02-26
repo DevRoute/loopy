@@ -27,8 +27,8 @@ const LoadingFallback = () => (
 );
 
 export default function HomepageHero() {
-  const { t } = useLocale();
-  console.log(t);
+  const { t, currentLocale } = useLocale();
+  console.log(currentLocale, t);
 
   const [projectRef, projectInView] = useInView();
   const [donationRef, donationInView] = useInView();
@@ -182,7 +182,7 @@ export default function HomepageHero() {
         transition={{ duration: 0.6 }}
       >
         <Suspense fallback={<LoadingFallback />}>
-          <Faq />
+          <Faq lang={currentLocale} />
         </Suspense>
       </motion.div>
 
