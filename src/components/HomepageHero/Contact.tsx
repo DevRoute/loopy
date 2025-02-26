@@ -37,10 +37,10 @@ export function Contact() {
   };
 
   return (
-    <div className="py-24 relative">
+    <div className="py-12 mb-32 relative">
       <div className="absolute inset-0 bg-gradient-to-b from-black/0 via-[#00DC82]/5 to-black/0" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-        <div className="text-center space-y-6 mb-16">
+        <div className="text-center space-y-4 mb-12">
           <motion.span
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

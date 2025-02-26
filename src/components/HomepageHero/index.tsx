@@ -60,11 +60,8 @@ export default function HomepageHero() {
         try {
           // 加载 FingerprintJS
           const fp = await FingerprintJS.load();
-
-          // 获取访客ID
           const result = await fp.get();
           const vid = result.visitorId;
-          visitorId.current = vid;
 
           // 获取来源信息
           const referrer = document.referrer;
@@ -73,7 +70,7 @@ export default function HomepageHero() {
           const utmMedium = urlParams.get('utm_medium') || undefined;
           const utmCampaign = urlParams.get('utm_campaign') || undefined;
 
-          // 上报PV和UV
+          // 只上报一次 PV 和 UV
           trackPageView({
             page: 'homepage',
             visitorId: vid,
@@ -157,17 +154,6 @@ export default function HomepageHero() {
       </motion.div>
 
       <motion.div
-        ref={contactRef}
-        initial={{ opacity: 0, y: 50 }}
-        animate={contactInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-        transition={{ duration: 0.6 }}
-      >
-        <Suspense fallback={<LoadingFallback />}>
-          <Contact />
-        </Suspense>
-      </motion.div>
-
-      <motion.div
         ref={serviceRef}
         initial={{ opacity: 0, y: 50 }}
         animate={serviceInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
@@ -175,6 +161,17 @@ export default function HomepageHero() {
       >
         <Suspense fallback={<LoadingFallback />}>
           <Service />
+        </Suspense>
+      </motion.div>
+
+      <motion.div
+        ref={contactRef}
+        initial={{ opacity: 0, y: 50 }}
+        animate={contactInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+        transition={{ duration: 0.6 }}
+      >
+        <Suspense fallback={<LoadingFallback />}>
+          <Contact />
         </Suspense>
       </motion.div>
 
