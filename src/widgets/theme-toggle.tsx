@@ -17,6 +17,8 @@ export default function ThemeToggle({ className, lang }: { className?: string; l
   const isHomePage = pathname === `/${lang}`;
 
   useEffect(() => {
+    console.log('isHomePage', isHomePage);
+    console.log('theme', theme);
     if (isHomePage && theme) {
       setPreviousTheme(theme);
       setTheme('dark');

@@ -286,7 +286,7 @@ export function SetupHero() {
               variant="secondary"
               className="bg-white/10 hover:bg-white/20 text-white font-bold px-8 py-4 rounded-xl shadow-lg"
             >
-              <Link href={`/${currentLocale}/mock-interview`}>
+              <Link href={`/${currentLocale}/interview`}>
                 模拟面试
                 <motion.span
                   className="ml-2 icon-[material-symbols--psychology]"
@@ -303,7 +303,7 @@ export function SetupHero() {
               variant="secondary"
               className="bg-white/10 hover:bg-white/20 text-white font-bold px-8 py-4 rounded-xl shadow-lg"
             >
-              <Link href={`/${currentLocale}/ai-podcast`}>
+              <Link href={`/${currentLocale}/podcast`}>
                 AI 播客
                 <motion.span
                   className="ml-2 icon-[material-symbols--podcasts]"

@@ -22,4 +22,26 @@ export default {
     title: '常见问题',
     type: 'page',
   },
+  interview: {
+    title: '面试',
+    display: 'hidden',
+    type: 'page',
+    theme: {
+      breadcrumb: false,
+      timestamp: false,
+      layout: 'full',
+      toc: false,
+    },
+  },
+  podcast: {
+    title: 'AI 播客',
+    display: 'hidden',
+    type: 'page',
+    theme: {
+      breadcrumb: false,
+      timestamp: false,
+      layout: 'full',
+      toc: false,
+    },
+  },
 } satisfies MetaRecord;

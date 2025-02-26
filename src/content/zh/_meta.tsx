@@ -35,4 +35,26 @@ export default {
       layout: 'full',
     },
   },
+  interview: {
+    title: '模拟面试',
+    display: 'hidden',
+    type: 'page',
+    theme: {
+      breadcrumb: false,
+      timestamp: false,
+      layout: 'full',
+      toc: false,
+    },
+  },
+  podcast: {
+    title: 'AI 播客',
+    display: 'hidden',
+    type: 'page',
+    theme: {
+      breadcrumb: false,
+      timestamp: false,
+      layout: 'full',
+      toc: false,
+    },
+  },
 } satisfies MetaRecord;
