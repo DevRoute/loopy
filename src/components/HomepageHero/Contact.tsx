@@ -85,7 +85,7 @@ export function Contact() {
               ),
               title: '掘金',
               desc: '关注我们的技术文章',
-              link: 'https://juejin.cn/user/yourUsername',
+              link: 'https://juejin.cn/user/3782764966460398/posts',
               text: '前往掘金主页',
             },
             {
@@ -101,7 +101,7 @@ export function Contact() {
               ),
               title: 'GitHub',
               desc: '查看我们的开源项目',
-              link: 'https://github.com/yourUsername',
+              link: 'https://github.com/xun082',
               text: '前往GitHub',
             },
             {

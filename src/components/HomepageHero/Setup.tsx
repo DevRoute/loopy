@@ -269,7 +269,7 @@ export function SetupHero() {
               size="lg"
               className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-bold px-8 py-4 rounded-xl shadow-lg"
             >
-              <Link href={`/${currentLocale}/getting-started`}>
+              <Link href={`/${currentLocale}/javascript/typeChange`}>
                 开始学习
                 <motion.span
                   className="ml-2 icon-[mingcute--arrow-right-fill]"

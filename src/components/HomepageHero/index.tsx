@@ -18,7 +18,7 @@ const Project = lazy(() => import('./Project').then((mod) => ({ default: mod.Pro
 const Donation = lazy(() => import('./Donation').then((mod) => ({ default: mod.Team })));
 const Contact = lazy(() => import('./Contact').then((mod) => ({ default: mod.Contact })));
 const Faq = lazy(() => import('./Faq').then((mod) => ({ default: mod.Faq })));
-
+const Service = lazy(() => import('./Service').then((mod) => ({ default: mod.Service })));
 // 加载占位组件
 const LoadingFallback = () => (
   <div className="h-screen flex items-center justify-center">
@@ -34,7 +34,7 @@ export default function HomepageHero() {
   const [donationRef, donationInView] = useInView();
   const [contactRef, contactInView] = useInView();
   const [faqRef, faqInView] = useInView();
-
+  const [serviceRef, serviceInView] = useInView();
   // 使用 ref 来跟踪初始化状态
   const initialized = useRef(false);
 
@@ -157,17 +157,6 @@ export default function HomepageHero() {
       </motion.div>
 
       <motion.div
-        ref={donationRef}
-        initial={{ opacity: 0, y: 50 }}
-        animate={donationInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-        transition={{ duration: 0.6 }}
-      >
-        <Suspense fallback={<LoadingFallback />}>
-          <Donation />
-        </Suspense>
-      </motion.div>
-
-      <motion.div
         ref={contactRef}
         initial={{ opacity: 0, y: 50 }}
         animate={contactInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
@@ -179,6 +168,17 @@ export default function HomepageHero() {
       </motion.div>
 
       <motion.div
+        ref={serviceRef}
+        initial={{ opacity: 0, y: 50 }}
+        animate={serviceInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+        transition={{ duration: 0.6 }}
+      >
+        <Suspense fallback={<LoadingFallback />}>
+          <Service />
+        </Suspense>
+      </motion.div>
+
+      <motion.div
         ref={faqRef}
         initial={{ opacity: 0, y: 50 }}
         animate={faqInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
@@ -186,6 +186,17 @@ export default function HomepageHero() {
       >
         <Suspense fallback={<LoadingFallback />}>
           <Faq />
+        </Suspense>
+      </motion.div>
+
+      <motion.div
+        ref={donationRef}
+        initial={{ opacity: 0, y: 50 }}
+        animate={donationInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+        transition={{ duration: 0.6 }}
+      >
+        <Suspense fallback={<LoadingFallback />}>
+          <Donation />
         </Suspense>
       </motion.div>
     </div>
