@@ -100,14 +100,14 @@ export function SetupHero() {
         <motion.div variants={item} className="text-center">
           <span
             className={cn(
-              'inline-flex items-center px-4 py-2 rounded-full text-sm font-medium  ',
-              'shadow-lg hover:shadow-xl transition-all duration-300',
-              'bg-linear-to-r from-yellow-400 via-orange-400 to-red-400 text-white',
-              'dark:bg-gradient-to-r dark:from-blue-500 dark:via-indigo-500 dark:to-purple-500 ',
+              'inline-flex items-center px-3.5 py-1.5 rounded-full text-sm font-medium',
+              'shadow-md hover:shadow-lg transition-all duration-300',
+              'bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 text-white',
+              'border border-white/20',
             )}
           >
             <motion.span
-              className="icon-[material-symbols--new-releases] mr-2"
+              className="icon-[material-symbols--new-releases] mr-1.5 text-base"
               animate={{ scale: [1, 1.2, 1] }}
               transition={{ duration: 2, repeat: Infinity }}
             />
@@ -121,9 +121,10 @@ export function SetupHero() {
             className={cn(
               'block text-5xl md:text-6xl lg:text-7xl mb-2',
               'text-transparent bg-clip-text bg-gradient-to-r',
-              'from-blue-400 via-blue-500 to-blue-600',
-              'dark:from-blue-400 dark:via-purple-500 dark:to-pink-500',
+              'from-blue-300 via-blue-400 to-blue-500',
+              'dark:from-blue-300 dark:via-purple-400 dark:to-pink-400',
               'animate-gradient-x',
+              'tracking-tight',
             )}
           >
             面试宝典
@@ -132,10 +133,11 @@ export function SetupHero() {
             className={cn(
               'block text-4xl md:text-5xl lg:text-6xl',
               'text-transparent bg-clip-text bg-gradient-to-r',
-              'from-gray-700 via-gray-700 to-gray-700',
-              'dark:from-indigo-300 dark:via-white dark:to-indigo-300',
-              'dark:hover:from-white dark:hover:via-indigo-300 dark:hover:to-white',
+              'from-gray-200 via-gray-300 to-gray-200',
+              'dark:from-indigo-200 dark:via-white dark:to-indigo-200',
+              'dark:hover:from-white dark:hover:via-indigo-200 dark:hover:to-white',
               'transition-all duration-500',
+              'tracking-tight',
             )}
           >
             知识体系精选
@@ -145,40 +147,40 @@ export function SetupHero() {
         {/* 技术标签 */}
         <motion.div
           variants={container}
-          className="mt-8 grid grid-cols-2 sm:grid-cols-3 md:flex md:flex-wrap justify-center gap-3 max-w-4xl mx-auto px-4"
+          className="mt-8 grid grid-cols-2 sm:grid-cols-3 md:flex md:flex-wrap justify-center gap-2 max-w-4xl mx-auto px-4"
         >
           {categories.map((category) => (
             <motion.div
               key={category.name}
               variants={item}
               whileHover={{
-                scale: 1.05,
-                y: -2,
-                transition: { duration: 0.2 },
+                scale: 1.03,
+                y: -1,
+                boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+                transition: { duration: 0.2, ease: 'easeOut' },
               }}
               className={`
-                group w-full md:w-auto md:min-w-[140px]
-                px-4 sm:px-6 py-2.5 rounded-full
+                group w-full md:w-auto md:min-w-[110px]
+                px-2.5 sm:px-3.5 py-1.5 rounded-full
                 bg-gradient-to-r ${category.color}
-                bg-opacity-20 backdrop-blur-md
-                border border-white/20 hover:border-white/40
-                cursor-pointer transition-all duration-300
-                shadow-lg shadow-black/10 hover:shadow-xl hover:shadow-black/20
-                flex items-center justify-center gap-2 sm:gap-3
+                bg-opacity-15 backdrop-blur-sm
+                border border-white/15 hover:border-white/30
+                cursor-pointer transition-all duration-200
+                shadow-sm hover:shadow-md
+                flex items-center justify-center gap-1.5
               `}
             >
               <span
                 className={`
-                  text-lg sm:text-xl text-white shrink-0
-                  drop-shadow-[0_0_4px_rgba(255,255,255,0.5)]
+                  text-base sm:text-lg text-white shrink-0
+                  drop-shadow-[0_0_3px_rgba(255,255,255,0.5)]
                   filter brightness-125
-                  group-hover:scale-110 transition-transform duration-300
-                  font-bold
+                  group-hover:scale-105 transition-transform duration-200
                 `}
               >
                 {category.icon}
               </span>
-              <span className="font-semibold text-sm sm:text-[15px] text-white/90 group-hover:text-white whitespace-nowrap">
+              <span className="font-medium text-xs sm:text-sm text-white group-hover:text-white whitespace-nowrap">
                 {category.name}
               </span>
             </motion.div>
@@ -186,15 +188,16 @@ export function SetupHero() {
         </motion.div>
 
         {/* 特性说明 */}
-        <motion.div variants={item} className="mt-12 text-center">
+        <motion.div variants={item} className="mt-8 text-center">
           <span
             className={cn(
-              'inline-flex items-center px-4 py-2 rounded-full text-sm ',
-              'border border-gray-300',
-              'dark:bg-white/10 dark:text-white/80 dark:backdrop-blur-sm dark:border-none',
+              'inline-flex items-center px-3 py-1.5 rounded-full text-xs',
+              'border border-white/15',
+              'bg-white/5 text-white backdrop-blur-sm shadow-sm',
+              'hover:bg-white/8 hover:border-white/25 transition-all duration-200',
             )}
           >
-            <span className="icon-[material-symbols--info-outline] mr-2" />
+            <span className="icon-[material-symbols--info-outline] mr-1.5 text-sm" />
             每个知识点都提供完整的知识图谱和深度解析
           </span>
         </motion.div>
@@ -202,30 +205,42 @@ export function SetupHero() {
         {/* 特性卡片 */}
         <motion.div
           variants={container}
-          className="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
         >
           {features.map((feature) => (
             <motion.div
               key={feature.title}
               variants={item}
-              whileHover={{ y: -5 }}
+              whileHover={{
+                y: -3,
+                boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
+                transition: { duration: 0.2, ease: 'easeOut' },
+              }}
               className={`
-                p-6 rounded-2xl
-                bg-gradient-to-br ${feature.color} bg-opacity-10
+                p-5 rounded-xl
+                bg-gradient-to-br ${feature.color} bg-opacity-8
                 backdrop-blur-sm border border-white/10
-                hover:border-white/20 transition-all duration-300
+                hover:border-white/20 transition-all duration-200
+                shadow-sm hover:shadow-md
               `}
             >
               <motion.span
-                className="text-3xl mb-4 block text-white"
-                whileHover={{ scale: 1.1 }}
-                animate={{ y: [0, -5, 0] }}
-                transition={{ duration: 2, repeat: Infinity }}
+                className="text-2xl mb-3 block text-white"
+                whileHover={{ scale: 1.05 }}
+                animate={{
+                  y: [0, -3, 0],
+                  rotate: [0, 2, 0],
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                }}
               >
-                <span className={feature.icon} />
+                <span className={`${feature.icon} drop-shadow-[0_0_4px_rgba(255,255,255,0.3)]`} />
               </motion.span>
-              <h3 className="text-xl font-bold mb-2 text-white">{feature.title}</h3>
-              <p className="text-sm text-white/80">{feature.desc}</p>
+              <h3 className="text-lg font-bold mb-1.5 text-white">{feature.title}</h3>
+              <p className="text-xs text-white/90 leading-relaxed">{feature.desc}</p>
             </motion.div>
           ))}
         </motion.div>
@@ -233,7 +248,7 @@ export function SetupHero() {
         {/* 统计数据 */}
         <motion.div
           variants={container}
-          className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-3xl mx-auto"
+          className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-5 max-w-3xl mx-auto"
         >
           {[
             { icon: 'icon-[material-symbols--person]', count: '10000+', label: '学习者' },
@@ -247,71 +262,95 @@ export function SetupHero() {
             <motion.div
               key={stat.label}
               variants={item}
-              whileHover={{ scale: 1.05 }}
-              className="flex flex-col items-center p-4 rounded-xl bg-white/5 backdrop-blur-sm"
+              whileHover={{
+                scale: 1.03,
+                boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+              }}
+              className="flex flex-col items-center p-3 rounded-lg bg-white/5 backdrop-blur-sm border border-white/8 hover:border-white/15 transition-all duration-200"
             >
               <motion.span
-                className={`${stat.icon} text-3xl text-blue-400 mb-2`}
-                animate={{ scale: [1, 1.1, 1] }}
-                transition={{ duration: 2, repeat: Infinity }}
+                className={`${stat.icon} text-xl text-blue-200 mb-1.5`}
+                animate={{
+                  scale: [1, 1.08, 1],
+                  rotate: [0, 2, 0],
+                }}
+                transition={{ duration: 1.5, repeat: Infinity }}
               />
-              <span className="text-2xl font-bold text-white">{stat.count}</span>
-              <span className="text-sm text-slate-300">{stat.label}</span>
+              <span className="text-lg font-bold text-white">{stat.count}</span>
+              <span className="text-xs text-white/80">{stat.label}</span>
             </motion.div>
           ))}
         </motion.div>
 
         {/* 按钮组 */}
-        <motion.div variants={item} className="mt-12 flex flex-wrap gap-4 justify-center">
-          <motion.div whileHover={{ scale: 1.05 }}>
+        <motion.div variants={item} className="mt-10 flex flex-wrap gap-3 justify-center">
+          <motion.div
+            whileHover={{
+              scale: 1.03,
+              transition: { duration: 0.2 },
+            }}
+            whileTap={{ scale: 0.98 }}
+          >
             <Button
               asChild
               size="lg"
-              className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-bold px-8 py-4 rounded-xl shadow-lg"
+              className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-semibold px-6 py-2.5 rounded-lg shadow-md"
             >
               <Link href={`/${currentLocale}/javascript/typeChange`}>
                 开始学习
                 <motion.span
-                  className="ml-2 icon-[mingcute--arrow-right-fill]"
-                  animate={{ x: [0, 5, 0] }}
+                  className="ml-1.5 icon-[mingcute--arrow-right-fill]"
+                  animate={{ x: [0, 3, 0] }}
                   transition={{ duration: 1, repeat: Infinity }}
                 />
               </Link>
             </Button>
           </motion.div>
-          <motion.div whileHover={{ scale: 1.05 }}>
+          <motion.div
+            whileHover={{
+              scale: 1.03,
+              transition: { duration: 0.2 },
+            }}
+            whileTap={{ scale: 0.98 }}
+          >
             <Button
               asChild
               size="lg"
               variant="secondary"
-              className="bg-white/10 hover:bg-white/20 text-white font-bold px-8 py-4 rounded-xl shadow-lg"
+              className="bg-white/8 hover:bg-white/12 text-white font-bold px-6 py-2.5 rounded-lg shadow-md"
             >
               <Link href={`/${currentLocale}/interview`}>
                 模拟面试
                 <motion.span
-                  className="ml-2 icon-[material-symbols--psychology]"
-                  animate={{ rotate: [0, 10, -10, 0] }}
-                  transition={{ duration: 2, repeat: Infinity }}
+                  className="ml-1.5 icon-[material-symbols--psychology]"
+                  animate={{ rotate: [0, 5, -5, 0] }}
+                  transition={{ duration: 1.5, repeat: Infinity }}
                 />
               </Link>
             </Button>
           </motion.div>
-          <motion.div whileHover={{ scale: 1.05 }}>
+          <motion.div
+            whileHover={{
+              scale: 1.03,
+              transition: { duration: 0.2 },
+            }}
+            whileTap={{ scale: 0.98 }}
+          >
             <Button
               asChild
               size="lg"
               variant="secondary"
-              className="bg-white/10 hover:bg-white/20 text-white font-bold px-8 py-4 rounded-xl shadow-lg"
+              className="bg-white/8 hover:bg-white/12 text-white font-bold px-6 py-2.5 rounded-lg shadow-md"
             >
               <Link href={`/${currentLocale}/podcast`}>
                 AI 播客
                 <motion.span
-                  className="ml-2 icon-[material-symbols--podcasts]"
+                  className="ml-1.5 icon-[material-symbols--podcasts]"
                   animate={{
-                    scale: [1, 1.2, 1],
-                    opacity: [1, 0.8, 1],
+                    scale: [1, 1.1, 1],
+                    opacity: [1, 0.9, 1],
                   }}
-                  transition={{ duration: 2, repeat: Infinity }}
+                  transition={{ duration: 1.5, repeat: Infinity }}
                 />
               </Link>
             </Button>
