@@ -46,15 +46,19 @@ export function CustomFooter({ lang }: { lang: string }) {
           'text-gray-500/[0.8] dark:text-zinc-300/[0.8]',
         )}
       >
-        <UnderlineLink
+        {/* <UnderlineLink
           link="https://creativecommons.org/licenses/by-nc-sa/4.0/"
           label="CC BY-NC-SA 4.0"
           underlineByDefault
-        />
+        /> */}
 
         <div className="flex items-center gap-[2px]">
           <span className="pl-[4px]">Copyright © {new Date().getFullYear()}</span>
-          <UnderlineLink link="https://github.com/pdsuwwz" label="Wisdom" />
+          <UnderlineLink link="https://github.com/xun082" label="Moment" />
+          版权所有
+          <Link href="https://beian.miit.gov.cn/#/Integrated/index" className="text-blue-400">
+            粤ICP备2025376666
+          </Link>
         </div>
 
         <Separator orientation="vertical" className="max-sm:hidden h-5 mx-2" />
