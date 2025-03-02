@@ -1,116 +1,114 @@
-# Nextjs Nextra Starter
+# 极简用户访问跟踪系统
 
-[![Deploy](https://img.shields.io/badge/passing-black?style=flat&logo=Vercel&label=Vercel&color=3bb92c&labelColor=black)](https://github.com/pdsuwwz/nextjs-nextra-starter/deployments)
-[![GitHub Workflow Status (branch)](https://img.shields.io/badge/passing-black?style=flat&label=build&color=3bb92c)](https://github.com/pdsuwwz/nextjs-nextra-starter/deployments/Production)
-[![thanks](https://badgen.net/badge/thanks/♥/pink)](https://github.com/pdsuwwz)
-[![License](https://img.shields.io/github/license/pdsuwwz/nextjs-nextra-starter?color=466fe8)](https://github.com/pdsuwwz/nextjs-nextra-starter/blob/main/LICENSE)
+这个系统用于跟踪用户的来源网站和访问情况，采用极简设计，只在用户离开页面时记录数据，不返回任何业务数据给前端。
 
-⚡️ 快速模板 Starter Template - React v19 + Next.js + Nextra (v4) + TypeScript + TailwindCSS (v4) + Shadcn UI
+## 功能特点
 
-[🚀 Live Demo 在线体验](https://nextjs-nextra-starter-green.vercel.app)
+- 跟踪用户来源网站（referrer）
+- 按天记录唯一IP访问（同一IP每天只记录一次）
+- 轻量级实现，对性能几乎无影响
+- 无响应设计，接口只接收数据不返回内容
+- 高峰期优化，使用内存缓冲区减少数据库访问频率
 
-## 🚀 更新说明
+## 技术实现
 
-- **Tailwind CSS v4 升级**：全面升级至 Tailwind CSS v4，优化性能并引入新特性。
-- **Nextra v4 重构**：升级至 Nextra v4，提升文档生成效率和开发体验。
+系统由以下几个部分组成：
 
-👉 [点击查看详细升级说明](https://nextjs-nextra-starter-green.vercel.app/zh/upgrade)
+1. **客户端跟踪**：
 
-## 🎉 Features
+   - `SimpleTracker` 组件：在应用中初始化跟踪功能
+   - `simpleTracker.ts`：处理跟踪逻辑，只在用户离开页面时发送请求
+   - 优先使用 `navigator.sendBeacon` API 发送数据
 
-- ⚡️ **Next.js + TypeScript**: 高效的 React 框架和类型安全支持
-- 🎨 **Tailwind CSS (v4)**: 原子化 CSS, 快速构建自定义、响应式界面 UI
-- 🧩 **Shadcn UI**: 高度可定制的 UI 组件集合，无需安装额外依赖
-- 📚 **Nextra v4**: 基于 Next.js 的静态站点生成器，专为文档而优化
-- 🛠️ **ESLint**: 统一编码风格和最佳实践
-- ⛅ **轻量化设计**: 精简项目设置，专注于内容编写
+2. **服务器端API**：
 
-## 前置条件
+   - `/api/track`：纯粹的数据接收接口
+     - 同一IP每天只记录一次
+     - 保存来源网站信息
+     - 返回 204 状态码（无内容）
+     - 使用内存缓冲区批量处理访问记录
 
-- React 19.x
-- Node >= 18.12.x
-- Pnpm 9.x
-- **VS Code 插件 `dbaeumer.vscode-eslint` >= v3.0.5 (pre-release)**
+3. **数据存储**：
+   - 使用MySQL数据库存储访问数据
+   - 表结构在 `schema.sql` 中定义
 
-## 运行效果
+## 高峰期优化
 
-![image](https://github.com/user-attachments/assets/b28a58c5-91c3-4cbe-b047-1e56c5fcb270)
-![image](https://github.com/user-attachments/assets/7f4ade20-8364-4e25-a5fd-73e42ec7118c)
-![image](https://github.com/user-attachments/assets/a0a07f3f-a457-4521-a45f-4c0f970044f6)
+系统采用了以下策略来处理高峰期的大量访问：
 
-## 安装和运行
+1. **内存缓冲区**：
 
-- 安装依赖
+   - 访问记录先存储在内存中，而不是立即写入数据库
+   - 当累积到一定数量（默认50条）或经过一定时间（默认60秒）时，批量写入数据库
+   - 大幅减少数据库连接次数和写入操作
 
-```bash
-pnpm i
+2. **内存IP过滤**：
+
+   - 使用内存中的Map和Set结构记录已访问的IP
+   - 按天记录，避免重复写入数据库
+   - 定期清理过期记录，避免内存泄漏
+
+3. **优雅退出处理**：
+   - 在服务关闭前确保缓冲区中的数据被保存到数据库
+   - 监听SIGTERM和SIGINT信号，处理进程退出
+
+## 使用方法
+
+### 1. 设置数据库
+
+执行 `src/lib/schema.sql` 中的SQL语句创建必要的表：
+
+```sql
+-- 创建访问记录表
+CREATE TABLE IF NOT EXISTS visits (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  visitor_id VARCHAR(255) NOT NULL,
+  referrer VARCHAR(1024) DEFAULT '',
+  ip_address VARCHAR(45) NOT NULL,
+  timestamp DATETIME NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 ```
 
-- 本地开发
+### 2. 在应用中添加跟踪组件
 
-```bash
-pnpm dev
-```
-
-接着用浏览器打开 http://localhost:8000 即可访问服务
-
-## 使用 Shadcn UI 组件
-
-本项目已集成 [Shadcn UI](https://ui.shadcn.com), 按照以下步骤安装/编辑组件并使用:
-
-### Shadcn 结构初始化
-
-首次执行 `pnpm dlx shadcn@latest init` 命令初始化 `Shadcn UI` 基本项目结构（如果尚未初始化）
-
-💡 注意
-
-> 该初始化命令用于创建 `Shadcn UI` 的基本项目结构
->
-> **本项目已完成初始化，无需再次运行此命令**
-
-### 组件安装
-
-1. 使用 `Shadcn CLI` 添加组件:
-
-   ```bash
-   pnpm dlx shadcn@latest add <组件名>
-   ```
-
-   如添加 `<Alert />` 组件，执行以下命令即可，[详见文档](https://ui.shadcn.com/docs/components/alert#installation)
-
-   ```bash
-   pnpm dlx shadcn@latest add alert
-   ```
-
-2. 使用组件
+在应用的根组件（如 `layout.tsx` 或 `app.tsx`）中添加 `SimpleTracker` 组件：
 
 ```tsx
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import SimpleTracker from '@/components/SimpleTracker';
 
-export default function Home() {
+export default function RootLayout({ children }) {
   return (
-    <Alert>
-      <AlertTitle>Heads up!</AlertTitle>
-      <AlertDescription>
-        You can add components and dependencies to your app using the cli.
-      </AlertDescription>
-    </Alert>
-  )
+    <html lang="en">
+      <body>
+        {children}
+        <SimpleTracker />
+      </body>
+    </html>
+  );
 }
 ```
 
-3. 自定义组件样式（可选）
+## 数据说明
 
-`Shadcn UI` 组件通常已提供了流行的默认样式和功能，能满足大多数需求，若确实需要进行自定义定制，可编辑相应的组件文件，如：
+系统会收集以下数据：
 
-打开 [`src/components/ui/alert.tsx`](src/components/ui/alert.tsx) 文件来修改 `Alert` 组件的样式
+- **visitorId**：随机生成的访客唯一标识
+- **referrer**：用户来源网站
+- **ipAddress**：用户IP地址
+- **timestamp**：访问时间
 
-> 注意：在大多数情况下，`Shadcn UI` 提供的默认样式已经足够满足需求，无需进行额外修改
+## 工作原理
 
-## 🌹 支持
+1. 用户访问页面，但不立即记录数据
+2. 用户离开页面时（关闭页面或切换到其他页面），发送一次请求记录访问数据
+3. 服务器将访问记录添加到内存缓冲区，并检查该IP今天是否已经记录过
+4. 当缓冲区达到阈值或定时器触发时，批量将数据写入数据库
+5. 接口不返回任何业务数据，只返回 204 状态码（无内容）
 
-如果你喜欢这个项目或发现有用，可以点右上角 [`Star`](https://github.com/pdsuwwz/nextjs-nextra-starter) 支持一下，你的支持是我们不断改进的动力，感谢！ ^\_^
+## 配置选项
 
-## License
+可以根据实际需求调整以下配置：
 
-[MIT](./LICENSE) License | Copyright © 2020-PRESENT [Wisdom](https://github.com/pdsuwwz)
+- `BUFFER_SIZE`：缓冲区大小，默认为50条记录
+- `FLUSH_INTERVAL`：刷新间隔，默认为60000毫秒（1分钟）

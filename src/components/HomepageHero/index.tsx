@@ -9,7 +9,8 @@ import { lazy, Suspense, useEffect, useRef } from 'react';
 // 直接导入首屏必需的 SetupHero
 import { SetupHero } from './Setup';
 
-import { trackEvent, trackPageView } from '@/services/analytics';
+// 导入新的统一跟踪函数
+import { track } from '@/services/analytics';
 import { useInView } from '@/hooks/useInView';
 import { useLocale } from '@/hooks';
 
@@ -35,19 +36,9 @@ export default function HomepageHero() {
   const [contactRef, contactInView] = useInView();
   const [faqRef, faqInView] = useInView();
   const [serviceRef, serviceInView] = useInView();
+
   // 使用 ref 来跟踪初始化状态
   const initialized = useRef(false);
-
-  // 使用 ref 来跟踪各部分是否已经发送过事件
-  const sectionEventsSent = useRef({
-    project: false,
-    donation: false,
-    contact: false,
-    faq: false,
-  });
-
-  // 访客ID
-  const visitorId = useRef<string>('');
 
   // 初始化分析
   useEffect(() => {
@@ -63,80 +54,17 @@ export default function HomepageHero() {
           const result = await fp.get();
           const vid = result.visitorId;
 
-          // 获取来源信息
-          const referrer = document.referrer;
-          const urlParams = new URLSearchParams(window.location.search);
-          const utmSource = urlParams.get('utm_source') || undefined;
-          const utmMedium = urlParams.get('utm_medium') || undefined;
-          const utmCampaign = urlParams.get('utm_campaign') || undefined;
-
-          // 只上报一次 PV 和 UV
-          trackPageView({
-            page: 'homepage',
-            visitorId: vid,
-            referrer,
-            utmSource,
-            utmMedium,
-            utmCampaign,
-          });
-        } catch (error) {
-          console.error('Failed to initialize fingerprint:', error);
-          // 即使指纹获取失败，也尝试记录PV
-          trackPageView({
-            page: 'homepage',
-            referrer: document.referrer,
-          });
+          // 只设置访客ID，不发送数据
+          // 数据将在用户离开页面时由 analytics.ts 中的事件处理器发送
+          track({ visitorId: vid }, true); // 设置 setVisitorIdOnly 为 true
+        } catch {
+          // 初始化指纹失败
         }
       };
 
       initFingerprint();
     }
   }, []); // 空依赖数组确保只运行一次
-
-  // 监听各部分的可见性
-  useEffect(() => {
-    if (projectInView && visitorId.current && !sectionEventsSent.current.project) {
-      sectionEventsSent.current.project = true;
-      trackEvent({
-        eventName: 'section_view',
-        section: 'project',
-        visitorId: visitorId.current,
-      });
-    }
-  }, [projectInView]);
-
-  useEffect(() => {
-    if (donationInView && visitorId.current && !sectionEventsSent.current.donation) {
-      sectionEventsSent.current.donation = true;
-      trackEvent({
-        eventName: 'section_view',
-        section: 'donation',
-        visitorId: visitorId.current,
-      });
-    }
-  }, [donationInView]);
-
-  useEffect(() => {
-    if (contactInView && visitorId.current && !sectionEventsSent.current.contact) {
-      sectionEventsSent.current.contact = true;
-      trackEvent({
-        eventName: 'section_view',
-        section: 'contact',
-        visitorId: visitorId.current,
-      });
-    }
-  }, [contactInView]);
-
-  useEffect(() => {
-    if (faqInView && visitorId.current && !sectionEventsSent.current.faq) {
-      sectionEventsSent.current.faq = true;
-      trackEvent({
-        eventName: 'section_view',
-        section: 'faq',
-        visitorId: visitorId.current,
-      });
-    }
-  }, [faqInView]);
 
   return (
     <div className="min-h-screen">
