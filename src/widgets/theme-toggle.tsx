@@ -11,29 +11,47 @@ import { Toggle } from '@/components/ui/toggle';
  * 快速切换暗黑模式组件，用于覆盖 nextra 原生切换下拉框
  */
 export default function ThemeToggle({ className, lang }: { className?: string; lang: string }) {
-  const { setTheme, theme } = useTheme();
-  const [previousTheme, setPreviousTheme] = useState('');
+  const { setTheme, theme, resolvedTheme } = useTheme(); // 获取当前主题和解析后的主题
+  const [previousTheme, setPreviousTheme] = useState('light'); // 设置默认值为light
+  const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
   const isHomePage = pathname === `/${lang}`;
 
+  // 组件挂载后设置mounted状态
   useEffect(() => {
-    console.log('isHomePage', isHomePage);
-    console.log('theme', theme);
-    if (isHomePage && theme) {
-      setPreviousTheme(theme);
+    setMounted(true);
+  }, []);
+
+  // 处理主题切换逻辑
+  useEffect(() => {
+    // 只在客户端挂载后执行
+    if (!mounted) return;
+
+    if (isHomePage) {
+      // 在首页，保存当前主题并设置为暗色
+      const currentTheme = theme || resolvedTheme;
+
+      if (currentTheme && currentTheme !== 'dark') {
+        setPreviousTheme(currentTheme);
+      }
+
       setTheme('dark');
-    } else {
+    } else if (previousTheme) {
+      // 不在首页，恢复之前的主题
       setTheme(previousTheme);
     }
   }, [isHomePage]);
 
   const changeTheme = useCallback(() => {
-    if (theme === 'dark') {
+    if (theme === 'dark' || resolvedTheme === 'dark') {
       setTheme('light');
     } else {
       setTheme('dark');
     }
-  }, [setTheme, theme]);
+  }, [setTheme, theme, resolvedTheme]);
+
+  // 如果组件尚未挂载，不渲染任何内容
+  if (!mounted) return null;
 
   return (
     !isHomePage && (
