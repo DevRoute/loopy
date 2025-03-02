@@ -28,7 +28,7 @@ export default function DevelopPage({ lang, title }: { lang: string; title: stri
   }, []);
 
   return (
-    <div className="min-h-[80vh] flex flex-col items-center justify-center px-4 py-8 md:p-6 relative bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-300">
+    <div className="min-h-screen relative bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-300">
       {/* 背景装饰 */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-full">
@@ -51,16 +51,17 @@ export default function DevelopPage({ lang, title }: { lang: string; title: stri
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-60 h-60 md:w-96 md:h-96 bg-[#FF6B6B]/5 dark:bg-[#FF6B6B]/10 rounded-full filter blur-3xl animate-pulse-slow" />
       </div>
 
-      <div className="max-w-4xl w-full z-10 flex flex-col items-center">
+      {/* 使用绝对定位实现垂直居中 */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl px-4 md:px-6">
         {/* 主要内容 */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="text-center mb-8 md:mb-12 w-full"
+          className="text-center mb-8 md:mb-12"
         >
-          <div className="flex items-center justify-center mb-6 md:mb-8">
-            <div className="relative w-12 h-12 md:w-16 md:h-16 mr-3 md:mr-4">
+          <div className="inline-block mb-6 md:mb-8">
+            <div className="relative w-12 h-12 md:w-16 md:h-16 mr-3 md:mr-4 inline-block align-middle">
               <svg className="w-full h-full animate-spin-slow" viewBox="0 0 100 100">
                 <circle
                   cx="50"
@@ -97,7 +98,7 @@ export default function DevelopPage({ lang, title }: { lang: string; title: stri
                 </svg>
               </div>
             </div>
-            <span className="text-lg md:text-xl font-bold bg-gradient-to-r from-[#00DC82] to-[#4F46E5] bg-clip-text text-transparent">
+            <span className="text-lg md:text-xl font-bold bg-gradient-to-r from-[#00DC82] to-[#4F46E5] bg-clip-text text-transparent inline-block align-middle">
               {title}
             </span>
           </div>
@@ -123,7 +124,7 @@ export default function DevelopPage({ lang, title }: { lang: string; title: stri
             </div>
           </div>
 
-          <p className="text-sm md:text-base lg:text-lg text-gray-600 dark:text-slate-300 max-w-2xl mx-auto mb-8 md:mb-12 leading-relaxed px-2">
+          <p className="text-sm md:text-base lg:text-lg text-gray-600 dark:text-slate-300 max-w-3xl mx-auto mb-8 md:mb-12 leading-relaxed px-2">
             {lang === 'zh'
               ? '我们正在精心打造这部分内容，以确保为您提供最优质的学习资源。感谢您的耐心等待！'
               : 'We are carefully crafting this content to ensure we provide you with the highest quality learning resources. Thank you for your patience!'}
@@ -181,10 +182,11 @@ export default function DevelopPage({ lang, title }: { lang: string; title: stri
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}
+          className="text-center"
         >
           <Link href={`/${lang}`}>
             <button
-              className="group flex items-center gap-2 md:gap-3 px-6 md:px-8 py-2.5 md:py-3 rounded-full
+              className="group inline-flex items-center gap-2 md:gap-3 px-6 md:px-8 py-2.5 md:py-3 rounded-full
                backdrop-blur-sm border
                text-white font-medium transition-all duration-300
               bg-gradient-to-r from-[#00DC82]/90 to-[#4F46E5]/90
