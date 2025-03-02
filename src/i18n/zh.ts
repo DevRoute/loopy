@@ -1,5 +1,5 @@
 export default {
-  systemTitle: 'Loopy编程秘籍',
+  systemTitle: '码了个 bug',
   banner: {
     title: '👋 嘿，欢迎来到 Next.js 起步模板!',
     more: '了解详情',

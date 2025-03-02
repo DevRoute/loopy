@@ -1,5 +1,5 @@
 export default {
-  systemTitle: 'Loopy Programming Guide',
+  systemTitle: 'Coded a bug',
   banner: {
     title: '👋 Hey there! Welcome to the Next.js Starter.',
     more: 'Check it out',
