@@ -219,11 +219,11 @@ console.log(student.__proto__ === Person.prototype) // true
 console.log(Person.prototype.constructor === Person) // true
 ```
 
-![20250210152511](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250210152511.png)
+![](https://ik.imagekit.io/moment/md-images/remote/image-1740932992531_0tk8oWEOh.png)
 
 具体的内存图如下图所示：
 
-![20250210155102](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250210155102.png)
+![](https://ik.imagekit.io/moment/md-images/remote/image-1740933002024_EHjpuGKEF.png)
 
 通过上图，以下代码的输出结果就能理解了：
 
@@ -236,9 +236,9 @@ console.log(student.__proto__.constructor === Person) // true
 
 在开始之前先来祭出两张神图：
 
-![20250210160003](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250210160003.png)
+![](https://ik.imagekit.io/moment/md-images/remote/image-1740933012667_NnyO3nXg3.png)
 
-![20250210160017](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250210160017.png)
+![](https://ik.imagekit.io/moment/md-images/remote/image-1740933025900_gG1AqWTZH.png)
 
 在讲原型之前，我们先来认识一下 Function 和 Object 的关系。
 
@@ -404,7 +404,7 @@ student.running() // 我被修改了  来自于实例本身
 
 通过一张图来展示子类的两个实例和两个构造函数及其对应的原型之间的关系:
 
-![20250210170945](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250210170945.png)
+![](https://ik.imagekit.io/moment/md-images/remote/image-1740933044026_5LtCedVBB.png)
 
 在使用原型链实现继承时，子类的原型实际上变成了父类的一个实例，这导致父类的实例属性和方法变成了原型属性和方法。这样，子类的实例会共享父类原型上的属性和方法，可能引发共享数据的问题。另一个问题是，子类在实例化时无法直接给父类的构造函数传递参数，这会影响父类构造函数的初始化。
 

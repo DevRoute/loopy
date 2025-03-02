@@ -86,7 +86,7 @@ Note that for scenarios with iframes embedded in the main application, since eac
 
 ## Data Collection
 
-![20250208142506](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250208142506.png)
+![](https://ik.imagekit.io/moment/md-images/remote/image-1740933175125_Sqp3WKUGW.png)
 
 This flowchart details the steps of frontend white screen detection, particularly considering the special case of skeleton screen applications. First, the system determines if the page is a skeleton screen application. This is because skeleton screens are placeholders during page loading, typically showing a simple framework or animation to indicate that the page is loading. The skeleton screen itself might display a white screen state, so additional judgment is needed to ensure false positives are avoided.
 
@@ -104,13 +104,13 @@ Vertical sampling refers to sampling page content from top to bottom along the v
 
 However, if the page has horizontal layouts or large amounts of dynamically loaded content, vertical sampling might not fully cover the page's rendering state.
 
-![20250208143501](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250208143501.png)
+![](https://ik.imagekit.io/moment/md-images/remote/image-1740933185568_dzAj153Va.png)
 
 #### Cross Sampling
 
 Cross sampling involves sampling from multiple locations on the page simultaneously, covering both vertical and horizontal directions. Typically, it detects by alternately selecting sampling points from different page areas. Cross sampling can capture more page details, particularly suitable for multi-column layouts or complex page structures (such as news websites, e-commerce platforms, etc.), providing a more comprehensive view of page rendering. Compared to vertical sampling, cross sampling requires more computational resources and has more sampling points, making implementation more complex and potentially causing additional performance overhead.
 
-![20250208143642](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250208143642.png)
+![](https://ik.imagekit.io/moment/md-images/remote/image-1740933195430_ymcoMHyW9.png)
 
 #### Vertical Cross Sampling
 
@@ -118,7 +118,7 @@ Vertical cross sampling combines features of both vertical and cross sampling, s
 
 To overcome the performance issues of vertical cross sampling, we can use requestIdleCallback to perform calculations during browser idle time. Since requestIdleCallback only runs during idle periods, it won't block page rendering or affect user operation response time, effectively reducing computational burden.
 
-![20250208144920](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250208144920.png)
+![](https://ik.imagekit.io/moment/md-images/remote/image-1740933205008_4YS-9Kx2X.png)
 
 ### White Screen Detection Criteria and Timing
 
@@ -158,7 +158,7 @@ Detection methods for applications without skeleton screens include several aspe
 
 5. Stop Monitoring: When special circumstances occur (like request cancellation or forced page stop), monitoring stops. Through the stopMonitoring method, requestIdleCallback stops sampling tasks and clears timers to avoid unnecessary resource consumption.
 
-![20250208164239](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250208164239.png)
+![](https://ik.imagekit.io/moment/md-images/remote/image-1740933217847_FyBNEBfGF.png)
 
 As shown above, the entire screen has 33 sampling points, with 28 in the content area. For simplicity, when detecting white screens, we determine if blank sampling points are greater than or equal to 28. Sampling point coordinates are obtained as follows:
 

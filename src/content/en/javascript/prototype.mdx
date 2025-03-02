@@ -221,11 +221,11 @@ console.log(student.__proto__ === Person.prototype) // true
 console.log(Person.prototype.constructor === Person) // true
 ```
 
-![20250210152511](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250210152511.png)
+![](https://ik.imagekit.io/moment/md-images/remote/image-1740932992531_0tk8oWEOh.png)
 
 The specific memory diagram is shown below:
 
-![20250210155102](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250210155102.png)
+![](https://ik.imagekit.io/moment/md-images/remote/image-1740933002024_EHjpuGKEF.png)
 
 Through the above diagram, the output results of the following code can be understood:
 
@@ -239,9 +239,9 @@ console.log(student.__proto__.constructor === Person) // true
 
 Before we begin, let's look at two important diagrams:
 
-![20250210160003](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250210160003.png)
+![](https://ik.imagekit.io/moment/md-images/remote/image-1740933012667_NnyO3nXg3.png)
 
-![20250210160017](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250210160017.png)
+![](https://ik.imagekit.io/moment/md-images/remote/image-1740933025900_gG1AqWTZH.png)
 
 Before discussing prototypes, let's first understand the relationship between Function and Object.
 
@@ -407,7 +407,7 @@ student.running() // I was modified from instance itself
 
 Through a diagram to show the relationship between two instances and two constructors and their corresponding prototypes:
 
-![20250210170945](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250210170945.png)
+![](https://ik.imagekit.io/moment/md-images/remote/image-1740933044026_5LtCedVBB.png)
 
 When using the prototype chain to implement inheritance, the prototype of the subclass actually becomes an instance of the parent class. This causes the parent class's instance properties and methods to become prototype properties and methods of the subclass. This results in the subclass instances sharing properties and methods on the parent prototype, which may cause shared data issues. Another issue is that the subclass cannot directly pass parameters to the parent constructor when instantiating, which affects the parent constructor's initialization.
 

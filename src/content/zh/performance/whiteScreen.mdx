@@ -86,7 +86,7 @@ document.elementsFromPoint(x, y);
 
 ## 数据采集
 
-![20250208142506](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250208142506.png)
+![](https://ik.imagekit.io/moment/md-images/remote/image-1740933175125_Sqp3WKUGW.png)
 
 这个流程图详细描述了前端白屏检测的步骤，尤其考虑到骨架屏应用的特殊情况。首先，系统会判断页面是否是骨架屏应用。这是因为骨架屏是一种页面加载过程中的占位符，通常会显示一个简单的框架或动画，以给用户提示页面正在加载。骨架屏本身可能会展示一个白屏状态，因此需要额外判断，确保不是因为骨架屏造成的误判。
 
@@ -104,13 +104,13 @@ document.elementsFromPoint(x, y);
 
 但是如果页面的内容横向布局或者大量动态加载的部分，垂直采样可能无法完全覆盖页面的渲染状态。
 
-![20250208143501](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250208143501.png)
+![](https://ik.imagekit.io/moment/md-images/remote/image-1740933185568_dzAj153Va.png)
 
 #### 交叉采样
 
 交叉采样是指从页面的多个位置同时进行采样，既涵盖垂直方向，也涉及水平方向的多个位置。通常，它通过交替选择页面不同区域的采样点来进行检测。交叉采样能够捕捉更多页面细节，特别适用于多列布局或复杂页面结构（如新闻网站、电子商务平台等），可以更全面地反映页面的渲染情况。与垂直采样相比，交叉采样需要更多的计算资源，采样点较多，因此在实现上更复杂，可能会带来额外的性能开销。
 
-![20250208143642](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250208143642.png)
+![](https://ik.imagekit.io/moment/md-images/remote/image-1740933195430_ymcoMHyW9.png)
 
 #### 垂直交叉采样
 
@@ -118,7 +118,7 @@ document.elementsFromPoint(x, y);
 
 为了克服垂直交叉采样带来的性能问题，我们可以利用 requestIdleCallback 在浏览器空闲时执行计算。由于 requestIdleCallback 只在空闲时段运行，它不会阻塞页面渲染或影响用户操作的响应速度，从而有效减轻了计算负担。
 
-![20250208144920](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250208144920.png)
+![](https://ik.imagekit.io/moment/md-images/remote/image-1740933205008_4YS-9Kx2X.png)
 
 ### 白屏的判断标准和检测时机
 
@@ -158,7 +158,7 @@ document.elementsFromPoint(x, y);
 
 5. 停止监控：当页面发生特殊情况（如请求被取消或页面被强制停止）时，监控会被停止。通过 stopMonitoring 方法，requestIdleCallback 会停止采样任务，清除定时器，避免不必要的资源消耗。
 
-![20250208164239](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250208164239.png)
+![](https://ik.imagekit.io/moment/md-images/remote/image-1740933217847_FyBNEBfGF.png)
 
 如上图所示，整个屏幕共 33 个采样点，其中内容区有 28 个。简单起见，检测白屏时，我们判断空白的采样点是否大于等于 28 个。采样点坐标的获取如下：
 

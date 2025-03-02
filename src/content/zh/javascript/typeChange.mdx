@@ -229,7 +229,7 @@ console.log(jsonString);
 
 最终输出结果如下图所示：
 
-![20250212151520](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250212151520.png)
+![](https://ik.imagekit.io/moment/md-images/remote/image-1740933050075_zV158CwSfo.png)
 
 ### replacer
 
@@ -404,7 +404,7 @@ console.log(Boolean(document.all)); // false
 
 在 `ES5` 规范中，所有步骤或语句的执行都会显式或隐式地返回一个 `Completion Record`，它包含三个特定字段。
 
-![20250212161216](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250212161216.png)
+![](https://ik.imagekit.io/moment/md-images/remote/image-1740933054805_-bPcZ7rmj.png)
 
 1. `[[type]]` 字段表示当前 `Completion Record` 的类型。它的值可以是 `normal`、`return`、`throw`、`break` 或 `continue`，表示该记录是由哪种语句或步骤生成的。
 
@@ -587,7 +587,7 @@ console.log(a + b); // "1，23，4"
 
 `a` 和 `b` 都不是字符串，但是它们都被强制转换为字符串然后进行拼接，原因是什么呢?
 
-![20250212161756](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250212161756.png)
+![](https://ik.imagekit.io/moment/md-images/remote/image-1740933065820_JJrfE4uCH.png)
 
 根据上图 `ES5规范` ，我们来个简单的总结，主要有以下规则:
 
@@ -683,11 +683,11 @@ console.log({} + []); // [object Object]
 
 但是这两个卧龙凤雏在浏览器上输出便产生了不同的结果，具体看下图:
 
-![20250212161937](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250212161937.png)
+![](https://ik.imagekit.io/moment/md-images/remote/image-1740933223635_U6WhQmWHU.png)
 
 这是因为 `{}` 被当成了一个独立的代码快运行了，所以 `{} + []` 变成了 `+[]`，所以结果就变成了 `0`。但是，对其加上一个括号，它又变回原样了。
 
-![20250212161949](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250212161949.png)
+![](https://ik.imagekit.io/moment/md-images/remote/image-1740933228264_agC5Z55Sx.png)
 
 我们再最后一个例子:
 
@@ -699,7 +699,7 @@ console.log(new Date(2022， 11， 20) + 777); // Tue Dec 20 2022 00:00:00 GMT+0
 
 `+` 操作符讲完了，接下来就看看 `-` 操作符，但是这个没 `+` 操作符那么复杂，这个很简单，继续看规范。
 
-![20250212162029](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250212162029.png)
+![](https://ik.imagekit.io/moment/md-images/remote/image-1740933235909_MFgT-JUUC.png)
 
 和 `+` 操作符不同的是， `-` 操作符默认都是把左右值优先转成 `number` 类型的，具体解释请看下面的代码:
 

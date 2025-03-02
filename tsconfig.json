@@ -30,6 +30,6 @@
     "next-env.d.ts",
     "./.next/types/**/*.ts",
     "next-sitemap.config.js"
-  ],
+, "scripts/image.js"  ],
   "exclude": ["node_modules"]
 }
