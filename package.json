@@ -1,9 +1,9 @@
 {
-  "name": "nextjs-nextra-starter",
+  "name": "loopy-programming-guide",
   "type": "module",
   "version": "0.0.1",
-  "description": "Next.js Nextra (v4) Tailwind CSS (v4) docs starter",
-  "author": "Wisdom <pdsu.wwz@foxmail.com>",
+  "description": "Loopy Programming Guide",
+  "author": "Moment",
   "license": "MIT",
   "homepage": "https://github.com/pdsuwwz/nextjs-nextra-starter#readme",
   "repository": {
@@ -21,7 +21,8 @@
     "lint": "eslint \"**/*.{ts,tsx,js,jsx}\" --fix",
     "lint:ci": "eslint \"**/*.{ts,tsx,js,jsx}\"",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,cjs,mjs,json}\"",
-    "format:ci": "prettier --list-different \"**/*.{ts,tsx,js,jsx}\""
+    "format:ci": "prettier --list-different \"**/*.{ts,tsx,js,jsx}\"",
+    "postinstall": "husky install"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
-import { Footer, LastUpdated, Layout, Navbar } from 'nextra-theme-docs';
+import { LastUpdated, Layout, Navbar } from 'nextra-theme-docs';
 import { Head, Search } from 'nextra/components';
 import { getPageMap } from 'nextra/page-map';
 
@@ -79,9 +79,9 @@ export default async function RootLayout({ children, params }: Props) {
             editLink={null}
             docsRepositoryBase="https://github.com/pdsuwwz/nextjs-nextra-starter"
             footer={
-              <Footer className="bg-background py-5!">
+              <main className="bg-background py-5!">
                 <CustomFooter lang={lang} />
-              </Footer>
+              </main>
             }
             search={<Search />}
             i18n={[
