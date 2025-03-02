@@ -16,6 +16,26 @@ export default {
     title: 'Javascript',
     type: 'page',
   },
+  typescript: {
+    title: 'TypeScript',
+    type: 'page',
+  },
+  react: {
+    title: 'React',
+    type: 'page',
+  },
+  node: {
+    title: 'Node.js',
+    type: 'page',
+  },
+  network: {
+    title: '计算机网络',
+    type: 'page',
+  },
+  engineer: {
+    title: '前端工程化',
+    type: 'page',
+  },
   performance: {
     title: (
       <span className="flex items-center leading-[1] ">

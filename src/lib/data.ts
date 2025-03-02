@@ -5,7 +5,7 @@ export const categories = [
   { name: '前端工程化', icon: '🔧', color: 'from-purple-400 to-indigo-500' },
   { name: 'TypeScript', icon: 'TS', color: 'from-blue-500 to-blue-700' },
   { name: '计算机网络', icon: '🌐', color: 'from-pink-400 to-red-400' },
-  { name: '性能优化', icon: '🚀', color: 'from-yellow-400 to-orange-500' },
+  { name: '前端性能优化', icon: '🚀', color: 'from-yellow-400 to-orange-500' },
 ];
 
 export const features = [
