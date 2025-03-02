@@ -12,7 +12,7 @@ import { Toggle } from '@/components/ui/toggle';
  */
 export default function ThemeToggle({ className, lang }: { className?: string; lang: string }) {
   const { setTheme, theme, resolvedTheme } = useTheme(); // 获取当前主题和解析后的主题
-  const [previousTheme, setPreviousTheme] = useState('light'); // 设置默认值为light
+  const [previousTheme, setPreviousTheme] = useState('dark'); // 设置默认值为light
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
   const isHomePage = pathname === `/${lang}`;
