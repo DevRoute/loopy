@@ -29,7 +29,9 @@
     ".next/types/**/*.ts",
     "next-env.d.ts",
     "./.next/types/**/*.ts",
-    "next-sitemap.config.js"
-, "scripts/image.js"  ],
+    "next-sitemap.config.js",
+    "scripts/replace-image-urls.mjs",
+    "scripts/image.js"
+  ],
   "exclude": ["node_modules"]
 }
