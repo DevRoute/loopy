@@ -8,7 +8,7 @@ OT（Operational Transformation）算法是一种用于支持实时协作编辑�
 
 脏路径问题通常出现在多个用户同时编辑同一文档时，某些用户的修改可能被覆盖或者丢失，尤其是在 并行编辑 或 异步更新 过程中。当一个用户修改某部分内容后，系统没有及时同步其他用户的更改或冲突时，就可能出现脏路径。
 
-假设我们编辑器中有三个段落：
+假设我们编辑器中有四个段落：
 
 ![20250226135807](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250226135807.png)
 
@@ -247,8 +247,7 @@ a → b 除了可以表示两个事件的先后关系，也可以理解为两个
 上面转换的结果发现没有，其满足这个等式:
 
 ```js
-yizhouOp + transform(yushenOp, yizhouOp) ===
-  yushenOp + transform(yizhouOp, yushenOp);
+yizhouOp + transform(yushenOp, yizhouOp) === yushenOp + transform(yizhouOp, yushenOp);
 ```
 
 其背后所表达的意思，用大白话就是: 如果我本地先应用了 op1, 但是 op2 实际的优先级更高，那么把 op2 根据 op1 转换成，仿佛是 op2 先应用。
