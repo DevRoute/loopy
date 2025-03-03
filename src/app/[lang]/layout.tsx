@@ -1,5 +1,5 @@
+import { ReactNode } from 'react';
 import type { Metadata } from 'next';
-import type { ReactNode } from 'react';
 import { LastUpdated, Layout, Navbar } from 'nextra-theme-docs';
 import { Head, Search } from 'nextra/components';
 import { getPageMap } from 'nextra/page-map';
@@ -13,6 +13,7 @@ import LocaleToggle from '@/widgets/locale-toggle';
 import { useServerLocale } from '@/hooks';
 import { CustomFooter } from '@/components/CustomFooter';
 import type { I18nLangAsyncProps, I18nLangKeys } from '@/i18n';
+import { AnimatedLogo } from '@/components/AnimatedLogo';
 import './styles/index.css';
 
 export const metadata = {
@@ -26,7 +27,11 @@ const CustomNavbar = async ({ lang }: I18nLangAsyncProps) => {
   const { t } = await useServerLocale(lang);
 
   return (
-    <Navbar logo={<span>{t('systemTitle')}</span>} logoLink={`/${lang}`} projectLink={repo}>
+    <Navbar
+      logo={<AnimatedLogo text={t('systemTitle')} />}
+      logoLink={`/${lang}`}
+      projectLink={repo}
+    >
       <>
         <LocaleToggle className="max-md:hidden" />
         <ThemeToggle className="max-md:hidden" lang={lang} />

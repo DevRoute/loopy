@@ -1,45 +1,45 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { BadgeDollarSign, Route, ShieldCheck, Truck, Undo2, UserRoundCheck } from 'lucide-react';
+import { FileEdit, Lightbulb, MessageCircle, RefreshCw, Users, Zap } from 'lucide-react';
 import Link from 'next/link';
 
 const faq = [
   {
-    icon: Undo2,
-    question: '这个网站是做什么的？',
+    icon: Lightbulb,
+    question: '这个网站能为我提供什么帮助？',
     answer:
-      '本网站专注于为前端开发者提供全面的面试准备资料，包括技术知识点、常见面试题、实战项目经验分享以及职业建议，帮助你在前端求职中脱颖而出。',
+      '本网站为前后端开发者提供全面的面试准备资源，包括最新技术知识点、精选面试题库、真实项目案例分析和专业职业规划建议，帮助你在竞争激烈的技术求职市场中脱颖而出。',
   },
   {
-    icon: Route,
-    question: '谁可以使用这个网站？',
+    icon: Users,
+    question: '哪些人适合使用这个平台？',
     answer:
-      '无论你是前端初学者、正在准备面试的求职者，还是想提升技能的在职开发者，这个网站都适合你。',
+      '无论你是刚入门的前端新手、正在积极求职的开发者，还是希望提升技术深度的资深工程师，我们的内容都能满足你在不同阶段的学习和职业发展需求。',
   },
   {
-    icon: Truck,
-    question: '使用这个网站需要付费吗？',
+    icon: Zap,
+    question: '网站的收费模式是怎样的？',
     answer:
-      '网站的基础内容完全免费，我们也提供部分高级功能或独家资源（如模拟面试服务、高级课程），可以通过订阅解锁。',
+      '我们秉持知识共享理念，核心的八股文内容完全免费。同时提供高级功能如AI模拟面试、实战项目课程和专家一对一指导等增值服务，可通过会员订阅解锁。',
   },
   {
-    icon: BadgeDollarSign,
-    question: '网站的内容包括哪些方面？',
+    icon: FileEdit,
+    question: '如何参与内容贡献或建立合作？',
     answer:
-      '我们涵盖HTML、CSS、JavaScript、React/Vue等前端核心技术，算法与数据结构，系统设计问题，以及软技能（如沟通技巧、自我介绍）。还有真实面试经验分享和企业常见考题。',
+      '我们欢迎优秀的开发者参与内容贡献！你可以通过页面底部的联系方式找到我们，或直接点击"联系我们"按钮发送合作提案。我们的团队会在24小时内回复，优质贡献者有机会加入我们的专家团队，共同打造更好的学习平台。',
   },
   {
-    icon: ShieldCheck,
-    question: '内容会定期更新吗？',
+    icon: RefreshCw,
+    question: '网站内容多久更新一次？',
     answer:
-      '是的，我们会根据前端技术趋势和用户反馈定期更新内容，确保你获取的信息是最新的，比如新增热门框架或工具的相关资料。',
+      '我们的技术团队每周定期更新内容，紧跟前沿技术趋势和面试热点。重大技术变革或框架更新后，我们会第一时间提供专题解析，确保用户获取最新、最实用的知识。',
   },
   {
-    icon: UserRoundCheck,
-    question: '如果我有疑问，能提问吗？',
+    icon: MessageCircle,
+    question: '遇到技术问题如何获得帮助？',
     answer:
-      '可以！我们有讨论区，你可以发帖提问，社区成员或专家会尽力解答。订阅用户还能享受一对一答疑服务。',
+      '你可以通过页面上的"联系我们"按钮或页面底部的联系方式直接与我们沟通。我们的社区论坛也欢迎你发布问题，活跃的开发者和技术专家会提供解答。会员用户还可享受优先回复和定期的在线技术答疑活动，帮助你快速突破技术瓶颈。',
   },
 ];
 
@@ -135,11 +135,11 @@ export function Faq({ lang }: { lang: string }) {
           <Link href={`/${lang}/questions`}>
             <button
               className="group flex items-center gap-2 px-8 py-3 rounded-full
-              bg-gradient-to-r from-[#00DC82] to-[#4F46E5]/80
+              bg-gradient-to-r from-[#00DC82] to-[#4F46E5]
               text-white font-medium transition-all duration-300
               hover:shadow-[0_0_30px_rgba(0,220,130,0.3)] transform hover:scale-105"
             >
-              <span>{lang === 'zh' ? '查看更多问题' : 'View More Questions'}</span>
+              <span>查看更多问题</span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5 transform group-hover:translate-x-1 transition-transform duration-300"

@@ -156,6 +156,39 @@ export function Contact() {
             </motion.div>
           ))}
         </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.2 }}
+          className="flex justify-center mt-12"
+        >
+          <a
+            href="https://juejin.cn/user/3782764966460398/posts"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group flex items-center gap-2 px-8 py-3 rounded-full
+            bg-gradient-to-r from-[#00DC82] to-[#4F46E5]
+            text-white font-medium transition-all duration-300
+            hover:shadow-[0_0_30px_rgba(0,220,130,0.3)] transform hover:scale-105"
+          >
+            <span>查看更多联系方式</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5 transform group-hover:translate-x-1 transition-transform duration-300"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M13 7l5 5m0 0l-5 5m5-5H6"
+              />
+            </svg>
+          </a>
+        </motion.div>
       </div>
     </div>
   );
