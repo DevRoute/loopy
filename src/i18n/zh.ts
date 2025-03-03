@@ -1,7 +1,7 @@
 export default {
-  systemTitle: '码了个 bug',
+  systemTitle: '面试导航',
   banner: {
-    title: '👋 嘿，欢迎来到 Next.js 起步模板!',
+    title: '👋 嘿，欢迎来到 面试导航!',
     more: '了解详情',
   },
 

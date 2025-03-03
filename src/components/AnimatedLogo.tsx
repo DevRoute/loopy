@@ -4,6 +4,9 @@ import { useState, useEffect } from 'react';
 
 interface AnimatedLogoProps {
   text: string;
+  size?: 'sm' | 'md' | 'lg';
+  className?: string;
+  mode?: 'light' | 'dark';
 }
 
 export function AnimatedLogo({ text }: AnimatedLogoProps) {
