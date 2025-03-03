@@ -4,6 +4,7 @@ import ImageKit from 'imagekit';
 import sharp from 'sharp'; // 导入sharp库
 import https from 'https'; // 用于下载图片
 import http from 'http'; // 用于下载图片
+import { execSync } from 'child_process'; // 用于执行Git命令
 
 // 1. 配置ImageKit（建议使用环境变量）
 const imagekit = new ImageKit({
@@ -13,30 +14,51 @@ const imagekit = new ImageKit({
 });
 
 // 2. 配置参数
-const rootDir = process.argv[2] || '.'; // 通过命令行参数指定根目录
+// 移除这里的rootDir声明，因为我们在下面重新定义了
 
 // 显示帮助信息
 function showHelp() {
   console.log(`
-使用方法: node scripts/replace-image-urls.mjs <目录路径> [选项]
+使用方法: node scripts/replace-image-urls.mjs [选项]
 
 选项:
   --force         强制替换所有图片（包括已经在ImageKit上的）
   --replace-all   替换所有图片（与--force相同）
+  --path <目录>   指定要处理的目录路径（默认处理Git变更的文件）
+  --file <文件>   指定要处理的单个文件
+  --untracked     包含未跟踪的文件
   --help          显示此帮助信息
 
 示例:
-  node scripts/replace-image-urls.mjs ./content             # 处理content目录下的所有Markdown文件，跳过已在ImageKit上的图片
-  node scripts/replace-image-urls.mjs ./content --force     # 处理content目录下的所有Markdown文件，强制替换所有图片
+  node scripts/replace-image-urls.mjs                      # 处理Git变更的Markdown文件
+  node scripts/replace-image-urls.mjs --force              # 处理Git变更的Markdown文件，强制替换所有图片
+  node scripts/replace-image-urls.mjs --path ./content     # 处理content目录下的所有Markdown文件
+  node scripts/replace-image-urls.mjs --untracked          # 处理Git变更的文件，包括未跟踪的文件
+  node scripts/replace-image-urls.mjs --file ./content/zh/javascript/ot.mdx  # 处理指定的文件
 `);
   process.exit(0);
 }
 
 // 解析命令行参数
-const args = process.argv.slice(3);
+const args = process.argv.slice(2);
 const forceReplace = args.includes('--force'); // 是否强制替换所有图片
 const replaceAll = args.includes('--replace-all'); // 是否替换所有图片（包括已经在ImageKit上的）
 const showHelpFlag = args.includes('--help'); // 是否显示帮助信息
+const includeUntracked = args.includes('--untracked'); // 是否包含未跟踪的文件
+
+// 获取指定路径参数
+let rootDir = null;
+const pathIndex = args.indexOf('--path');
+if (pathIndex !== -1 && pathIndex + 1 < args.length) {
+  rootDir = args[pathIndex + 1];
+}
+
+// 获取指定文件参数
+let specificFile = null;
+const fileIndex = args.indexOf('--file');
+if (fileIndex !== -1 && fileIndex + 1 < args.length) {
+  specificFile = args[fileIndex + 1];
+}
 
 // 显示帮助信息
 if (showHelpFlag) {
@@ -293,14 +315,77 @@ async function downloadWithHttp(url) {
 // 修改 sleep 函数的实现
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+// 获取Git变更的Markdown文件
+function getGitChangedMarkdownFiles() {
+  try {
+    // 获取Git变更的文件列表
+    const gitOutput = execSync('git diff --name-only HEAD').toString().trim();
+    const stagedOutput = execSync('git diff --name-only --staged').toString().trim();
+
+    let untrackedOutput = '';
+    if (includeUntracked) {
+      // 如果包含未跟踪的文件，则获取未跟踪的文件列表
+      untrackedOutput = execSync('git ls-files --others --exclude-standard').toString().trim();
+    }
+
+    // 合并变更、暂存和未跟踪的文件列表
+    const changedFiles = [
+      ...new Set([
+        ...gitOutput.split('\n').filter(Boolean),
+        ...stagedOutput.split('\n').filter(Boolean),
+        ...untrackedOutput.split('\n').filter(Boolean),
+      ]),
+    ];
+
+    // 过滤出Markdown文件
+    return changedFiles.filter(
+      (file) =>
+        file && mdFileExtensions.includes(path.extname(file).toLowerCase()) && fs.existsSync(file),
+    );
+  } catch (error) {
+    console.error('获取Git变更文件失败:', error.message);
+    return [];
+  }
+}
+
 // 7. 主流程
 async function main() {
   console.log('开始处理图片替换...');
-  console.log(`根目录: ${rootDir}`);
-  console.log(`强制替换: ${forceReplace || replaceAll ? '是' : '否'}`);
 
-  const mdFiles = getMarkdownFiles(rootDir);
+  let mdFiles;
+
+  if (specificFile) {
+    // 如果指定了文件，则只处理该文件
+    console.log(`处理指定文件: ${specificFile}`);
+    if (
+      fs.existsSync(specificFile) &&
+      mdFileExtensions.includes(path.extname(specificFile).toLowerCase())
+    ) {
+      mdFiles = [specificFile];
+    } else {
+      console.log(`指定的文件不存在或不是Markdown文件: ${specificFile}`);
+      return { totalFiles: 0, processedFiles: 0 };
+    }
+  } else if (rootDir) {
+    // 如果指定了目录，则处理该目录下的所有Markdown文件
+    console.log(`指定目录: ${rootDir}`);
+    mdFiles = getMarkdownFiles(rootDir);
+  } else {
+    // 否则处理Git变更的文件
+    console.log('处理Git变更的文件');
+    if (includeUntracked) {
+      console.log('包含未跟踪的文件');
+    }
+    mdFiles = getGitChangedMarkdownFiles();
+  }
+
+  console.log(`强制替换: ${forceReplace || replaceAll ? '是' : '否'}`);
   console.log(`找到的Markdown文件: ${mdFiles.length}个`);
+
+  if (mdFiles.length === 0) {
+    console.log('没有找到需要处理的Markdown文件');
+    return { totalFiles: 0, processedFiles: 0 };
+  }
 
   // 统计信息
   const stats = {

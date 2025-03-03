@@ -8,13 +8,13 @@ OT（Operational Transformation）算法是一种用于支持实时协作编辑�
 
 脏路径问题通常出现在多个用户同时编辑同一文档时，某些用户的修改可能被覆盖或者丢失，尤其是在 并行编辑 或 异步更新 过程中。当一个用户修改某部分内容后，系统没有及时同步其他用户的更改或冲突时，就可能出现脏路径。
 
-假设我们编辑器中有四个段落：
+假设我们编辑器中有三个段落：
 
-![20250226135807](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250226135807.png)
+![](https://ik.imagekit.io/moment/md-images/remote/image-1740990417656_cIJU06v4v.webp)
 
 这里用数组简单模拟上面的三个段落，下图展示了两个用户同时对数据修改产生的操作序列
 
-![20250226135838](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250226135838.png)
+![](https://ik.imagekit.io/moment/md-images/remote/image-1740990422457_dbgCPkt9_.webp)
 
 问题的产生：
 
@@ -32,7 +32,7 @@ OT（Operational Transformation）算法是一种用于支持实时协作编辑�
 
 这里以前面介绍的图片数据结构为例说明并发冲突的问题，下图展示问题出现的过程，为了方便表达，图片节点仅保留 type 和 align 两个字段：
 
-![20250226140627](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250226140627.png)
+![](https://ik.imagekit.io/moment/md-images/remote/image-1740990436186_mXrWuFqzr.webp)
 
 在分布式协同编辑中，并发冲突发生在多个用户同时修改同一数据时。最开始，两个用户的图像 align 属性都是 center。左边用户将其修改为 left（左对齐），而右边用户将其修改为 right（右对齐）。当他们各自的修改通过消息服务同步到对方时，左边的图像最终显示为右对齐，右边的图像则显示为左对齐，造成数据不一致。这是因为他们都修改了相同位置的相同属性，导致了冲突。
 
@@ -42,7 +42,7 @@ undos/redos 问题本质还是前面所说的「脏路径问题」+ 「并发冲
 
 还是前面「脏路径问题」的数据操作，这里只看右边部分，分析它的撤回栈：
 
-![20250226141051](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250226141051.png)
+![](https://ik.imagekit.io/moment/md-images/remote/image-1740990459066_n-T5PMqC-.webp)
 
 以右边用户的操作为例：
 
@@ -70,13 +70,13 @@ OT 算法有多个不同的分支，其最主要的分支为使用去中心化�
 
 如下图所示：
 
-![20250117172335](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250117172335.png)
+![](https://ik.imagekit.io/moment/md-images/remote/image-1740990473098_Qr4qT8vNH.webp)
 
 > 如需查阅更详细的信息，可以查看维基百科的 [OT 算法](https://en.wikipedia.org/wiki/Operational_transformation) 页面。
 
 OT（操作转换） 是一种算法，旨在解决多用户同时操作同一文档或数据时的同步问题。由于每个用户的操作可能在不同的机器上按不同的顺序执行，直接应用这些操作可能导致结果不一致。OT 通过对操作进行转换，确保每个用户的操作能够在其他用户的编辑结果基础上正确应用，从而使所有用户最终看到一致的结果。
 
-![20250117174204](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250117174204.png)
+![](https://ik.imagekit.io/moment/md-images/remote/image-1740990481098_pd6lw45J2.webp)
 
 现在我们来看一个具体的例子，假设有两个用户 `山鸡` 和 `陈浩南`，他们同时编辑同一个文档，文档的初始内容为 `Hello, `。
 
@@ -170,7 +170,7 @@ Lamport 时钟为每个节点的事件分配一个 逻辑时间戳，而这个�
 
 如果 a 和 b 没有先后关系，则称两个事件是并发的，记作 a || b。
 
-![20250217155648](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250217155648.png)
+![](https://ik.imagekit.io/moment/md-images/remote/image-1740990485179_DeIX7hei0.webp)
 
 在上面的图片中，有两个进程 A 和 B，每个点表示一个事件，黑色点表示进程内的事件，蓝色点表示进程的发送消息事件，红色点表示进程的接收消息事件。可以从上图得出：
 
@@ -200,7 +200,7 @@ a → b 除了可以表示两个事件的先后关系，也可以理解为两个
 
 咋上面的图中，它的逻辑时钟值如下所示：
 
-![20250217161158](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250217161158.png)
+![](https://ik.imagekit.io/moment/md-images/remote/image-1740990489197_bmkEMw-Se.webp)
 
 从以上算法可以很容易地得出下面两个结论：
 
@@ -226,13 +226,13 @@ a → b 除了可以表示两个事件的先后关系，也可以理解为两个
 
 向量时钟就是分布式系统的时钟，能够将所有事件按照时间轴进行排序，此时我们就可以有如下的思维模型。
 
-![20250224211013](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250224211013.png)
+![](https://ik.imagekit.io/moment/md-images/remote/image-1740990572759_W1JP7gr13.webp)
 
 在这个时候，我们两台电脑上分别编辑，通过网络传输后，分别传输到对方电脑上。
 
 此时，对于一州用户而言，其收到对方操作后，可以按照因果关系排序, 发现是并发的修改 (因为二者没有通信过，或者通信过之后各自又都修改了)
 
-![20250224211154](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250224211154.png)
+![](https://ik.imagekit.io/moment/md-images/remote/image-1740990613969_S7GZt9lNO.webp)
 
 雨珅用户接收完所有操作后，也可以对其排序，对于雨珅也是一个并发修改。对于并发修改，不能直接应用，需要进行操作转换。
 
@@ -240,7 +240,7 @@ a → b 除了可以表示两个事件的先后关系，也可以理解为两个
 
 所以，此时这个并发修改，应该假设是一州先操作，雨珅后操作，按照操作人的意图，所以理想中的结果就是， "yushenyizhou", 为了达到结果收敛的效果，两边都要进行操作转换。转换结果如下:
 
-![20250224211256](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250224211256.png)
+![](https://ik.imagekit.io/moment/md-images/remote/image-1740990655549_eFuQ7bih5.webp)
 
 转换函数一般为 `transform` , OT 算法的核心就是 `transform` 函数的实现。
 
@@ -254,15 +254,15 @@ yizhouOp + transform(yushenOp, yizhouOp) === yushenOp + transform(yizhouOp, yush
 
 此时两边都应用完成之后，我们将转换后的 op 对象存入历史堆栈，转换后的 op 发生的时间是当前时刻，本例中为 [1, 1]，我们发现一个神奇的现象，就是两边的 vector clock 相等了，所以向量时钟相等时，往往也意味着我们两边的状态已经同步了。(操作一旦推入历史堆栈，就再也不能更改，插入，历史堆栈只会向上增长)
 
-![20250225092617](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250225092617.png)
+![](https://ik.imagekit.io/moment/md-images/remote/image-1740990690138_4vk-CU-ND.webp)
 
 接着假如雨珅再次编辑一次，看会发生什么：
 
-![20250225092706](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250225092706.png)
+![](https://ik.imagekit.io/moment/md-images/remote/image-1740990725984_8Gr_XJ4Iz.webp)
 
 此时 `[1, 1] < [1, 2]` ，我们可以大胆地说，没有发生并发冲突。当没有发生并发冲突时，而且是发生在当前状态之后，直接应用这次变更即可，无需做任何转换。
 
-![20250225092748](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250225092748.png)
+![](https://ik.imagekit.io/moment/md-images/remote/image-1740990765572_dcHz0mMqm.webp)
 
 此时可以看到，向量时钟的三个状态在 OT 领域分别对应三个特殊含义:
 
@@ -274,17 +274,17 @@ yizhouOp + transform(yushenOp, yizhouOp) === yushenOp + transform(yizhouOp, yush
 
 再看稍微复杂一点的案例，如果同时有两个操作对象，一州发送给雨珅：
 
-![20250225092904](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250225092904.png)
+![](https://ik.imagekit.io/moment/md-images/remote/image-1740990822853_z3hkRbGV7.webp)
 
 当雨珅接收后发现 一州的第一个操作，和雨珅的这两个操作同时并发。此时会进行多次转换:
 
-![20250225112135](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250225112135.png)
+![](https://ik.imagekit.io/moment/md-images/remote/image-1740990865002_vkaoZ88Sn.webp)
 
 第一次转换完结果为 `hello li yushen yizhou`
 
 收到第二个操作此时会和三个操作发生并发关系，所以要进行三次转换。
 
-![20250225094601](https://raw.githubusercontent.com/xun082/md/main/blogs.images20250225094601.png)
+![](https://ik.imagekit.io/moment/md-images/remote/image-1740990933891_AgIQ73xTf.webp)
 
 > 因为第二次转换之后，对应的向量时钟 > 后续 op, 所以无需转换了
 
