@@ -11,7 +11,7 @@ import { useLocale } from '@/hooks';
 
 // 懒加载其他组件
 const Project = lazy(() => import('./Project').then((mod) => ({ default: mod.Project })));
-const Donation = lazy(() => import('./Donation').then((mod) => ({ default: mod.Team })));
+// const Donation = lazy(() => import('./Donation').then((mod) => ({ default: mod.Team })));
 const Contact = lazy(() => import('./Contact').then((mod) => ({ default: mod.Contact })));
 const Faq = lazy(() => import('./Faq').then((mod) => ({ default: mod.Faq })));
 const Service = lazy(() => import('./Service').then((mod) => ({ default: mod.Service })));
@@ -27,7 +27,7 @@ export default function HomepageHero() {
   console.log(currentLocale, t);
 
   const [projectRef, projectInView] = useInView();
-  const [donationRef, donationInView] = useInView();
+  // const [donationRef, donationInView] = useInView();
   const [contactRef, contactInView] = useInView();
   const [faqRef, faqInView] = useInView();
   const [serviceRef, serviceInView] = useInView();
@@ -80,7 +80,7 @@ export default function HomepageHero() {
         </Suspense>
       </motion.div>
 
-      <motion.div
+      {/* <motion.div
         ref={donationRef}
         initial={{ opacity: 0, y: 50 }}
         animate={donationInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
@@ -89,7 +89,7 @@ export default function HomepageHero() {
         <Suspense fallback={<LoadingFallback />}>
           <Donation />
         </Suspense>
-      </motion.div>
+      </motion.div> */}
     </div>
   );
 }

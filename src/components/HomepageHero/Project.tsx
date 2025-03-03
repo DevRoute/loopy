@@ -36,8 +36,8 @@ export function Project() {
       image: 'https://cdn.pixabay.com/photo/2023/01/30/07/24/losangeles-7754986_1280.jpg',
       link: 'https://github.com/xun082/create-neat',
       repo: 'xun082/create-neat',
-      stars: 12,
-      forks: 3,
+      stars: 541,
+      forks: 143,
       tech: ['Webpack', 'Vite', 'NodeJs', 'TypeScript', 'Turborepo'],
     },
     {
@@ -47,8 +47,8 @@ export function Project() {
       image: 'https://cdn.pixabay.com/photo/2023/01/30/07/24/losangeles-7754986_1280.jpg',
       link: 'https://github.com/xun082/online-edit-web',
       repo: 'xun082/online-edit-web',
-      stars: 8,
-      forks: 2,
+      stars: 181,
+      forks: 126,
       tech: ['Next.js', 'TypeScript', 'Shadcn UI', 'Zustand', 'Tailwind CSS', 'Yjs'],
     },
     {
@@ -58,8 +58,8 @@ export function Project() {
       image: 'https://cdn.pixabay.com/photo/2023/01/30/07/24/losangeles-7754986_1280.jpg',
       link: 'https://github.com/xun082/create-ai-toolkit',
       repo: 'xun082/create-ai-toolkit',
-      stars: 15,
-      forks: 4,
+      stars: 23,
+      forks: 16,
       tech: ['Node.js', 'TypeScript', 'OpenAI'],
     },
   ];
