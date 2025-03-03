@@ -6,6 +6,7 @@ import { getPageMap } from 'nextra/page-map';
 
 import { getDirection } from '../_dictionaries/get-dictionary';
 import { ThemeProvider } from './_components/ThemeProvider';
+import { AnalyticsProvider } from './_components/AnalyticsProvider';
 
 import ThemeToggle from '@/widgets/theme-toggle';
 import LocaleToggle from '@/widgets/locale-toggle';
@@ -73,26 +74,28 @@ export default async function RootLayout({ children, params }: Props) {
           storageKey="starter-theme-provider"
           disableTransitionOnChange
         >
-          <Layout
-            navbar={<CustomNavbar lang={lang} />}
-            lastUpdated={<LastUpdated>{t('lastUpdated')}</LastUpdated>}
-            editLink={null}
-            docsRepositoryBase="https://github.com/pdsuwwz/nextjs-nextra-starter"
-            footer={
-              <main className="bg-background py-5!">
-                <CustomFooter lang={lang} />
-              </main>
-            }
-            search={<Search />}
-            i18n={[
-              { locale: 'en', name: 'English' },
-              { locale: 'zh', name: '简体中文' },
-            ]}
-            pageMap={pageMap}
-            feedback={{ content: '' }}
-          >
-            {children}
-          </Layout>
+          <AnalyticsProvider>
+            <Layout
+              navbar={<CustomNavbar lang={lang} />}
+              lastUpdated={<LastUpdated>{t('lastUpdated')}</LastUpdated>}
+              editLink={null}
+              docsRepositoryBase="https://github.com/pdsuwwz/nextjs-nextra-starter"
+              footer={
+                <main className="bg-background py-5!">
+                  <CustomFooter lang={lang} />
+                </main>
+              }
+              search={<Search />}
+              i18n={[
+                { locale: 'en', name: 'English' },
+                { locale: 'zh', name: '简体中文' },
+              ]}
+              pageMap={pageMap}
+              feedback={{ content: '' }}
+            >
+              {children}
+            </Layout>
+          </AnalyticsProvider>
         </ThemeProvider>
       </body>
     </html>

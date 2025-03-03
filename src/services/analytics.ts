@@ -53,8 +53,8 @@ class AnalyticsTracker {
       const increment = now - this.lastHeartbeat;
       this.accumulatedDuration += increment;
 
-      // 如果用户离开页面（切换标签或最小化），发送当前累计的停留时间
-      this.sendTrackingData();
+      // 移除在页面隐藏时发送数据的逻辑
+      // 只在用户完全离开网站时才发送数据
     } else if (document.visibilityState === 'visible') {
       // 页面再次可见时，重置最后心跳时间
       this.lastHeartbeat = now;

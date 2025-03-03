@@ -1,16 +1,11 @@
 'use client';
 
-// 假设有一个统计服务
-// 引入 FingerprintJS
-import FingerprintJS from '@fingerprintjs/fingerprintjs';
 import { motion } from 'framer-motion';
-import { lazy, Suspense, useEffect, useRef } from 'react';
+import { lazy, Suspense } from 'react';
 
 // 直接导入首屏必需的 SetupHero
 import { SetupHero } from './Setup';
 
-// 导入新的统一跟踪函数
-import { track } from '@/services/analytics';
 import { useInView } from '@/hooks/useInView';
 import { useLocale } from '@/hooks';
 
@@ -36,35 +31,6 @@ export default function HomepageHero() {
   const [contactRef, contactInView] = useInView();
   const [faqRef, faqInView] = useInView();
   const [serviceRef, serviceInView] = useInView();
-
-  // 使用 ref 来跟踪初始化状态
-  const initialized = useRef(false);
-
-  // 初始化分析
-  useEffect(() => {
-    // 只在未初始化时执行
-    if (!initialized.current) {
-      initialized.current = true;
-
-      // 初始化 FingerprintJS
-      const initFingerprint = async () => {
-        try {
-          // 加载 FingerprintJS
-          const fp = await FingerprintJS.load();
-          const result = await fp.get();
-          const vid = result.visitorId;
-
-          // 只设置访客ID，不发送数据
-          // 数据将在用户离开页面时由 analytics.ts 中的事件处理器发送
-          track({ visitorId: vid }, true); // 设置 setVisitorIdOnly 为 true
-        } catch {
-          // 初始化指纹失败
-        }
-      };
-
-      initFingerprint();
-    }
-  }, []); // 空依赖数组确保只运行一次
 
   return (
     <div className="min-h-screen">

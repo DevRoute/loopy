@@ -5,6 +5,7 @@ import sharp from 'sharp'; // 导入sharp库
 import https from 'https'; // 用于下载图片
 import http from 'http'; // 用于下载图片
 import { execSync } from 'child_process'; // 用于执行Git命令
+import crypto from 'crypto'; // 用于生成文件哈希
 
 // 1. 配置ImageKit（建议使用环境变量）
 const imagekit = new ImageKit({
@@ -73,10 +74,16 @@ const TIMEOUT = 60000; // 请求超时时间（毫秒）- 增加到60秒
 
 // 添加URL缓存，避免重复上传相同的图片
 const urlCache = new Map();
+const hashCache = new Map(); // 用于存储文件哈希和URL的映射
 
 // 检查URL是否来自ImageKit
 function isImageKitUrl(url) {
   return url.includes('ik.imagekit.io/moment');
+}
+
+// 生成文件内容的哈希值
+function generateFileHash(buffer) {
+  return crypto.createHash('md5').update(buffer).digest('hex');
 }
 
 // 3. 递归获取所有Markdown文件
@@ -154,25 +161,22 @@ function parseImages(content, filePath) {
 async function uploadToImageKit(filePath, originalPath, isBuffer = false, fileName = null) {
   try {
     let file;
+    let fileBuffer;
 
     // 使用sharp将图片转换为webp格式
     if (isBuffer) {
       // 如果是buffer（远程图片），使用sharp转换为webp
-      file = await sharp(filePath).webp().toBuffer();
-      // 确保文件名以.webp结尾
-      if (fileName) {
-        const nameWithoutExt = fileName.substring(0, fileName.lastIndexOf('.')) || fileName;
-        fileName = `${nameWithoutExt}.webp`;
-      } else {
-        fileName = `image-${Date.now()}.webp`;
-      }
+      fileBuffer = await sharp(filePath).webp().toBuffer();
+      file = fileBuffer;
     } else {
       // 如果是本地文件，也使用sharp转换为webp
-      file = await sharp(filePath).webp().toBuffer();
-      const extension = path.extname(filePath);
-      const nameWithoutExt = path.basename(filePath, extension);
-      fileName = `${nameWithoutExt}.webp`;
+      fileBuffer = await sharp(filePath).webp().toBuffer();
+      file = fileBuffer;
     }
+
+    // 使用文件内容的哈希值作为文件名
+    const fileHash = generateFileHash(fileBuffer);
+    fileName = `${fileHash}.webp`;
 
     const folderPath = isBuffer
       ? '/md-images/remote'
@@ -271,28 +275,8 @@ async function downloadWithHttp(url) {
 
               console.log(`下载成功，大小: ${buffer.length} 字节`);
 
-              // 从响应头或URL推断文件扩展名
-              let extension = '.jpg'; // 默认扩展名
-              const contentType = response.headers['content-type'];
-
-              // 根据内容类型确定扩展名
-              if (contentType) {
-                if (contentType.includes('png')) extension = '.png';
-                else if (contentType.includes('gif')) extension = '.gif';
-                else if (contentType.includes('webp')) extension = '.webp';
-                else if (contentType.includes('jpeg') || contentType.includes('jpg'))
-                  extension = '.jpg';
-              } else {
-                // 尝试从URL推断扩展名
-                const urlExt = path.extname(parsedUrl.pathname).toLowerCase();
-
-                if (urlExt && allowedExtensions.includes(urlExt)) {
-                  extension = urlExt;
-                }
-              }
-
-              const fileName = `image-${Date.now()}${extension}`;
-              resolve({ buffer, fileName });
+              // 不再需要从响应头或URL推断文件扩展名，因为我们将使用哈希值作为文件名
+              resolve({ buffer });
             });
           });
         });
@@ -434,21 +418,29 @@ async function main() {
           const downloadResult = await downloadImage(image.url);
 
           if (downloadResult) {
-            imageUrl = await uploadToImageKit(
-              downloadResult.buffer,
-              filePath,
-              true,
-              downloadResult.fileName,
-            );
+            // 计算文件哈希
+            const fileHash = generateFileHash(downloadResult.buffer);
 
-            if (imageUrl) {
-              console.log(`已下载并重新上传: ${image.url} -> ${imageUrl}`);
-              stats.uploadedImages++;
-              // 缓存结果
+            // 检查是否已有相同哈希的图片
+            if (hashCache.has(fileHash)) {
+              imageUrl = hashCache.get(fileHash);
+              console.log(`使用哈希缓存的URL (相同内容): ${image.url} -> ${imageUrl}`);
+              stats.cachedImages++;
+              // 缓存URL结果
               urlCache.set(image.url, imageUrl);
             } else {
-              console.log(`下载成功但上传失败: ${image.url}`);
-              stats.failedImages++;
+              imageUrl = await uploadToImageKit(downloadResult.buffer, filePath, true);
+
+              if (imageUrl) {
+                console.log(`已下载并重新上传: ${image.url} -> ${imageUrl}`);
+                stats.uploadedImages++;
+                // 缓存结果
+                urlCache.set(image.url, imageUrl);
+                hashCache.set(fileHash, imageUrl);
+              } else {
+                console.log(`下载成功但上传失败: ${image.url}`);
+                stats.failedImages++;
+              }
             }
           } else {
             console.log(`无法下载图片，保留原始URL: ${image.url}`);
@@ -458,26 +450,46 @@ async function main() {
           }
         }
       } else {
-        // 检查缓存中是否已有此本地图片的上传结果
-        const cacheKey = `local:${image.absolute}`;
+        // 处理本地图片
+        try {
+          // 读取文件内容
+          const fileContent = fs.readFileSync(image.absolute);
+          // 计算文件哈希
+          const fileHash = generateFileHash(fileContent);
 
-        if (urlCache.has(cacheKey)) {
-          imageUrl = urlCache.get(cacheKey);
-          console.log(`使用缓存的本地图片URL: ${image.absolute} -> ${imageUrl}`);
-          stats.cachedImages++;
-        } else {
-          // 处理本地图片
-          imageUrl = await uploadToImageKit(image.absolute, filePath);
-
-          if (imageUrl) {
-            console.log(`已上传本地图片: ${image.absolute} -> ${imageUrl}`);
-            stats.uploadedImages++;
-            // 缓存结果
-            urlCache.set(cacheKey, imageUrl);
+          // 检查缓存中是否已有相同哈希的图片
+          if (hashCache.has(fileHash)) {
+            imageUrl = hashCache.get(fileHash);
+            console.log(`使用哈希缓存的URL (相同内容): ${image.absolute} -> ${imageUrl}`);
+            stats.cachedImages++;
           } else {
-            console.log(`上传本地图片失败: ${image.absolute}`);
-            stats.failedImages++;
+            // 检查缓存中是否已有此本地图片的上传结果
+            const cacheKey = `local:${image.absolute}`;
+
+            if (urlCache.has(cacheKey)) {
+              imageUrl = urlCache.get(cacheKey);
+              console.log(`使用缓存的本地图片URL: ${image.absolute} -> ${imageUrl}`);
+              stats.cachedImages++;
+            } else {
+              // 处理本地图片
+              imageUrl = await uploadToImageKit(image.absolute, filePath);
+
+              if (imageUrl) {
+                console.log(`已上传本地图片: ${image.absolute} -> ${imageUrl}`);
+                stats.uploadedImages++;
+                // 缓存结果
+                urlCache.set(cacheKey, imageUrl);
+                hashCache.set(fileHash, imageUrl);
+              } else {
+                console.log(`上传本地图片失败: ${image.absolute}`);
+                stats.failedImages++;
+              }
+            }
           }
+        } catch (error) {
+          console.error(`读取本地图片失败: ${image.absolute}`, error);
+          stats.failedImages++;
+          continue;
         }
       }
 
