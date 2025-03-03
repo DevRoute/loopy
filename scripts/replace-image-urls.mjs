@@ -14,6 +14,7 @@ const imagekit = new ImageKit({
 
 // 2. 配置参数
 const rootDir = process.argv[2] || '.'; // 通过命令行参数指定根目录
+const forceReplace = process.argv[3] === '--force'; // 是否强制替换所有图片
 const allowedExtensions = ['.png', '.jpg', '.jpeg', '.gif', '.webp'];
 const mdFileExtensions = ['.md', '.markdown', '.mdx'];
 const MAX_RETRIES = 3; // 最大重试次数
@@ -104,15 +105,10 @@ async function uploadToImageKit(filePath, originalPath, isBuffer = false, fileNa
   try {
     let file = isBuffer ? filePath : fs.readFileSync(filePath);
 
-    // 如果是本地文件，使用 sharp 转换为 webp 格式
-    if (!isBuffer) {
+    // 如果是本地文件，保持原始格式
+    if (!isBuffer && !fileName) {
       const extension = path.extname(filePath).toLowerCase();
-
-      if (allowedExtensions.includes(extension)) {
-        // 使用sharp进行格式转换，转换为webp
-        file = await sharp(filePath).webp().toBuffer(); // 转换为 webp 格式
-        fileName = fileName || `${path.basename(filePath, extension)}.webp`; // 更新文件名为 webp 格式
-      }
+      fileName = `${path.basename(filePath)}`;
     }
 
     const folderPath = isBuffer
@@ -128,7 +124,6 @@ async function uploadToImageKit(filePath, originalPath, isBuffer = false, fileNa
     return response.url;
   } catch (error) {
     console.error(`上传失败: ${fileName || filePath}`, error);
-
     return null;
   }
 }
@@ -291,7 +286,7 @@ async function main() {
 
       if (image.isRemote) {
         // 检查URL是否已经是ImageKit的URL
-        if (isImageKitUrl(image.url)) {
+        if (isImageKitUrl(image.url) && !forceReplace) {
           console.log(`图片已在ImageKit上，跳过: ${image.url}`);
           stats.alreadyOnImageKit++;
           continue;

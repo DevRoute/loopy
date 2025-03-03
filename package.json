@@ -99,7 +99,7 @@
       "pnpm lint",
       "pnpm format"
     ],
-    "*.md{,x}": "node ./scripts/replace-image-urls.mjs"
+    "*.md{,x}": "node scripts/replace-image-urls.mjs ./content --force"
   },
   "config": {
     "commitizen": {
