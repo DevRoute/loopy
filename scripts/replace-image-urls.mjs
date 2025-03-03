@@ -14,7 +14,35 @@ const imagekit = new ImageKit({
 
 // 2. 配置参数
 const rootDir = process.argv[2] || '.'; // 通过命令行参数指定根目录
-const forceReplace = process.argv[3] === '--force'; // 是否强制替换所有图片
+
+// 显示帮助信息
+function showHelp() {
+  console.log(`
+使用方法: node scripts/replace-image-urls.mjs <目录路径> [选项]
+
+选项:
+  --force         强制替换所有图片（包括已经在ImageKit上的）
+  --replace-all   替换所有图片（与--force相同）
+  --help          显示此帮助信息
+
+示例:
+  node scripts/replace-image-urls.mjs ./content             # 处理content目录下的所有Markdown文件，跳过已在ImageKit上的图片
+  node scripts/replace-image-urls.mjs ./content --force     # 处理content目录下的所有Markdown文件，强制替换所有图片
+`);
+  process.exit(0);
+}
+
+// 解析命令行参数
+const args = process.argv.slice(3);
+const forceReplace = args.includes('--force'); // 是否强制替换所有图片
+const replaceAll = args.includes('--replace-all'); // 是否替换所有图片（包括已经在ImageKit上的）
+const showHelpFlag = args.includes('--help'); // 是否显示帮助信息
+
+// 显示帮助信息
+if (showHelpFlag) {
+  showHelp();
+}
+
 const allowedExtensions = ['.png', '.jpg', '.jpeg', '.gif', '.webp'];
 const mdFileExtensions = ['.md', '.markdown', '.mdx'];
 const MAX_RETRIES = 3; // 最大重试次数
@@ -103,12 +131,25 @@ function parseImages(content, filePath) {
 // 5. 上传图片到ImageKit
 async function uploadToImageKit(filePath, originalPath, isBuffer = false, fileName = null) {
   try {
-    let file = isBuffer ? filePath : fs.readFileSync(filePath);
+    let file;
 
-    // 如果是本地文件，保持原始格式
-    if (!isBuffer && !fileName) {
-      const extension = path.extname(filePath).toLowerCase();
-      fileName = `${path.basename(filePath)}`;
+    // 使用sharp将图片转换为webp格式
+    if (isBuffer) {
+      // 如果是buffer（远程图片），使用sharp转换为webp
+      file = await sharp(filePath).webp().toBuffer();
+      // 确保文件名以.webp结尾
+      if (fileName) {
+        const nameWithoutExt = fileName.substring(0, fileName.lastIndexOf('.')) || fileName;
+        fileName = `${nameWithoutExt}.webp`;
+      } else {
+        fileName = `image-${Date.now()}.webp`;
+      }
+    } else {
+      // 如果是本地文件，也使用sharp转换为webp
+      file = await sharp(filePath).webp().toBuffer();
+      const extension = path.extname(filePath);
+      const nameWithoutExt = path.basename(filePath, extension);
+      fileName = `${nameWithoutExt}.webp`;
     }
 
     const folderPath = isBuffer
@@ -254,8 +295,12 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 // 7. 主流程
 async function main() {
+  console.log('开始处理图片替换...');
+  console.log(`根目录: ${rootDir}`);
+  console.log(`强制替换: ${forceReplace || replaceAll ? '是' : '否'}`);
+
   const mdFiles = getMarkdownFiles(rootDir);
-  console.log('找到的Markdown文件:', mdFiles);
+  console.log(`找到的Markdown文件: ${mdFiles.length}个`);
 
   // 统计信息
   const stats = {
@@ -286,7 +331,7 @@ async function main() {
 
       if (image.isRemote) {
         // 检查URL是否已经是ImageKit的URL
-        if (isImageKitUrl(image.url) && !forceReplace) {
+        if (isImageKitUrl(image.url) && !forceReplace && !replaceAll) {
           console.log(`图片已在ImageKit上，跳过: ${image.url}`);
           stats.alreadyOnImageKit++;
           continue;
